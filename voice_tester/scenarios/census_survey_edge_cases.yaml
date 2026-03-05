@@ -1,0 +1,337 @@
+# Census Survey Voice Test - Edge Cases
+#
+# Tests error handling and edge cases in the Census Survey bot:
+# - Invalid responses
+# - Unclear answers
+# - Requests for help
+# - Corrections
+
+name: "Census Survey - Edge Cases"
+version: "1.0.0"
+description: |
+  Test edge cases and error handling in the Census Survey.
+  The AI caller will intentionally provide unclear or invalid responses
+  to test how the system handles confusion and errors.
+author: "Voice Test Agent"
+created: "2026-03-03"
+tags:
+  - census-survey
+  - edge-cases
+  - error-handling
+  - lex-bot
+
+target:
+  phone_number: "${CONNECT_PHONE_NUMBER}"
+  timeout_seconds: 300
+  max_duration_seconds: 360
+  
+  recording:
+    enabled: true
+    format: "wav"
+    channels: 2
+
+# =============================================================================
+# AI CALLER PERSONA - Confused Caller
+# =============================================================================
+persona:
+  name: "Confused Elderly Caller"
+  
+  attributes:
+    speaking_rate: "slow"
+    patience: "patient"
+    clarity: "mumbling"  # Slightly unclear speech
+    language: "en-US"
+    voice_gender: "male"
+  
+  background: |
+    You are an elderly resident who is a bit hard of hearing and sometimes
+    gives confusing answers. You mean well but sometimes:
+    - Give answers that don't match the question
+    - Ask for things to be repeated
+    - Provide multiple answers at once
+    - Change your answer
+    
+    Your actual demographics (which you should eventually provide):
+    - Language: English
+    - Employment: Retired
+    - Age: 75-84
+    - Housing: Rent
+    
+    You are cooperative but confused. Start by giving wrong or unclear answers,
+    then provide correct ones when asked to clarify.
+  
+  behaviors:
+    asks_clarification: true
+    interrupts: false
+    makes_mistakes: true
+    mistake_rate: 0.4  # 40% chance of unclear/wrong answer
+
+# =============================================================================
+# TEST STEPS - Edge Case Scenarios
+# =============================================================================
+steps:
+  # --- GREETING PHASE ---
+  - id: "wait_for_greeting"
+    description: "Wait for the system greeting"
+    action: "listen"
+    expect:
+      patterns:
+        - "welcome"
+        - "census"
+        - "survey"
+      timeout_seconds: 20
+    on_success: "confused_greeting"
+
+  - id: "confused_greeting"
+    description: "Respond with confusion"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Hello? Who is this? The census? What's this about?"
+    wait_for_response: true
+    next: "language_selection"
+
+  # --- LANGUAGE SELECTION WITH ERROR ---
+  - id: "language_selection"
+    description: "Wait for language prompt"
+    action: "listen"
+    expect:
+      patterns:
+        - "language"
+        - "english"
+        - "spanish"
+      timeout_seconds: 20
+    on_success: "invalid_language"
+
+  - id: "invalid_language"
+    description: "Provide invalid language option"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "French"
+    wait_for_response: true
+    next: "wait_language_retry"
+
+  - id: "wait_language_retry"
+    description: "Wait for system to ask again"
+    action: "listen"
+    expect:
+      patterns:
+        - "sorry"
+        - "didn't understand"
+        - "English or Spanish"
+        - "please"
+        - "repeat"
+      timeout_seconds: 15
+    on_success: "correct_language"
+    on_failure: "correct_language"
+
+  - id: "correct_language"
+    description: "Provide correct language"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Oh, English please"
+    wait_for_response: true
+    next: "wait_employment"
+
+  # --- EMPLOYMENT WITH MULTIPLE ANSWERS ---
+  - id: "wait_employment"
+    description: "Wait for employment question"
+    action: "listen"
+    expect:
+      patterns:
+        - "employment"
+        - "work"
+        - "job"
+      timeout_seconds: 20
+    on_success: "multiple_employment_answers"
+
+  - id: "multiple_employment_answers"
+    description: "Give confusing multiple answers"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Well I used to work at the factory but now I'm retired, but I still do some part time gardening"
+    wait_for_response: true
+    next: "wait_employment_clarification"
+
+  - id: "wait_employment_clarification"
+    description: "Wait for system to ask for clarification"
+    action: "listen"
+    expect:
+      patterns:
+        - "sorry"
+        - "one option"
+        - "retired"
+        - "employed"
+        - "clarify"
+        - "repeat"
+      timeout_seconds: 20
+    on_success: "clear_employment"
+    on_failure: "clear_employment"
+
+  - id: "clear_employment"
+    description: "Give clear employment answer"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Retired"
+    wait_for_response: true
+    next: "wait_age"
+
+  # --- AGE WITH CORRECTION ---
+  - id: "wait_age"
+    description: "Wait for age question"
+    action: "listen"
+    expect:
+      patterns:
+        - "age"
+        - "old"
+        - "born"
+      timeout_seconds: 20
+    on_success: "wrong_age"
+
+  - id: "wrong_age"
+    description: "Give wrong age then correct"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "35... no wait, that's my son. I'm 78."
+    wait_for_response: true
+    next: "wait_age_confirm"
+
+  - id: "wait_age_confirm"
+    description: "Wait for age confirmation or question"
+    action: "listen"
+    expect:
+      patterns:
+        - "75"
+        - "84"
+        - "confirm"
+        - "age"
+      timeout_seconds: 20
+    on_success: "confirm_age"
+
+  - id: "confirm_age"
+    description: "Confirm age if asked"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Yes, 75 to 84 range"
+    wait_for_response: true
+    next: "wait_housing"
+
+  # --- HOUSING WITH HELP REQUEST ---
+  - id: "wait_housing"
+    description: "Wait for housing question"
+    action: "listen"
+    expect:
+      patterns:
+        - "housing"
+        - "rent"
+        - "own"
+        - "home"
+      timeout_seconds: 20
+    on_success: "ask_for_help"
+
+  - id: "ask_for_help"
+    description: "Ask for help understanding options"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "What do you mean by housing? Can you explain the options?"
+    wait_for_response: true
+    next: "wait_help_response"
+
+  - id: "wait_help_response"
+    description: "Wait for explanation"
+    action: "listen"
+    expect:
+      patterns:
+        - "rent"
+        - "own"
+        - "lease"
+        - "mortgage"
+        - "options"
+      timeout_seconds: 20
+    on_success: "answer_housing"
+
+  - id: "answer_housing"
+    description: "Give housing answer after help"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Oh I rent an apartment"
+    wait_for_response: true
+    next: "wait_completion"
+
+  # --- COMPLETION ---
+  - id: "wait_completion"
+    description: "Wait for completion message"
+    action: "listen"
+    expect:
+      patterns:
+        - "thank you"
+        - "complete"
+        - "finished"
+        - "recorded"
+      timeout_seconds: 30
+    on_success: "acknowledge_completion"
+
+  - id: "acknowledge_completion"
+    description: "Say goodbye"
+    action: "speak"
+    content:
+      type: "ai_generated"
+      intent: "Express gratitude, maybe mention it was a bit confusing, and say goodbye"
+    wait_for_response: false
+    next: "end_call"
+
+  - id: "end_call"
+    action: "hangup"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+success_criteria:
+  required:
+    - step: "correct_language"
+      status: "completed"
+    - step: "clear_employment"
+      status: "completed"
+    - step: "confirm_age"
+      status: "completed"
+    - step: "answer_housing"
+      status: "completed"
+  
+  validation:
+    # We should see some clarification/error handling
+    error_recovery_demonstrated: true
+    max_response_latency_ms: 8000
+
+# =============================================================================
+# ASSERTIONS
+# =============================================================================
+assertions:
+  - type: "transcript_contains"
+    patterns:
+      - "English"
+      - "retired"
+    all_required: true
+  
+  # Should NOT have critical system failures
+  - type: "transcript_excludes"
+    patterns:
+      - "system error"
+      - "technical difficulties"
+      - "call back later"
+  
+  - type: "duration"
+    min_seconds: 90
+    max_seconds: 360
+
+cleanup:
+  save_transcript: true
+  save_recording: true
+  generate_report: true

@@ -1,0 +1,236 @@
+# AI Voice Tester - Test Scenario Template
+# 
+# This template defines the complete schema for creating voice test scenarios.
+# Copy this file and customize for your specific test case.
+
+# =============================================================================
+# METADATA
+# =============================================================================
+name: "Template Test Scenario"
+version: "1.0.0"
+description: "A template showing all available configuration options"
+author: "Your Name"
+created: "2026-03-03"
+tags:
+  - template
+  - example
+
+# =============================================================================
+# TARGET CONFIGURATION
+# =============================================================================
+target:
+  # Phone number to call (E.164 format)
+  phone_number: "+15551234567"
+  
+  # Optional: Call timeout in seconds
+  timeout_seconds: 300
+  
+  # Optional: Max duration before hanging up
+  max_duration_seconds: 180
+  
+  # Optional: Recording settings
+  recording:
+    enabled: true
+    format: "wav"  # wav, mp3
+    channels: 2    # 1=mono, 2=stereo (separate channels for caller/callee)
+
+# =============================================================================
+# CALLER PERSONA
+# =============================================================================
+persona:
+  # Persona name/type
+  name: "Standard Caller"
+  
+  # Caller attributes
+  attributes:
+    # Speaking rate: slow, normal, fast
+    speaking_rate: "normal"
+    
+    # Patience level: patient, normal, impatient
+    patience: "normal"
+    
+    # How clearly they speak: clear, mumbling, accented
+    clarity: "clear"
+    
+    # Language/locale
+    language: "en-US"
+    
+    # Voice gender for TTS: male, female, neutral
+    voice_gender: "female"
+    
+    # Optional: Specific TTS voice ID
+    # voice_id: "Joanna"  # Amazon Polly voice
+  
+  # Background context for AI
+  background: |
+    You are a standard caller testing an automated phone system.
+    You should respond naturally to prompts but stay focused on completing
+    the test scenario. Be patient and clear in your responses.
+  
+  # Behavioral traits
+  behaviors:
+    # Will ask for clarification if confused
+    asks_clarification: true
+    
+    # May interrupt the bot (for barge-in testing)
+    interrupts: false
+    
+    # Will provide incorrect info sometimes (for error handling tests)
+    makes_mistakes: false
+    
+    # Rate of mistakes if enabled (0-1)
+    mistake_rate: 0.1
+
+# =============================================================================
+# TEST STEPS
+# =============================================================================
+# Define the expected conversation flow and responses
+
+steps:
+  # Step 1: Wait for greeting
+  - id: "greeting"
+    description: "Wait for the system greeting"
+    action: "listen"
+    expect:
+      # What we expect to hear (regex patterns)
+      patterns:
+        - "welcome"
+        - "hello"
+        - "thank you for calling"
+      # Timeout waiting for this prompt
+      timeout_seconds: 15
+    on_success: "respond_to_greeting"
+    on_failure: "handle_no_greeting"
+
+  # Step 2: Respond to greeting
+  - id: "respond_to_greeting"
+    description: "Respond to the greeting"
+    action: "speak"
+    # What to say - can be literal or AI-generated
+    content:
+      type: "ai_generated"  # literal, ai_generated, random_choice
+      # For ai_generated, provide intent/context
+      intent: "Respond naturally to the greeting and indicate interest in the service"
+      # For literal
+      # text: "Hello, I'd like to complete a survey"
+      # For random_choice
+      # choices:
+      #   - "Yes, hello"
+      #   - "Hi there"
+      #   - "Hello, yes"
+    # Wait for response after speaking
+    wait_for_response: true
+    next: "main_menu"
+
+  # Step 3: Navigate menu
+  - id: "main_menu"
+    description: "Listen for menu options"
+    action: "listen"
+    expect:
+      patterns:
+        - "press.*one|option.*one"
+        - "say.*english|english.*press"
+    on_success: "select_english"
+    on_timeout: "retry_main_menu"
+
+  # Step 4: Select option
+  - id: "select_english"
+    description: "Select English language"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "English"
+    wait_for_response: true
+    next: "verify_language_confirmed"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+success_criteria:
+  # All these conditions must be met for test to pass
+  required:
+    # Steps that must be completed
+    - step: "greeting"
+      status: "completed"
+    
+    - step: "select_english"
+      status: "completed"
+  
+  # Optional: Additional validation
+  validation:
+    # Check specific intents were triggered
+    intents_recognized:
+      - "WelcomeIntent"
+      - "LanguageSelection"
+    
+    # Check no error messages
+    no_errors: true
+    
+    # Max acceptable latency for responses
+    max_response_latency_ms: 3000
+
+# =============================================================================
+# ERROR HANDLING
+# =============================================================================
+error_handling:
+  # What to do if step fails
+  on_step_failure:
+    # retry, skip, abort
+    action: "retry"
+    max_retries: 2
+    retry_delay_seconds: 1
+  
+  # Timeout handling
+  on_timeout:
+    action: "abort"
+    message: "Test aborted due to timeout"
+  
+  # Unexpected prompts
+  on_unexpected_prompt:
+    # Use AI to handle gracefully
+    use_ai: true
+    ai_instruction: "Try to get back on track with the test scenario"
+
+# =============================================================================
+# ASSERTIONS
+# =============================================================================
+# Post-call validations
+
+assertions:
+  # Verify conversation included expected elements
+  - type: "transcript_contains"
+    patterns:
+      - "welcome"
+      - "survey"
+    all_required: true
+  
+  # Verify timing
+  - type: "duration"
+    min_seconds: 30
+    max_seconds: 180
+  
+  # Verify no error phrases
+  - type: "transcript_excludes"
+    patterns:
+      - "error"
+      - "sorry.*didn't understand"
+      - "please try again"
+
+# =============================================================================
+# CLEANUP
+# =============================================================================
+cleanup:
+  # Save transcript
+  save_transcript: true
+  
+  # Save recording
+  save_recording: true
+  
+  # Generate report
+  generate_report: true
+  
+  # Notify on completion
+  notifications:
+    # slack:
+    #   webhook_url: "https://hooks.slack.com/..."
+    #   on_failure_only: true

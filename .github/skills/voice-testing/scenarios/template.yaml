@@ -1,0 +1,171 @@
+# Voice Test Scenario Template
+# Copy and customize for your specific test case
+
+name: "Template Test Scenario"
+version: "1.0.0"
+description: "Describe what this test validates"
+author: "Your Name"
+created: "2026-03-04"
+tags:
+  - template
+  - example
+
+# =============================================================================
+# TARGET - Where to call
+# =============================================================================
+target:
+  phone_number: "+15551234567"  # E.164 format
+  timeout_seconds: 180
+  max_duration_seconds: 300
+  recording:
+    enabled: true
+    format: "wav"
+    channels: 2  # Stereo: caller on left, system on right
+
+# =============================================================================
+# PERSONA - Who is calling
+# =============================================================================
+persona:
+  name: "Standard Customer"
+  
+  attributes:
+    speaking_rate: "normal"    # slow | normal | fast
+    patience: "normal"         # impatient | normal | patient
+    clarity: "clear"           # mumbling | clear
+    accent: "neutral"          # neutral | regional
+  
+  background: |
+    A typical customer calling to complete a survey.
+    They are cooperative and will answer questions directly.
+    They understand English well and speak clearly.
+  
+  behaviors:
+    asks_clarification: false  # Request repeats if confused
+    interrupts: false          # Cut off IVR mid-sentence
+    makes_mistakes: false      # Give wrong/invalid input
+    hangs_up_early: false      # End call before completion
+
+# =============================================================================
+# STEPS - What happens during the call
+# =============================================================================
+steps:
+  # Step 1: Wait for greeting
+  - id: wait_for_greeting
+    description: "Wait for the IVR to answer and greet"
+    action: listen
+    expect:
+      patterns:
+        - "welcome"
+        - "thank you for calling"
+        - "hello"
+      timeout_seconds: 15
+    on_timeout: fail
+
+  # Step 2: Confirm participation  
+  - id: confirm_survey
+    description: "Agree to take the survey"
+    action: speak
+    content:
+      type: literal
+      text: "Yes, I'd like to take the survey"
+    wait_after_seconds: 1
+
+  # Step 3: Listen for first question
+  - id: hear_question_1
+    description: "Listen for the first survey question"
+    action: listen
+    expect:
+      patterns:
+        - "how would you rate"
+        - "on a scale"
+        - "first question"
+      timeout_seconds: 20
+
+  # Step 4: Answer with AI
+  - id: answer_question_1
+    description: "Provide answer based on persona"
+    action: speak
+    content:
+      type: ai_generated
+      intent: "Answer the rating question positively, giving a number 4 or 5"
+      constraints:
+        - "Keep response under 10 words"
+        - "Include the rating number"
+
+  # Step 5: Wait for next prompt
+  - id: hear_confirmation
+    description: "Listen for acknowledgment or next question"
+    action: listen
+    expect:
+      patterns:
+        - "thank you"
+        - "next question"
+        - "anything else"
+      timeout_seconds: 15
+
+  # Step 6: End call gracefully
+  - id: end_call
+    description: "Say goodbye when survey completes"
+    action: speak
+    content:
+      type: literal
+      text: "Thank you, goodbye"
+    
+  - id: hangup
+    action: hangup
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+success_criteria:
+  required:
+    - step: wait_for_greeting
+      status: completed
+    - step: answer_question_1
+      status: completed
+  
+  optional:
+    - step: end_call
+      status: completed
+
+# =============================================================================
+# ASSERTIONS - Post-call validation
+# =============================================================================
+assertions:
+  # Verify expected phrases appeared
+  - type: transcript_contains
+    patterns:
+      - "survey"
+      - "thank you"
+    all_required: true
+    description: "Basic IVR phrases should be present"
+
+  # Verify no error messages
+  - type: transcript_excludes
+    patterns:
+      - "error"
+      - "sorry, I didn't understand"
+      - "invalid"
+      - "please try again"
+    description: "No error messages should appear"
+
+  # Check call duration
+  - type: duration
+    min_seconds: 30
+    max_seconds: 180
+    description: "Call should complete within expected time"
+
+  # Check all steps executed
+  - type: step_completion
+    min_completed: 4
+    description: "At least 4 steps should complete successfully"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  expected_duration_seconds: 60
+  difficulty: easy
+  coverage:
+    - happy_path
+    - basic_flow

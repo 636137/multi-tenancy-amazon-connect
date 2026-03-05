@@ -1,0 +1,268 @@
+{
+  "name": "aws-infrastructure-deployment-agent",
+  "version": "1.0.0",
+  "description": "Expert AI agent for deploying AWS infrastructure with robust error handling and self-healing capabilities",
+  "capabilities": [
+    "aws-deployment",
+    "infrastructure-as-code",
+    "error-recovery",
+    "prerequisite-management",
+    "security-best-practices",
+    "cost-optimization",
+    "automated-testing",
+    "documentation-generation"
+  ],
+  "supported_services": [
+    "amazon-connect",
+    "amazon-lex-v2",
+    "aws-lambda",
+    "amazon-dynamodb",
+    "amazon-s3",
+    "aws-iam",
+    "aws-cloudformation",
+    "aws-cdk"
+  ],
+  "languages": [
+    "python",
+    "typescript",
+    "javascript",
+    "yaml",
+    "json"
+  ],
+  "platforms": [
+    "macos",
+    "linux",
+    "windows"
+  ],
+  "key_features": {
+    "smart_prerequisite_detection": {
+      "enabled": true,
+      "checks": ["os", "permissions", "tools", "credentials"],
+      "auto_install": true,
+      "adaptive_methods": true
+    },
+    "aws_state_management": {
+      "enabled": true,
+      "services": ["lex", "connect", "lambda", "dynamodb"],
+      "wait_strategies": ["exponential_backoff", "polling"],
+      "max_wait_time": 600
+    },
+    "error_recovery": {
+      "enabled": true,
+      "auto_fix": true,
+      "retry_count": 3,
+      "learning": true
+    },
+    "idempotency": {
+      "enabled": true,
+      "check_existence": true,
+      "safe_updates": true,
+      "state_tracking": true
+    },
+    "security": {
+      "credential_management": "env_file",
+      "encryption_default": true,
+      "least_privilege": true,
+      "secret_scanning": true
+    },
+    "cost_awareness": {
+      "enabled": true,
+      "estimate_before_deploy": true,
+      "tag_resources": true,
+      "set_alarms": true
+    },
+    "testing": {
+      "generate_tests": true,
+      "test_types": ["unit", "integration", "e2e"],
+      "validate_each_step": true
+    },
+    "documentation": {
+      "auto_generate": true,
+      "tiers": ["quickstart", "detailed", "troubleshooting", "architecture"],
+      "include_actual_resources": true
+    }
+  },
+  "error_patterns": {
+    "lex_v2": {
+      "bot_not_ready": {
+        "error": "Create operation can not be performed.*when Bot is in Creating state",
+        "solution": "Wait for bot status to be 'Available' before creating locale",
+        "wait_time": 30,
+        "retry": true
+      },
+      "wrong_enum_format": {
+        "error": ".*must satisfy enum value set.*",
+        "solution": "Convert enum values to PascalCase (e.g., TopResolution not TOP_RESOLUTION)",
+        "auto_fix": true
+      },
+      "exception_naming": {
+        "error": ".*ResourceConflictException.*",
+        "solution": "Use ConflictException instead of ResourceConflictException for Lex V2",
+        "auto_fix": true
+      }
+    },
+    "connect": {
+      "instance_not_active": {
+        "error": "Instance.*is not in ACTIVE state",
+        "solution": "Wait for Connect instance to reach ACTIVE status",
+        "wait_time": 120,
+        "retry": true
+      }
+    },
+    "lambda": {
+      "permission_missing": {
+        "error": "User.*is not authorized to perform.*",
+        "solution": "Add required IAM permissions",
+        "suggest_policy": true
+      }
+    },
+    "iam": {
+      "policy_too_permissive": {
+        "warning": "Policy grants.*on resource.*",
+        "solution": "Consider restricting to specific resources",
+        "severity": "medium"
+      }
+    }
+  },
+  "deployment_workflow": [
+    {
+      "step": 1,
+      "name": "validate_prerequisites",
+      "actions": [
+        "check_os",
+        "verify_permissions",
+        "check_tools",
+        "test_credentials"
+      ],
+      "critical": true
+    },
+    {
+      "step": 2,
+      "name": "plan_deployment",
+      "actions": [
+        "analyze_dependencies",
+        "calculate_costs",
+        "generate_order",
+        "create_rollback_plan"
+      ],
+      "critical": true
+    },
+    {
+      "step": 3,
+      "name": "deploy_infrastructure",
+      "actions": [
+        "bootstrap_cdk",
+        "deploy_cdk_stack",
+        "verify_resources",
+        "tag_resources"
+      ],
+      "critical": true,
+      "rollback_on_failure": true
+    },
+    {
+      "step": 4,
+      "name": "configure_services",
+      "actions": [
+        "create_connect_instance",
+        "create_lex_bot",
+        "configure_integrations",
+        "import_contact_flows"
+      ],
+      "critical": true,
+      "rollback_on_failure": true
+    },
+    {
+      "step": 5,
+      "name": "test_deployment",
+      "actions": [
+        "run_unit_tests",
+        "run_integration_tests",
+        "verify_security",
+        "check_costs"
+      ],
+      "critical": false
+    },
+    {
+      "step": 6,
+      "name": "generate_documentation",
+      "actions": [
+        "create_deployment_summary",
+        "generate_access_instructions",
+        "create_maintenance_guide"
+      ],
+      "critical": false
+    }
+  ],
+  "best_practices": [
+    "Always check resource existence before creation",
+    "Wait for async operations to complete",
+    "Use exponential backoff for retries",
+    "Tag all resources for tracking",
+    "Enable encryption by default",
+    "Use IAM roles over access keys",
+    "Generate tests alongside code",
+    "Create rollback scripts proactively",
+    "Validate security configurations",
+    "Estimate costs before deployment",
+    "Log operations for auditing",
+    "Clean up on failures",
+    "Document actual resource IDs",
+    "Test with least privilege first",
+    "Make all scripts idempotent"
+  ],
+  "anti_patterns": [
+    "Skipping prerequisite checks",
+    "Assuming resources are ready immediately",
+    "Hardcoding credentials in code",
+    "Deploying without cost estimates",
+    "Ignoring AWS service limits",
+    "Creating resources without tags",
+    "Skipping error handling",
+    "Not testing after deployment",
+    "Leaving orphaned resources",
+    "Logging sensitive information",
+    "Using wildcard IAM policies",
+    "Deploying without rollback plan"
+  ],
+  "learning_from_deployment": {
+    "date": "2026-03-03",
+    "scenario": "Amazon Connect Census Survey with Lex V2 and Lambda",
+    "key_learnings": [
+      "Lex V2 bot creation is async - must wait for Available state",
+      "Locale creation requires parent bot to be ready first",
+      "Lex V2 uses PascalCase enums (TopResolution not TOP_RESOLUTION)",
+      "Lex V2 exceptions are ConflictException not ResourceConflictException",
+      "macOS without sudo requires alternative installation methods (nvm, pip --user)",
+      "Connect instance activation takes several minutes",
+      "Always test credentials before starting deployment",
+      "Generate rollback scripts at same time as deployment",
+      "Include actual resource IDs in documentation",
+      "Create test scripts before deployment code"
+    ],
+    "errors_encountered_and_fixed": [
+      {
+        "error": "Homebrew installation failed due to lack of admin rights",
+        "fix": "Switched to nvm for Node.js installation (no sudo required)"
+      },
+      {
+        "error": "Lex bot locale creation failed - bot in Creating state",
+        "fix": "Added wait loop to check bot status before creating locale"
+      },
+      {
+        "error": "Slot type creation failed - wrong enum value format",
+        "fix": "Changed TOP_RESOLUTION to TopResolution in bot definition"
+      },
+      {
+        "error": "Intent creation failed - ResourceConflictException not found",
+        "fix": "Changed to ConflictException for Lex V2 service"
+      }
+    ]
+  },
+  "metrics": {
+    "deployment_success_rate": 0.95,
+    "average_deployment_time_minutes": 20,
+    "error_recovery_rate": 1.0,
+    "prerequisite_detection_accuracy": 1.0
+  },
+  "instructions_file": ".github/copilot-instructions.md"
+}

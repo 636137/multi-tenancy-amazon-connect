@@ -1,0 +1,232 @@
+# Treasury Conversational Flow - Automated Voice Test
+#
+# Instance: treasury-connect-prod
+# Flow: TreasuryConversationalFlow (8dfd7f4a-e383-4889-a941-d516d4919a50)
+# Phone: +18332896602
+#
+# Tests IVR menu navigation with DTMF and speech
+
+name: "Treasury IVR Menu - Navigation Test"
+version: "1.0.0"
+description: |
+  Automated voice test for the Treasury IVR menu system.
+  Tests navigation through the main menu:
+  - Press 1 for IRS
+  - Press 2 for US Mint
+  - Press 3 for Treasury Offset
+  - Press 4 for other services
+  
+  Uses Nova Sonic for intelligent responses to bureau-specific prompts.
+
+author: "Copilot Agent Skills"
+created: "2026-03-04"
+tags:
+  - treasury
+  - ivr-menu
+  - dtmf
+  - nova-sonic
+
+# =============================================================================
+# TARGET CONFIGURATION
+# =============================================================================
+target:
+  phone_number: "+18332896602"
+  instance_id: "a88ddab9-3b29-409f-87f0-bdb614abafef"
+  flow_id: "8dfd7f4a-e383-4889-a941-d516d4919a50"
+  flow_name: "TreasuryConversationalFlow"
+  
+  timeout_seconds: 120
+  max_duration_seconds: 180
+  
+  recording:
+    enabled: true
+    format: "wav"
+    channels: 2
+    save_path: "./voice_output/treasury_ivr/"
+
+# =============================================================================
+# NOVA SONIC AI CALLER CONFIGURATION
+# =============================================================================
+ai_caller:
+  engine: "nova-sonic"
+  model_id: "amazon.nova-sonic-v1:0"
+  region: "us-east-1"
+  
+  voice:
+    id: "matthew"
+    gender: "male"
+    accent: "us-english"
+  
+  audio:
+    input_sample_rate: 16000
+    output_sample_rate: 24000
+    chunk_size_ms: 20
+    silence_padding_seconds: 2.0
+
+# =============================================================================
+# CALLER PERSONA
+# =============================================================================
+persona:
+  name: "Treasury Caller"
+  
+  system_prompt: |
+    You are calling the U.S. Treasury Department to get information about 
+    IRS tax refund status.
+    
+    CRITICAL RULES:
+    1. When you hear menu options, say "one" or press 1 for IRS
+    2. Keep responses SHORT (1-2 sentences)
+    3. You have a tax-related question
+    4. Be polite and professional
+    
+    Your scenario:
+    - You filed taxes 6 weeks ago
+    - You haven't received your refund
+    - You want to check the status
+    
+  attributes:
+    speaking_rate: "normal"
+    patience: "patient"
+    clarity: "clear"
+
+# =============================================================================
+# TEST STEPS
+# =============================================================================
+steps:
+  - id: "wait_for_greeting"
+    description: "Wait for Treasury welcome message"
+    action: "listen"
+    expect:
+      patterns:
+        - "Treasury"
+        - "press 1|press one"
+        - "IRS|Mint|Offset"
+      timeout_seconds: 30
+    on_match: "select_irs"
+    on_timeout: "hangup_timeout"
+
+  - id: "select_irs"
+    description: "Select IRS option (Press 1)"
+    action: "dtmf"
+    digits: "1"
+    next: "wait_for_irs_menu"
+
+  - id: "wait_for_irs_menu"
+    description: "Wait for IRS submenu or prompt"
+    action: "listen"
+    expect:
+      patterns:
+        - "IRS"
+        - "tax|refund|return"
+        - "how can I help"
+      timeout_seconds: 20
+    on_match: "ai_conversation"
+    on_timeout: "retry_selection"
+
+  - id: "retry_selection"
+    description: "Try speaking selection instead of DTMF"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "IRS please"
+    next: "listen_after_retry"
+
+  - id: "listen_after_retry"
+    description: "Listen for response after speaking"
+    action: "listen"
+    expect:
+      patterns:
+        - "IRS|tax|refund|help"
+      timeout_seconds: 20
+    on_match: "ai_conversation"
+    on_timeout: "call_end"
+
+  - id: "ai_conversation"
+    description: "Engage with IRS service AI"
+    action: "ai_conversation"
+    config:
+      max_turns: 5
+      turn_timeout_seconds: 30
+      end_on_patterns:
+        - "anything else"
+        - "goodbye"
+        - "thank you for calling"
+      
+      guidance: |
+        Ask about tax refund status:
+        1. First ask about your refund status
+        2. If asked for SSN, say you'll provide partial
+        3. If offered more help, say no thank you
+
+  - id: "call_end"
+    description: "End the call politely"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Thank you, goodbye."
+    next: "hangup"
+
+  - id: "hangup"
+    description: "Hang up"
+    action: "hangup"
+    reason: "completed"
+
+  - id: "hangup_timeout"
+    description: "Timeout hangup"
+    action: "hangup"
+    reason: "timeout"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+success_criteria:
+  required:
+    - step: "wait_for_greeting"
+      status: "matched"
+  
+  optional:
+    - step: "wait_for_irs_menu"
+      status: "matched"
+  
+  call_duration:
+    min_seconds: 15
+    max_seconds: 180
+
+# =============================================================================
+# ASSERTIONS
+# =============================================================================
+assertions:
+  - type: "transcript_contains"
+    description: "Treasury greeting played"
+    patterns:
+      - "Treasury"
+    required: true
+
+  - type: "transcript_contains"
+    description: "Menu options presented"
+    patterns:
+      - "IRS|Mint|press"
+    required: true
+
+  - type: "dtmf_sent"
+    description: "DTMF digit was sent"
+    digits: "1"
+    required: true
+
+  - type: "transcript_excludes"
+    description: "No system errors"
+    patterns:
+      - "error|sorry.*cannot|system.*down"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  connect_instance: "treasury-connect-prod"
+  test_type: "integration"
+  priority: "high"
+  features_tested:
+    - "ivr_menu"
+    - "dtmf_navigation"
+    - "speech_recognition"
+    - "bureau_routing"

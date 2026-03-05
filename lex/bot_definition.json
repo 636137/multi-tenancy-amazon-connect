@@ -1,0 +1,406 @@
+{
+  "name": "CensusSurveyBot",
+  "description": "AI bot for conducting census surveys via voice and chat",
+  "roleArn": "REPLACE_WITH_LEX_ROLE_ARN",
+  "dataPrivacy": {
+    "childDirected": false
+  },
+  "idleSessionTTLInSeconds": 300,
+  "botLocales": [
+    {
+      "localeId": "en_US",
+      "description": "English US locale for census survey",
+      "nluIntentConfidenceThreshold": 0.4,
+      "voiceSettings": {
+        "voiceId": "Joanna"
+      },
+      "intents": [
+        {
+          "intentName": "StartSurvey",
+          "description": "Intent to start the census survey",
+          "sampleUtterances": [
+            {
+              "utterance": "I want to start the survey"
+            },
+            {
+              "utterance": "begin survey"
+            },
+            {
+              "utterance": "start"
+            },
+            {
+              "utterance": "let's begin"
+            }
+          ],
+          "intentConfirmationSetting": {
+            "active": false
+          },
+          "fulfillmentCodeHook": {
+            "enabled": true
+          }
+        },
+        {
+          "intentName": "ProvideHouseholdInfo",
+          "description": "Intent to provide household size",
+          "sampleUtterances": [
+            {
+              "utterance": "{HouseholdSize} people"
+            },
+            {
+              "utterance": "there are {HouseholdSize} people"
+            },
+            {
+              "utterance": "{HouseholdSize}"
+            },
+            {
+              "utterance": "we have {HouseholdSize} members"
+            }
+          ],
+          "slotPriorities": [
+            {
+              "priority": 1,
+              "slotName": "HouseholdSize"
+            }
+          ],
+          "slots": [
+            {
+              "slotName": "HouseholdSize",
+              "description": "Number of people in household",
+              "slotTypeName": "AMAZON.Number",
+              "valueElicitationSetting": {
+                "slotConstraint": "Required",
+                "promptSpecification": {
+                  "messageGroupsList": [
+                    {
+                      "message": {
+                        "plainTextMessage": {
+                          "value": "How many people live in your household?"
+                        }
+                      }
+                    }
+                  ],
+                  "maxRetries": 2
+                }
+              }
+            }
+          ],
+          "fulfillmentCodeHook": {
+            "enabled": true
+          }
+        },
+        {
+          "intentName": "ProvideLanguageInfo",
+          "description": "Intent to provide primary language",
+          "sampleUtterances": [
+            {
+              "utterance": "{PrimaryLanguage}"
+            },
+            {
+              "utterance": "we speak {PrimaryLanguage}"
+            },
+            {
+              "utterance": "the primary language is {PrimaryLanguage}"
+            }
+          ],
+          "slotPriorities": [
+            {
+              "priority": 1,
+              "slotName": "PrimaryLanguage"
+            }
+          ],
+          "slots": [
+            {
+              "slotName": "PrimaryLanguage",
+              "description": "Primary language spoken",
+              "slotTypeName": "LanguageType",
+              "valueElicitationSetting": {
+                "slotConstraint": "Required",
+                "promptSpecification": {
+                  "messageGroupsList": [
+                    {
+                      "message": {
+                        "plainTextMessage": {
+                          "value": "What is the primary language spoken in your home?"
+                        }
+                      }
+                    }
+                  ],
+                  "maxRetries": 2
+                }
+              }
+            }
+          ],
+          "fulfillmentCodeHook": {
+            "enabled": true
+          }
+        },
+        {
+          "intentName": "ProvideEmploymentInfo",
+          "description": "Intent to provide employment status",
+          "sampleUtterances": [
+            {
+              "utterance": "I am {EmploymentStatus}"
+            },
+            {
+              "utterance": "{EmploymentStatus}"
+            },
+            {
+              "utterance": "my status is {EmploymentStatus}"
+            }
+          ],
+          "slotPriorities": [
+            {
+              "priority": 1,
+              "slotName": "EmploymentStatus"
+            }
+          ],
+          "slots": [
+            {
+              "slotName": "EmploymentStatus",
+              "description": "Employment status",
+              "slotTypeName": "EmploymentType",
+              "valueElicitationSetting": {
+                "slotConstraint": "Required",
+                "promptSpecification": {
+                  "messageGroupsList": [
+                    {
+                      "message": {
+                        "plainTextMessage": {
+                          "value": "What is your employment status? Employed, unemployed, retired, or student?"
+                        }
+                      }
+                    }
+                  ],
+                  "maxRetries": 2
+                }
+              }
+            }
+          ],
+          "fulfillmentCodeHook": {
+            "enabled": true
+          }
+        },
+        {
+          "intentName": "ProvideAgeInfo",
+          "description": "Intent to provide age range",
+          "sampleUtterances": [
+            {
+              "utterance": "{AgeRange}"
+            },
+            {
+              "utterance": "I am {AgeRange}"
+            },
+            {
+              "utterance": "my age is {AgeRange}"
+            }
+          ],
+          "slotPriorities": [
+            {
+              "priority": 1,
+              "slotName": "AgeRange"
+            }
+          ],
+          "slots": [
+            {
+              "slotName": "AgeRange",
+              "description": "Age range",
+              "slotTypeName": "AgeRangeType",
+              "valueElicitationSetting": {
+                "slotConstraint": "Required",
+                "promptSpecification": {
+                  "messageGroupsList": [
+                    {
+                      "message": {
+                        "plainTextMessage": {
+                          "value": "What is your age range? Under 18, 18 to 34, 35 to 54, 55 to 64, or 65 and over?"
+                        }
+                      }
+                    }
+                  ],
+                  "maxRetries": 2
+                }
+              }
+            }
+          ],
+          "fulfillmentCodeHook": {
+            "enabled": true
+          }
+        },
+        {
+          "intentName": "ProvideHousingInfo",
+          "description": "Intent to provide housing type",
+          "sampleUtterances": [
+            {
+              "utterance": "{HousingType}"
+            },
+            {
+              "utterance": "I live in a {HousingType}"
+            },
+            {
+              "utterance": "we live in a {HousingType}"
+            }
+          ],
+          "slotPriorities": [
+            {
+              "priority": 1,
+              "slotName": "HousingType"
+            }
+          ],
+          "slots": [
+            {
+              "slotName": "HousingType",
+              "description": "Type of housing",
+              "slotTypeName": "HousingType",
+              "valueElicitationSetting": {
+                "slotConstraint": "Required",
+                "promptSpecification": {
+                  "messageGroupsList": [
+                    {
+                      "message": {
+                        "plainTextMessage": {
+                          "value": "What type of housing do you live in? House, apartment, condo, or other?"
+                        }
+                      }
+                    }
+                  ],
+                  "maxRetries": 2
+                }
+              }
+            }
+          ],
+          "fulfillmentCodeHook": {
+            "enabled": true
+          }
+        }
+      ],
+      "slotTypes": [
+        {
+          "slotTypeName": "LanguageType",
+          "description": "Languages spoken",
+          "slotTypeValues": [
+            {
+              "sampleValue": {
+                "value": "English"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "Spanish"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "Chinese"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "French"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "Other"
+              }
+            }
+          ],
+          "valueSelectionSetting": {
+            "resolutionStrategy": "TopResolution"
+          }
+        },
+        {
+          "slotTypeName": "EmploymentType",
+          "description": "Employment status",
+          "slotTypeValues": [
+            {
+              "sampleValue": {
+                "value": "employed"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "unemployed"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "retired"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "student"
+              }
+            }
+          ],
+          "valueSelectionSetting": {
+            "resolutionStrategy": "TopResolution"
+          }
+        },
+        {
+          "slotTypeName": "AgeRangeType",
+          "description": "Age ranges",
+          "slotTypeValues": [
+            {
+              "sampleValue": {
+                "value": "under 18"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "18 to 34"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "35 to 54"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "55 to 64"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "65 and over"
+              }
+            }
+          ],
+          "valueSelectionSetting": {
+            "resolutionStrategy": "TopResolution"
+          }
+        },
+        {
+          "slotTypeName": "HousingType",
+          "description": "Types of housing",
+          "slotTypeValues": [
+            {
+              "sampleValue": {
+                "value": "house"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "apartment"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "condo"
+              }
+            },
+            {
+              "sampleValue": {
+                "value": "other"
+              }
+            }
+          ],
+          "valueSelectionSetting": {
+            "resolutionStrategy": "TopResolution"
+          }
+        }
+      ]
+    }
+  ]
+}

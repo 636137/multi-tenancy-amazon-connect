@@ -1,0 +1,227 @@
+# Treasury Agent Core Flow - Automated Voice Test
+#
+# Instance: treasury-connect-prod
+# Flow: TreasuryAgentCoreFlow (27e3aaec-09ca-40d1-8101-90b1b921712e)
+# Phone: +18332896602
+#
+# Tests Lambda data dip for state lookup based on caller's area code
+
+name: "Treasury Agent Core - Data Dip Test"
+version: "1.0.0"
+description: |
+  Automated voice test for the Treasury Agent Core flow.
+  This flow performs a Lambda data dip to look up the caller's state
+  based on their phone number's area code.
+  
+  Flow prompts:
+  - "Now performing a data dip using AWS Lambda..."
+  - "Based on your phone number, we will lookup the state..."
+  - Error: "Sorry, we failed to find the state..."
+  - Success: "Based on the number you are calling from, your area code is located in {State}"
+
+author: "Copilot Agent Skills"
+created: "2026-03-04"
+tags:
+  - treasury
+  - lambda-data-dip
+  - state-lookup
+  - nova-sonic
+
+# =============================================================================
+# TARGET CONFIGURATION
+# =============================================================================
+target:
+  phone_number: "+18332896602"
+  instance_id: "a88ddab9-3b29-409f-87f0-bdb614abafef"
+  flow_id: "27e3aaec-09ca-40d1-8101-90b1b921712e"
+  flow_name: "TreasuryAgentCoreFlow"
+  
+  timeout_seconds: 90
+  max_duration_seconds: 120
+  
+  # Caller ID to use - Texas area code for predictable state lookup
+  caller_id: "+15125551234"
+  
+  recording:
+    enabled: true
+    format: "wav"
+    channels: 2
+    save_path: "./voice_output/treasury_agent/"
+
+# =============================================================================
+# NOVA SONIC AI CALLER CONFIGURATION
+# =============================================================================
+ai_caller:
+  engine: "nova-sonic"
+  model_id: "amazon.nova-sonic-v1:0"
+  region: "us-east-1"
+  
+  voice:
+    id: "tiffany"
+    gender: "female"
+    accent: "us-english"
+  
+  audio:
+    input_sample_rate: 16000
+    output_sample_rate: 24000
+    chunk_size_ms: 20
+    silence_padding_seconds: 2.0
+
+# =============================================================================
+# CALLER PERSONA
+# =============================================================================
+persona:
+  name: "State Verification Caller"
+  
+  system_prompt: |
+    You are calling Treasury to verify they can correctly identify 
+    your location based on your phone number.
+    
+    CRITICAL RULES:
+    1. Listen for the state they identify
+    2. Confirm if correct, or note if wrong
+    3. Keep responses SHORT
+    
+    Your phone has a Texas (512) area code, so they should identify Texas.
+    
+  attributes:
+    speaking_rate: "normal"
+    patience: "patient"
+    clarity: "clear"
+
+# =============================================================================
+# TEST STEPS
+# =============================================================================
+steps:
+  - id: "wait_for_data_dip"
+    description: "Wait for Lambda data dip message"
+    action: "listen"
+    expect:
+      patterns:
+        - "data dip"
+        - "Lambda"
+        - "lookup|looking up"
+        - "phone number"
+      timeout_seconds: 30
+    on_match: "wait_for_result"
+    on_timeout: "check_greeting"
+
+  - id: "check_greeting"
+    description: "Check for any greeting"
+    action: "listen"
+    expect:
+      patterns:
+        - "welcome|hello|Treasury|calling"
+      timeout_seconds: 15
+    on_match: "wait_for_result"
+    on_timeout: "hangup_timeout"
+
+  - id: "wait_for_result"
+    description: "Wait for state lookup result"
+    action: "listen"
+    expect:
+      patterns:
+        - "area code|state|located in"
+        - "Texas|California|New York"
+        - "failed to find|sorry"
+      timeout_seconds: 20
+    on_match: "respond_to_result"
+    on_timeout: "ai_engage"
+
+  - id: "respond_to_result"
+    description: "AI responds to state identification"
+    action: "ai_conversation"
+    config:
+      max_turns: 3
+      turn_timeout_seconds: 20
+      end_on_patterns:
+        - "anything else"
+        - "goodbye"
+      
+      guidance: |
+        If they correctly identified your state (Texas), confirm it.
+        If they got it wrong or couldn't find it, politely note that.
+        Then ask what services are available for your state.
+
+  - id: "ai_engage"
+    description: "Engage with whatever response came"
+    action: "speak"
+    content:
+      type: "literal"
+      text: "Hello, I'm calling from Texas."
+    next: "listen_for_anything"
+
+  - id: "listen_for_anything"
+    description: "Listen for any response"
+    action: "listen"
+    expect:
+      patterns:
+        - ".*"
+      timeout_seconds: 15
+    on_match: "call_end"
+    on_timeout: "call_end"
+
+  - id: "call_end"
+    description: "End call normally"
+    action: "hangup"
+    reason: "completed"
+
+  - id: "hangup_timeout"
+    description: "Timeout"
+    action: "hangup"
+    reason: "timeout"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+success_criteria:
+  required:
+    - step: "wait_for_data_dip"
+      status: "matched"
+      alternatives:
+        - step: "check_greeting"
+          status: "matched"
+  
+  call_duration:
+    min_seconds: 10
+    max_seconds: 120
+
+# =============================================================================
+# ASSERTIONS
+# =============================================================================
+assertions:
+  - type: "lambda_invocation"
+    description: "Lambda data dip was triggered"
+    patterns:
+      - "data dip|Lambda"
+    required: true
+
+  - type: "transcript_contains"
+    description: "State lookup mentioned"
+    patterns:
+      - "state|area code|phone number"
+    required: true
+
+  - type: "state_identified"
+    description: "Check if state was correctly identified"
+    expected_state: "Texas"
+    caller_area_code: "512"
+    required: false
+
+  - type: "transcript_excludes"
+    description: "No critical errors"
+    patterns:
+      - "system error|cannot process|unavailable"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  connect_instance: "treasury-connect-prod"
+  test_type: "integration"
+  priority: "medium"
+  features_tested:
+    - "lambda_data_dip"
+    - "area_code_lookup"
+    - "state_identification"
+    - "attribute_interpolation"

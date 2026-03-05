@@ -1,0 +1,193 @@
+# Census Survey Contact Flow - Automated Voice Test
+#
+# Instance: census-enumerator-9652
+# Flow: Census Survey Flow (4ed0dc27-6319-47e6-b98d-71cac718e656)
+# Phone: +18332895330
+#
+# Uses Nova Sonic AI-to-AI for intelligent caller simulation
+
+name: "Census Survey Flow - Interactive Test"
+version: "1.0.0"
+description: |
+  Automated voice test for the Census Survey Flow using Nova Sonic.
+  Simulates a cooperative caller completing the full survey.
+  
+  Flow contains 13 voice prompts including:
+  - Welcome message with recording notice
+  - Survey questions
+  - Roll outcomes (dice game element)
+
+author: "Copilot Agent Skills"
+created: "2026-03-04"
+tags:
+  - census-enumerator
+  - survey-flow
+  - nova-sonic
+  - automated-test
+
+# =============================================================================
+# TARGET CONFIGURATION
+# =============================================================================
+target:
+  phone_number: "+18332895330"
+  instance_id: "1d3555df-0f7a-4c78-9177-d42253597de2"
+  flow_id: "4ed0dc27-6319-47e6-b98d-71cac718e656"
+  flow_name: "Census Survey Flow"
+  
+  timeout_seconds: 180
+  max_duration_seconds: 300
+  
+  recording:
+    enabled: true
+    format: "wav"
+    channels: 2
+    save_path: "./voice_output/census_survey/"
+
+# =============================================================================
+# NOVA SONIC AI CALLER CONFIGURATION
+# =============================================================================
+ai_caller:
+  engine: "nova-sonic"
+  model_id: "amazon.nova-sonic-v1:0"
+  region: "us-east-1"
+  
+  voice:
+    id: "tiffany"
+    gender: "female"
+    accent: "us-english"
+  
+  audio:
+    input_sample_rate: 16000
+    output_sample_rate: 24000
+    chunk_size_ms: 20
+    silence_padding_seconds: 2.0
+
+# =============================================================================
+# CALLER PERSONA
+# =============================================================================
+persona:
+  name: "Survey Participant"
+  
+  system_prompt: |
+    You are calling the U.S. Census Bureau survey line. You are a cooperative 
+    participant willing to complete the survey.
+    
+    CRITICAL RULES:
+    1. Keep all responses SHORT (1-2 sentences max)
+    2. Answer questions directly without elaboration
+    3. Wait for prompts before speaking
+    4. If asked to press a number, say the number clearly instead
+    
+    Your profile:
+    - Name: Sarah Johnson
+    - Location: Austin, Texas
+    - Employment: Employed full-time
+    - Housing: Homeowner
+    - Household size: 3 people
+    - Age range: 35-44
+    
+    When you hear "roll" or "dice" - acknowledge the result briefly.
+    
+  attributes:
+    speaking_rate: "normal"
+    patience: "patient"
+    clarity: "clear"
+
+# =============================================================================
+# TEST STEPS
+# =============================================================================
+steps:
+  - id: "initial_greeting"
+    description: "Wait for welcome message"
+    action: "listen"
+    expect:
+      patterns:
+        - "Census Bureau"
+        - "recorded"
+        - "quality assurance"
+      timeout_seconds: 30
+    on_match: "ai_respond"
+    on_timeout: "hangup_timeout"
+
+  - id: "ai_respond"
+    description: "AI responds to prompts naturally"
+    action: "ai_conversation"
+    config:
+      max_turns: 20
+      turn_timeout_seconds: 30
+      end_on_patterns:
+        - "goodbye"
+        - "thank you for completing"
+        - "survey complete"
+      
+      # AI will respond naturally to each prompt
+      guidance: |
+        Listen carefully and respond appropriately:
+        - Greetings: Respond politely, confirm participation
+        - Yes/No questions: Answer directly
+        - Multiple choice: State your choice clearly
+        - Confirmations: Say "yes" or "correct"
+        - Dice/roll results: Acknowledge briefly
+
+  - id: "hangup_normal"
+    description: "End call after survey completion"
+    action: "hangup"
+    reason: "completed"
+
+  - id: "hangup_timeout"
+    description: "End call due to timeout"
+    action: "hangup"
+    reason: "timeout"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+success_criteria:
+  required:
+    - step: "initial_greeting"
+      status: "matched"
+    - step: "ai_respond"
+      min_turns: 3
+  
+  call_duration:
+    min_seconds: 30
+    max_seconds: 300
+
+# =============================================================================
+# ASSERTIONS
+# =============================================================================
+assertions:
+  - type: "transcript_contains"
+    description: "Verified greeting played"
+    patterns:
+      - "Census Bureau|census"
+    required: true
+
+  - type: "transcript_contains"
+    description: "Survey questions were asked"
+    patterns:
+      - "question|answer|survey|response"
+    required: true
+
+  - type: "transcript_excludes"
+    description: "No error messages"
+    patterns:
+      - "error occurred"
+      - "system failure"
+      - "please try again later"
+
+  - type: "call_completed"
+    description: "Call ended normally"
+    expected_reasons:
+      - "completed"
+      - "caller_hangup"
+      - "system_hangup"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  connect_instance: "census-enumerator-9652"
+  test_type: "integration"
+  priority: "high"
+  owner: "voice-testing-team"

@@ -1,0 +1,22 @@
+{
+  "name": "connect-census-survey",
+  "version": "1.0.0",
+  "description": "Amazon Connect Census Survey with AI Agent",
+  "scripts": {
+    "deploy": "./deploy.sh",
+    "test": "python3 scripts/test_system.py",
+    "cleanup": "python3 scripts/cleanup.py"
+  },
+  "keywords": [
+    "amazon-connect",
+    "census",
+    "survey",
+    "lex",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-cdk": "^2.125.0"
+  }
+}
