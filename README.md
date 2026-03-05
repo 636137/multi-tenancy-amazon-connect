@@ -1,228 +1,232 @@
 # Amazon Connect Voice Testing Framework
 
-Automated voice testing for Amazon Connect contact centers using AI-powered callers. Make real phone calls, interact with IVR systems, and validate conversation flows.
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![AWS](https://img.shields.io/badge/AWS-Connect%20%7C%20Chime%20%7C%20Bedrock-orange.svg)](https://aws.amazon.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Features
+**Automated voice testing for Amazon Connect contact centers** — Make real phone calls with AI-powered callers, test IVR flows, and validate Lex bot conversations.
 
-- **Real PSTN Voice Calls** - Actual phone calls via AWS Chime SDK SIP Media Application
-- **AI-Powered Callers** - Lambda handlers with Polly TTS that talk to your contact flows
-- **Status Tracking** - DynamoDB tracks call states in real-time
-- **Nova Sonic Integration** - AI-to-AI voice conversations using Amazon Bedrock
-- **Copilot Agent Skills** - Reusable AI skills for deployment, testing, and voice workflows
+## What This Does
 
-## Test Results
+| Capability | Description |
+|------------|-------------|
+| **Real Phone Calls** | Initiates actual PSTN calls via AWS Chime SDK to test your contact centers |
+| **AI Caller** | Lambda-based caller speaks via Polly, listens, and responds intelligently |
+| **AI-to-AI Conversations** | Two Nova Sonic instances talking to each other (demo included) |
+| **Status Tracking** | Real-time call state tracking via DynamoDB |
+| **Copilot Skills** | 4 reusable agent skills for deployment, testing, and voice workflows |
+
+## Latest Test Results
 
 ```
-✅ Census Survey: received_input (12.5s)
-✅ Treasury IVR: received_input (10.4s)
+✅ Census Survey (+18332895330): received_input in 12.5s
+✅ Treasury IVR (+18332896602): received_input in 10.4s
 ```
+
+---
+
+## Quick Start
+
+### 1. Clone and Setup
+
+```bash
+git clone https://github.com/636137/NovaSonicToNovaSonic.git
+cd NovaSonicToNovaSonic
+
+# Python 3.12+ required
+python3.12 -m venv .venv312
+source .venv312/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Configure AWS
+
+```bash
+aws configure
+# Needs: Connect, Chime SDK Voice, Bedrock, DynamoDB, Polly access
+```
+
+### 3. Run Voice Tests
+
+```bash
+# Test your Connect contact flows with real calls
+python voice_tester/run_pstn_tests.py
+```
+
+### 4. Try AI-to-AI Demo (Optional)
+
+```bash
+# Watch two AI voices have a conversation
+python voice_tester/sonic_live_playback.py
+```
+
+---
 
 ## Architecture
 
 ```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│   Test Runner   │────▶│  Chime SDK PSTN  │────▶│ Amazon Connect  │
-│ run_pstn_tests  │     │  SIP Media App   │     │  Contact Flow   │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
-                               │
-                               ▼
-                        ┌──────────────────┐
-                        │   SIP Lambda     │
-                        │  - Polly TTS     │
-                        │  - Status Track  │
-                        └──────────────────┘
-                               │
-                               ▼
-                        ┌──────────────────┐
-                        │    DynamoDB      │
-                        │ voice-test-      │
-                        │ scenarios        │
-                        └──────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│                        PSTN VOICE TESTING                          │
+├────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   ┌─────────────┐    ┌──────────────┐    ┌─────────────────────┐   │
+│   │ Test Runner │───▶│ Chime SDK    │───▶│  Amazon Connect     │   │
+│   │ Python CLI  │    │ SIP Media App│    │  Contact Flow       │   │
+│   └─────────────┘    └──────┬───────┘    └─────────────────────┘   │
+│                             │                                       │
+│                             ▼                                       │
+│                      ┌──────────────┐                               │
+│                      │ SIP Lambda   │                               │
+│                      │ • Polly TTS  │◀──── "Hello, this is a       │
+│                      │ • Bedrock AI │      test call..."           │
+│                      │ • Status     │                               │
+│                      └──────┬───────┘                               │
+│                             │                                       │
+│                             ▼                                       │
+│                      ┌──────────────┐    ┌─────────────────────┐   │
+│                      │  DynamoDB    │───▶│  Test Results JSON  │   │
+│                      │  Status      │    │  voice_output/      │   │
+│                      └──────────────┘    └─────────────────────┘   │
+│                                                                     │
+└────────────────────────────────────────────────────────────────────┘
 ```
 
-## Quick Start
-
-### Prerequisites
-
-- Python 3.12+ (required for AWS Smithy SDK)
-- AWS Account with:
-  - Amazon Connect instance
-  - Chime SDK Voice resources
-  - Bedrock access (for AI responses)
-- AWS CLI configured
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/636137/NovaSonicToNovaSonic.git
-cd NovaSonicToNovaSonic
-
-# Create virtual environment
-python3.12 -m venv .venv312
-source .venv312/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### Run Voice Tests
-
-```bash
-# Run PSTN voice tests against Connect instances
-python voice_tester/run_pstn_tests.py
-```
-
-### Run Nova Sonic Demo
-
-```bash
-# AI-to-AI voice conversation
-python voice_tester/sonic_live_playback.py
-```
+---
 
 ## Project Structure
 
 ```
 ├── .github/
-│   ├── copilot-instructions.md    # Copilot custom instructions
-│   └── skills/                    # Agent Skills (copy these!)
-│       ├── aws-deployment/        # AWS infrastructure deployment
-│       ├── nova-sonic/            # Voice streaming with Bedrock
-│       ├── testing-automation/    # Test generation
-│       └── voice-testing/         # PSTN call testing
-├── cdk/                           # CDK infrastructure stacks
-├── contact_flows/                 # Connect flow JSON definitions
-├── lambda/                        # Lambda function handlers
-├── lex/                           # Lex bot definitions
-├── scripts/                       # Utility scripts
-│   ├── fix_sip_lambda.py         # Update SIP Lambda handler
-│   └── setup_voice_testing.py    # Infrastructure setup
-└── voice_tester/                  # Voice testing framework
-    ├── run_pstn_tests.py         # Main test runner
-    ├── sonic_live_playback.py    # Nova Sonic demo
-    └── scenarios/                 # Test scenario YAML files
+│   ├── copilot-instructions.md     # Copilot custom instructions
+│   └── skills/                     # 4 Agent Skills (copy these!)
+│       ├── aws-deployment/         # Deploy Connect, Lex, Lambda
+│       ├── nova-sonic/             # Voice streaming with Bedrock
+│       ├── testing-automation/     # Generate tests
+│       └── voice-testing/          # PSTN call testing
+│
+├── voice_tester/                   # Main testing framework
+│   ├── run_pstn_tests.py          # ⭐ Main test runner
+│   ├── sonic_live_playback.py     # ⭐ AI-to-AI demo
+│   ├── nova_sonic_working.py      # Nova Sonic client
+│   ├── ai_to_ai_conversation.py   # Two AIs talking
+│   └── scenarios/                  # Test scenario YAML files
+│
+├── scripts/                        # Utilities
+│   ├── fix_sip_lambda.py          # Update SIP Lambda handler
+│   ├── setup_voice_testing.py     # Create DynamoDB table
+│   ├── check_lambda_logs.py       # Debug Lambda
+│   └── analyze_connect_flows.py   # Analyze your Connect flows
+│
+├── lambda/                         # Lambda handlers
+│   ├── lex/                        # Lex fulfillment
+│   └── survey/                     # Survey handler
+│
+├── contact_flows/                  # Connect flow definitions
+├── lex/                            # Lex bot configuration
+├── cdk/                            # CDK infrastructure
+└── docs/                           # Additional documentation
 ```
+
+---
+
+## Key Commands
+
+| Command | What It Does |
+|---------|--------------|
+| `python voice_tester/run_pstn_tests.py` | Run PSTN voice tests against Connect |
+| `python voice_tester/sonic_live_playback.py` | AI-to-AI conversation demo |
+| `python scripts/fix_sip_lambda.py` | Update the SIP Lambda handler |
+| `python scripts/check_lambda_logs.py` | View recent Lambda logs |
+| `python scripts/analyze_connect_flows.py` | Analyze Connect instance flows |
 
 ---
 
 ## Copilot Agent Skills
 
-This project includes **four reusable Agent Skills** for GitHub Copilot. Copy the `.github/skills/` folder to your projects to enable AI-powered workflows.
+This project includes **4 reusable Agent Skills** for GitHub Copilot. Copy them to any project!
 
 ### Available Skills
 
-| Skill | Invoke With | Description |
-|-------|-------------|-------------|
-| AWS Deployment | `/aws-deployment` | Deploy Connect, Lex, Lambda with self-healing and error recovery |
-| Nova Sonic | `/nova-sonic` | Bidirectional voice streaming with Amazon Bedrock |
-| Voice Testing | `/voice-testing` | PSTN call tests against contact flows |
-| Testing Automation | `/testing-automation` | Generate unit and integration tests |
+| Skill | Invoke | Use For |
+|-------|--------|---------|
+| **AWS Deployment** | `/aws-deployment` | Deploy Connect, Lex, Lambda with self-healing |
+| **Nova Sonic** | `/nova-sonic` | Bidirectional voice streaming with Bedrock |
+| **Voice Testing** | `/voice-testing` | Create PSTN call tests |
+| **Testing Automation** | `/testing-automation` | Generate unit/integration tests |
 
-### Quick Setup for Your Project
-
-**Copy skills to your project:**
+### Copy to Your Project
 
 ```bash
-# Copy the entire skills folder
-cp -r .github/skills/ /path/to/your/project/.github/skills/
+# Copy skills folder
+cp -r .github/skills/ /your/project/.github/skills/
 
-# Copy the Copilot instructions
-cp .github/copilot-instructions.md /path/to/your/project/.github/
+# Copy Copilot instructions
+cp .github/copilot-instructions.md /your/project/.github/
 ```
 
-**Use in Copilot Chat:**
-1. Type `/` to see available skills
-2. Select a skill or let Copilot auto-detect based on your query
-3. Skills provide domain-specific knowledge and workflows
-
-### Skills File Format
-
-Skills use the [VS Code Agent Skills](https://agentskills.io) format:
-
-```yaml
----
-name: skill-name
-description: Brief description of what the skill does
-argument-hint: "[optional] [arguments]"
-user-invocable: true
-disable-model-invocation: false
----
-
-# Skill Title
-
-Detailed markdown content with:
-- Instructions and guidelines
-- Code examples
-- Templates
-- Troubleshooting tips
-```
-
-### Customizing Skills
-
-Edit the SKILL.md files in each skill folder to customize behavior:
-
-| File | Purpose |
-|------|---------|
-| `SKILL.md` | Main skill definition and instructions |
-| `examples/` | Code examples for common tasks |
-| `templates/` | Reusable code/config templates |
+See [SKILLS.md](SKILLS.md) for detailed documentation on customizing skills.
 
 ---
 
 ## Configuration
 
-### Environment Variables
+### Test Targets
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `AWS_REGION` | AWS region | us-east-1 |
-| `SIP_MEDIA_APP_ID` | Chime SIP Media Application ID | (auto-detected) |
-| `FROM_PHONE` | Caller phone number | +13602098836 |
-| `DYNAMODB_TABLE` | Test status tracking table | voice-test-scenarios |
+Edit `voice_tester/run_pstn_tests.py` to add your phone numbers:
 
-### Test Scenarios
-
-Create YAML scenarios in `voice_tester/scenarios/`:
-
-```yaml
-name: "My IVR Test"
-description: "Test the main menu flow"
-
-target:
-  phone_number: "+15551234567"
-  timeout_seconds: 120
-
-steps:
-  - action: "listen"
-    expect:
-      patterns: ["welcome", "main menu"]
-  - action: "dtmf"
-    content: "1"
-  - action: "listen"
-    expect:
-      patterns: ["account balance"]
+```python
+targets = [
+    {
+        "name": "My IVR",
+        "phone": "+15551234567",
+        "scenario": {"greeting": "Test call"}
+    }
+]
 ```
+
+### AWS Resources
+
+| Resource | Description |
+|----------|-------------|
+| `treasury-synthetic-caller` | Chime SIP Media Application |
+| `treasury-sip-media-app` | Lambda handler for SIP events |
+| `voice-test-scenarios` | DynamoDB table (us-east-1) |
+| `+13602098836` | Outbound caller ID |
 
 ---
 
-## AWS Resources Required
+## How It Works
 
-| Resource | Purpose |
-|----------|---------|
-| Chime SIP Media Application | Handles outbound PSTN calls |
-| Chime Voice Connector | Routes calls to PSTN |
-| Lambda (SIP Handler) | Processes SIP events, speaks via Polly |
-| DynamoDB Table | Tracks test status and results |
-| Phone Number | Caller ID for outbound calls |
+### 1. Test Runner Initiates Call
+```python
+chime.create_sip_media_application_call(
+    FromPhoneNumber="+13602098836",
+    ToPhoneNumber="+18332895330",  # Your Connect number
+    SipMediaApplicationId="..."
+)
+```
 
-### Infrastructure Setup
+### 2. Lambda Handles SIP Events
+```
+NEW_OUTBOUND_CALL → RINGING → CALL_ANSWERED → ACTION_SUCCESSFUL → HANGUP
+```
 
-```bash
-# Creates DynamoDB table and configures Lambda
-python scripts/setup_voice_testing.py
+### 3. Lambda Speaks via Polly
+```python
+{
+    "Type": "Speak",
+    "Parameters": {
+        "Text": "Hello, this is an automated test call.",
+        "Engine": "neural",
+        "VoiceId": "Joanna"
+    }
+}
+```
 
-# Update the SIP Lambda handler
-python scripts/fix_sip_lambda.py
+### 4. Status Tracked in DynamoDB
+```
+test_id: "90ba4a34-1d94-439e-919f-eb79d0113e73"
+status: "received_input" → "completed"
 ```
 
 ---
@@ -230,47 +234,39 @@ python scripts/fix_sip_lambda.py
 ## Troubleshooting
 
 ### Call Timeouts
+```bash
+# Check DynamoDB table exists
+python -c "import boto3; print(boto3.client('dynamodb', region_name='us-east-1').describe_table(TableName='voice-test-scenarios'))"
 
-1. Verify DynamoDB table exists in correct region (us-east-1)
-2. Check Lambda has DynamoDB permissions
-3. View Lambda logs: `python scripts/check_lambda_logs.py`
+# Check Lambda logs
+python scripts/check_lambda_logs.py
+```
 
 ### PlayAudio Errors
-
-Use `Speak` action instead of `PlayAudio`:
-
+Use `Speak` action instead (simpler, more reliable):
 ```python
-{
-    "Type": "Speak",
-    "Parameters": {
-        "Text": "Hello, this is a test.",
-        "Engine": "neural",
-        "VoiceId": "Joanna"
-    }
-}
+{"Type": "Speak", "Parameters": {"Text": "Hello", "VoiceId": "Joanna"}}
 ```
 
-### Status Polling Issues
+### Wrong Region
+Ensure all resources are in us-east-1:
+- DynamoDB table
+- Lambda function
+- Chime SIP Media Application
 
-Test runner must poll by `transaction_id`:
+---
 
-```python
-poll_id = result.transaction_id if result.transaction_id else result.test_id
-```
+## AWS Prerequisites
+
+- **Amazon Connect** instance with phone number
+- **Chime SDK Voice** SIP Media Application + Voice Connector
+- **Lambda** with SIP handler code
+- **DynamoDB** table for status tracking
+- **Polly** access for TTS
+- **Bedrock** access (optional, for AI responses)
 
 ---
 
 ## License
 
 MIT License - see [LICENSE](LICENSE)
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make changes and test
-4. Submit a pull request
-
----
-
-*Built with Amazon Connect, Chime SDK, and Nova Sonic*
