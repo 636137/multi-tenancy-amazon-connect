@@ -148,7 +148,9 @@ StreamTech Plus subscription from three months ago.
 
 ## 📄 License
 
-MIT
+**MAXIMUS PROPRIETARY** - Internal Use Only
+
+This software is confidential and proprietary to Maximus Inc. Unauthorized copying, distribution, or use is strictly prohibited. See [LICENSE](LICENSE) for details.
 
 ---
 
