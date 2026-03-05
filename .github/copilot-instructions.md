@@ -9,6 +9,7 @@ For specialized workflows, use the available **Agent Skills** (type `/` in chat 
 | Skill | Purpose |
 |-------|---------|
 | `/aws-deployment` | Deploy AWS infrastructure with error handling and self-healing |
+| `/frontend-design` | Create distinctive, production-grade UI with bold aesthetics |
 | `/nova-sonic` | Deploy Nova Sonic bidirectional voice streaming applications |
 | `/voice-testing` | Create and execute real voice call tests |
 | `/testing-automation` | Generate and run automated tests |

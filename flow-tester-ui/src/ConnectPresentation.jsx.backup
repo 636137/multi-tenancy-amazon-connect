@@ -1,0 +1,1852 @@
+import { useState } from "react";
+
+const C = {
+  bg: "#0a0e1a", surface: "#111827", surfaceLight: "#1a2235",
+  accent: "#00d4ff", accentDim: "#00d4ff33",
+  danger: "#ff3b5c", dangerDim: "#ff3b5c22",
+  success: "#00e68a", successDim: "#00e68a22",
+  warn: "#ffb020", warnDim: "#ffb02022",
+  purple: "#a78bfa", purpleDim: "#a78bfa22",
+  rose: "#fb7185", roseDim: "#fb718522",
+  teal: "#2dd4bf", tealDim: "#2dd4bf22",
+  amber: "#f59e0b",
+  slate: "#64748b",
+  text: "#e2e8f0", textDim: "#94a3b8",
+  border: "#1e293b", borderLight: "#334155",
+};
+const T = [
+  { name: "HMRC", color: "#00d4ff", icon: "£" },
+  { name: "NHS Digital", color: "#00e68a", icon: "+" },
+  { name: "DWP", color: "#ffb020", icon: "◆" },
+  { name: "Home Office", color: "#a78bfa", icon: "⬡" },
+];
+const SL = [
+  { id: "hero", label: "Overview" }, { id: "shared", label: "Shared Instance" },
+  { id: "tagging", label: "Tag Reality" }, { id: "domains", label: "Domain Locks" },
+  { id: "gaps", label: "TBAC Gaps" }, { id: "ai", label: "AI Bundle" },
+  { id: "technical", label: "Technical Path" }, { id: "business", label: "Business Decision" },
+  { id: "faq", label: "FAQ" }, { id: "solution", label: "Per-Agency" },
+];
+const F = "'DM Sans', sans-serif";
+const FH = "'Playfair Display', Georgia, serif";
+
+function Badge({ children, color = C.accent }) {
+  return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color, border: `1px solid ${color}44`, background: `${color}15`, textTransform: "uppercase" }}>{children}</span>;
+}
+function Orb({ color, size = 200, top, left, opacity = 0.12 }) {
+  return <div style={{ position: "absolute", top, left, width: size, height: size, borderRadius: "50%", filter: "blur(80px)", opacity, background: color, pointerEvents: "none", zIndex: 0 }} />;
+}
+function Pulse({ color }) {
+  return <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: color, marginRight: 8, verticalAlign: "middle", animation: "pulse 2s ease-in-out infinite" }} />;
+}
+function Sl({ visible, children }) {
+  return <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease", position: visible ? "relative" : "absolute", pointerEvents: visible ? "auto" : "none", padding: "28px 20px", top: 0, left: 0, right: 0 }}>{children}</div>;
+}
+function SH({ badge, bc, title, hl, hc, sub }) {
+  return (
+    <div style={{ textAlign: "center", marginBottom: 26, position: "relative", zIndex: 1 }}>
+      <Badge color={bc}>{badge}</Badge>
+      <h2 style={{ fontSize: 30, fontWeight: 800, color: C.text, margin: "14px 0 6px", fontFamily: FH, lineHeight: 1.15 }}>
+        {title} <span style={{ color: hc }}>{hl}</span>
+      </h2>
+      {sub && <p style={{ fontSize: 13, color: C.textDim, maxWidth: 560, margin: "0 auto", fontFamily: F, lineHeight: 1.5 }}>{sub}</p>}
+    </div>
+  );
+}
+
+// 1. HERO
+  return (
+    <Sl visible={v}>
+      <Orb color={C.accent} size={400} top={-100} left={-100} opacity={0.07} />
+      <Orb color={C.danger} size={300} top={200} left="60%" opacity={0.05} />
+      <div style={{ textAlign: "center", padding: "50px 0 30px", position: "relative", zIndex: 1 }}>
+        <Badge color={C.warn}>UK Government Risk Analysis</Badge>
+        <h1 style={{ fontSize: 48, fontWeight: 800, color: C.text, margin: "22px 0 0", fontFamily: FH, lineHeight: 1.1, letterSpacing: -1 }}>Multi-Tenant<br /><span style={{ color: C.accent }}>Amazon Connect</span></h1>
+        <p style={{ fontSize: 16, color: C.textDim, maxWidth: 540, margin: "18px auto 0", lineHeight: 1.6, fontFamily: F }}>How tag-based access controls, domain constraints, and the AI pricing toggle interact across sovereign government entities — and where isolation fails.</p>
+        <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 40, flexWrap: "wrap" }}>
+          {T.map((t, i) => (
+            <div key={t.name} style={{ padding: "12px 20px", borderRadius: 12, border: `1px solid ${t.color}33`, background: `${t.color}08`, display: "flex", alignItems: "center", gap: 10, animation: `fadeUp 0.5s ease ${0.3 + i * 0.1}s both` }}>
+              <span style={{ fontSize: 18, width: 30, height: 30, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: `${t.color}22`, color: t.color }}>{t.icon}</span>
+              <span style={{ color: t.color, fontWeight: 600, fontSize: 13, fontFamily: F }}>{t.name}</span>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 12, color: C.textDim, marginTop: 28, opacity: 0.5, fontFamily: F }}>4 independent data controllers · 1 shared instance · 6+ data repos · 1 domain each for Profiles, Cases, Q</p>
+      </div>
+    </Sl>
+  );
+}
+
+// 2. SHARED INSTANCE
+function S2({ v }) {
+  const repos = [
+    { name: "S3 Recordings", icon: "🪣", desc: "Call recordings & transcripts" },
+    { name: "Contact Records", icon: "📋", desc: "CTRs via shared Kinesis" },
+    { name: "Contact Lens", icon: "🔍", desc: "Analytics & sentiment" },
+    { name: "Lex Sessions", icon: "🤖", desc: "Bot conversation logs" },
+    { name: "DynamoDB", icon: "🗃️", desc: "Session state & config" },
+    { name: "CloudWatch", icon: "📊", desc: "Metrics & ops logs" },
+  ];
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.danger} size={400} top={-80} right={-100} opacity={0.06} />
+      
+      <SectionHeader
+        badge="Architecture Problem"
+        badgeColor={palette.danger}
+        title="One Instance,"
+        highlight="Shared Everything"
+        highlightColor={palette.danger}
+        subtitle="All tenants' data flows into common AWS resources with no native isolation"
+      />
+      
+      {/* Tenant row */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 12,
+          marginBottom: 8,
+          flexWrap: "wrap",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {tenants.map((t, i) => (
+          <div
+            key={t.name}
+            style={{
+              padding: "10px 16px",
+              borderRadius: 12,
+              border: `1px solid ${t.color}33`,
+              background: `${t.color}08`,
+              textAlign: "center",
+              minWidth: 90,
+              animation: `slideUp 400ms ${easing.outExpo} ${i * 60}ms backwards`,
+            }}
+          >
+            <div style={{ fontSize: 18, color: t.color, marginBottom: 4 }}>{t.icon}</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: t.color, fontFamily: typography.body }}>
+              {t.name}
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Connection lines */}
+      <div style={{ display: "flex", justifyContent: "center", margin: "8px 0", position: "relative", zIndex: 1 }}>
+        {tenants.map((t, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 102 }}>
+            <div
+              style={{
+                width: 2,
+                height: 24,
+                background: `linear-gradient(to bottom, ${t.color}60, ${palette.danger}60)`,
+              }}
+            />
+            <div
+              style={{
+                width: 0,
+                height: 0,
+                borderLeft: "5px solid transparent",
+                borderRight: "5px solid transparent",
+                borderTop: `6px solid ${palette.danger}80`,
+              }}
+            />
+          </div>
+        ))}
+      </div>
+      
+      {/* Shared instance box */}
+      <GlassPanel
+        accent={palette.danger}
+        glow
+        style={{ maxWidth: 720, margin: "0 auto", position: "relative" }}
+      >
+        <AnimatedBorder color={palette.danger} radius={20} />
+        
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+          <StatusDot color={palette.danger} />
+          <span
+            style={{
+              fontSize: 12,
+              fontWeight: 700,
+              color: palette.danger,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              fontFamily: typography.body,
+            }}
+          >
+            Shared Amazon Connect Instance
+          </span>
+        </div>
+        
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: 10,
+          }}
+        >
+          {repos.map((r, i) => (
+            <div
+              key={r.name}
+              style={{
+                padding: "14px 16px",
+                borderRadius: 14,
+                border: `1px solid ${palette.borderLight}`,
+                background: palette.surface,
+                animation: `slideUp 400ms ${easing.outExpo} ${200 + i * 50}ms backwards`,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ fontSize: 18 }}>{r.icon}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: palette.text, fontFamily: typography.body }}>
+                  {r.name}
+                </span>
+              </div>
+              <div style={{ fontSize: 11, color: palette.textSecondary, lineHeight: 1.5, fontFamily: typography.body }}>
+                {r.desc}
+              </div>
+              <div style={{ display: "flex", gap: 4, marginTop: 8, alignItems: "center" }}>
+                {tenants.map(t => (
+                  <span
+                    key={t.name}
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: 3,
+                      background: t.color,
+                      opacity: 0.8,
+                    }}
+                  />
+                ))}
+                <span style={{ fontSize: 9, color: palette.textMuted, marginLeft: 4, fontFamily: typography.mono }}>
+                  mixed
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div
+          style={{
+            marginTop: 14,
+            padding: "12px 16px",
+            borderRadius: 12,
+            background: palette.dangerDim,
+            border: `1px solid ${palette.danger}22`,
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 10,
+          }}
+        >
+          <span style={{ fontSize: 16 }}>⚠️</span>
+          <span style={{ fontSize: 12, color: palette.danger, lineHeight: 1.6, fontFamily: typography.body }}>
+            Every repository contains commingled data from all tenants. No native partition boundary.
+          </span>
+        </div>
+      </GlassPanel>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 3: TAGGING REALITY
+// ═══════════════════════════════════════════════════════════════════
+
+function TaggingSlide({ visible }) {
+  const resources = [
+    { name: "Users / Agents", taggable: true, tbac: true },
+    { name: "Queues", taggable: true, tbac: true },
+    { name: "Routing Profiles", taggable: true, tbac: true },
+    { name: "Contacts", taggable: false, tbac: false, critical: true },
+    { name: "Contact Lens Dashboard", taggable: true, tbac: false, critical: true },
+    { name: "Contact Search", taggable: true, tbac: "partial", critical: true },
+    { name: "S3 Recordings", taggable: false, tbac: false, critical: true },
+    { name: "Kinesis Streams", taggable: false, tbac: false },
+    { name: "CloudWatch Logs", taggable: false, tbac: false },
+    { name: "Real-time Metrics", taggable: true, tbac: true },
+    { name: "Historical Metrics", taggable: true, tbac: true },
+    { name: "Security Profiles", taggable: true, tbac: true },
+  ];
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.accent} size={300} top={0} left={-100} opacity={0.06} />
+      
+      <SectionHeader
+        badge="Tagging Matrix"
+        badgeColor={palette.warn}
+        title="What Tags"
+        highlight="Actually Control"
+        highlightColor={palette.warn}
+        subtitle="TBAC covers operational resources but misses where tenant data lives"
+      />
+      
+      <div style={{ maxWidth: 640, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <GlassPanel padding={0} style={{ overflow: "hidden" }}>
+          {/* Header */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 90px 90px",
+              padding: "14px 20px",
+              background: palette.surfaceElevated,
+              borderBottom: `1px solid ${palette.border}`,
+            }}
+          >
+            {["Resource", "Taggable", "TBAC"].map(h => (
+              <span
+                key={h}
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: palette.textMuted,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  fontFamily: typography.body,
+                  textAlign: h === "Resource" ? "left" : "center",
+                }}
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+          
+          {/* Rows */}
+          {resources.map((r, i) => (
+            <div
+              key={r.name}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 90px 90px",
+                padding: "12px 20px",
+                borderBottom: `1px solid ${palette.border}`,
+                background: r.critical ? palette.dangerDim : "transparent",
+                animation: `slideUp 250ms ${easing.outExpo} ${i * 30}ms backwards`,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 13,
+                  color: r.critical ? palette.danger : palette.text,
+                  fontWeight: r.critical ? 600 : 400,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  fontFamily: typography.body,
+                }}
+              >
+                {r.critical && <span style={{ fontSize: 10 }}>🚨</span>}
+                {r.name}
+              </span>
+              <span style={{ textAlign: "center", fontSize: 16 }}>
+                {r.taggable ? "✅" : "❌"}
+              </span>
+              <span style={{ textAlign: "center", fontSize: 16 }}>
+                {r.tbac === true ? "✅" : r.tbac === "partial" ? "⚠️" : "❌"}
+              </span>
+            </div>
+          ))}
+        </GlassPanel>
+        
+        {/* Critical gap callout */}
+        <div
+          style={{
+            marginTop: 20,
+            padding: "18px 22px",
+            borderRadius: 16,
+            background: `linear-gradient(135deg, ${palette.dangerDim}, ${palette.warnDim})`,
+            border: `1px solid ${palette.danger}33`,
+            position: "relative",
+          }}
+        >
+          <AnimatedBorder color={palette.danger} radius={16} thickness={1} />
+          <div
+            style={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: palette.danger,
+              marginBottom: 8,
+              fontFamily: typography.display,
+            }}
+          >
+            The Critical Gap
+          </div>
+          <div style={{ fontSize: 13, color: palette.textSecondary, lineHeight: 1.7, fontFamily: typography.body }}>
+            <strong style={{ color: palette.text }}>Contacts cannot be tagged.</strong> S3 recordings land 
+            in shared buckets. Contact Lens dashboards ignore TBAC. One misconfigured security profile 
+            exposes all tenants' data.
+          </div>
+        </div>
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 4: DOMAIN LOCKS
+// ═══════════════════════════════════════════════════════════════════
+
+function DomainLocksSlide({ visible }) {
+  const domains = [
+    {
+      name: "Customer Profiles",
+      icon: "👤",
+      color: palette.accent,
+      constraint: "1 domain / instance",
+      impact: "All tenant PII pools into one domain. Identity Resolution merges duplicates across tenants. No TBAC on profile data.",
+    },
+    {
+      name: "Amazon Connect Cases",
+      icon: "📁",
+      color: palette.warn,
+      constraint: "1 Cases domain / instance",
+      impact: "All case templates, fields, layouts shared. DWP benefits cases and NHS safeguarding cases in the same domain.",
+    },
+    {
+      name: "Amazon Q in Connect",
+      icon: "🧠",
+      color: palette.success,
+      constraint: "1 AI agent domain / instance",
+      impact: "One knowledge base feeds all agents. HMRC tax guidance and NHS clinical pathways cannot be separated.",
+    },
+    {
+      name: "Outbound Campaigns",
+      icon: "📞",
+      color: palette.home,
+      constraint: "Instance + account quotas",
+      impact: "Campaign management and predictive dialer shared. One tenant's burst exhausts quotas for all.",
+    },
+    {
+      name: "Evaluation Forms",
+      icon: "📝",
+      color: "#fb7185",
+      constraint: "Instance-wide",
+      impact: "Performance evaluations shared. Supervisors see all agents' evaluations. Gen AI auto-evals process all contacts.",
+    },
+    {
+      name: "Agent Scheduling",
+      icon: "📅",
+      color: "#38bdf8",
+      constraint: "Instance-level",
+      impact: "Scheduling rules, shift profiles, staffing forecasts at instance level. Cross-tenant pools break forecasting.",
+    },
+  ];
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color="#fb7185" size={400} top={-100} left="30%" opacity={0.06} />
+      
+      <SectionHeader
+        badge="1:1 Domain Locks"
+        badgeColor="#fb7185"
+        title="One Instance ="
+        highlight="One Domain Each"
+        highlightColor="#fb7185"
+        subtitle="Six critical services hard-locked to a single domain per instance — no tenant partitioning"
+      />
+      
+      <div style={{ maxWidth: 720, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* Lock indicator */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            marginBottom: 24,
+            padding: "12px 20px",
+            borderRadius: 14,
+            background: `rgba(251, 113, 133, 0.06)`,
+            border: `1px solid rgba(251, 113, 133, 0.2)`,
+          }}
+        >
+          <span style={{ fontSize: 22 }}>🔒</span>
+          <span
+            style={{
+              fontSize: 11,
+              color: "#fb7185",
+              fontWeight: 700,
+              fontFamily: typography.mono,
+              letterSpacing: "0.03em",
+            }}
+          >
+            1 INSTANCE = 1 Profiles = 1 Cases = 1 Q = 1 Scheduling Domain
+          </span>
+        </div>
+        
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {domains.map((d, i) => (
+            <GlassPanel
+              key={d.name}
+              accent={d.color}
+              padding={18}
+              style={{ animation: `slideUp 400ms ${easing.outExpo} ${i * 60}ms backwards` }}
+            >
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 10 }}>
+                <span style={{ fontSize: 24 }}>{d.icon}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: d.color, fontFamily: typography.display }}>
+                    {d.name}
+                  </div>
+                  <Badge color={palette.danger} size="xs">
+                    {d.constraint}
+                  </Badge>
+                </div>
+              </div>
+              <p style={{ fontSize: 12, color: palette.textSecondary, lineHeight: 1.6, margin: 0, fontFamily: typography.body }}>
+                {d.impact}
+              </p>
+            </GlassPanel>
+          ))}
+        </div>
+        
+        <div
+          style={{
+            marginTop: 20,
+            padding: "16px 20px",
+            borderRadius: 14,
+            background: `linear-gradient(135deg, rgba(251, 113, 133, 0.08), ${palette.dangerDim})`,
+            border: `1px solid rgba(251, 113, 133, 0.25)`,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: 13, color: palette.textSecondary, lineHeight: 1.7, margin: 0, fontFamily: typography.body }}>
+            Each domain is a <strong style={{ color: palette.text }}>single flat namespace</strong>. NHS patient 
+            profiles, HMRC taxpayer records, DWP benefits cases, and Home Office immigration data all inhabit 
+            the same container.
+          </p>
+        </div>
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 5: TBAC GAPS / FAILURE MODES
+// ═══════════════════════════════════════════════════════════════════
+
+function GapsSlide({ visible }) {
+  const gaps = [
+    {
+      title: "Security Profile Override",
+      color: palette.danger,
+      icon: "🔓",
+      desc: "Any admin with an unrestricted security profile bypasses all TBAC. One misconfiguration exposes every tenant.",
+      tag: "NCSC Principle 3",
+    },
+    {
+      title: "Contact Search Leakage",
+      color: palette.warn,
+      icon: "🔎",
+      desc: "Contact Search returns cross-tenant results. NHS supervisor could surface HMRC conversations.",
+      tag: "FOIA cross-contamination",
+    },
+    {
+      title: "S3 Race Condition",
+      color: palette.home,
+      icon: "⏱️",
+      desc: "Lambda pipeline must move recordings instantly. Any failure leaves data in shared bucket.",
+      tag: "Data minimisation breach",
+    },
+    {
+      title: "Kinesis / CloudWatch",
+      color: palette.accent,
+      icon: "📡",
+      desc: "CTRs into shared Kinesis. CloudWatch logs all tenants. No tag-based filtering.",
+      tag: "No tenant isolation",
+    },
+  ];
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.danger} size={400} top={-100} left="40%" opacity={0.06} />
+      
+      <SectionHeader
+        badge="Failure Modes"
+        badgeColor={palette.danger}
+        title="Where"
+        highlight="Isolation Fails"
+        highlightColor={palette.danger}
+      />
+      
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 16,
+          maxWidth: 700,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {gaps.map((g, i) => (
+          <GlassPanel
+            key={g.title}
+            accent={g.color}
+            glow
+            padding={22}
+            style={{ animation: `slideUp 500ms ${easing.outExpo} ${i * 80}ms backwards` }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+              <span
+                style={{
+                  fontSize: 28,
+                  width: 48,
+                  height: 48,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 14,
+                  background: `${g.color}15`,
+                }}
+              >
+                {g.icon}
+              </span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: g.color, fontFamily: typography.display }}>
+                {g.title}
+              </span>
+            </div>
+            <p style={{ fontSize: 13, color: palette.textSecondary, lineHeight: 1.65, margin: "0 0 14px", fontFamily: typography.body }}>
+              {g.desc}
+            </p>
+            <Badge color={g.color} size="xs">{g.tag}</Badge>
+          </GlassPanel>
+        ))}
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 6: AI BUNDLE PRICING
+// ═══════════════════════════════════════════════════════════════════
+
+function AIBundleSlide({ visible }) {
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.warn} size={350} top={-80} left="25%" opacity={0.06} />
+      
+      <SectionHeader
+        badge="Cost Architecture"
+        badgeColor={palette.warn}
+        title="The"
+        highlight="Unlimited AI Trap"
+        highlightColor={palette.warn}
+        subtitle="Instance-level toggle with no per-tenant granularity"
+      />
+      
+      <div style={{ maxWidth: 620, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, marginBottom: 24 }}>
+          {/* AI Enabled */}
+          <GlassPanel accent={palette.success} glow padding={24}>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: palette.success,
+                marginBottom: 12,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                fontFamily: typography.body,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <StatusDot color={palette.success} />
+              AI Enabled
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: palette.text, fontFamily: typography.display }}>
+              $0.038
+              <span style={{ fontSize: 14, color: palette.textSecondary }}>/min</span>
+            </div>
+            <div style={{ fontSize: 12, color: palette.textSecondary, margin: "12px 0", lineHeight: 1.6, fontFamily: typography.body }}>
+              Contact Lens · Q in Connect · Perf Eval · Screen Rec · Scheduling · AI Lex
+            </div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+              {tenants.map(t => (
+                <span
+                  key={t.name}
+                  style={{
+                    padding: "3px 10px",
+                    borderRadius: 6,
+                    background: `${t.color}18`,
+                    color: t.color,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    fontFamily: typography.body,
+                  }}
+                >
+                  {t.name}
+                </span>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: palette.warn, fontWeight: 600, fontFamily: typography.body }}>
+              ⚠️ ALL tenants pay — even those not using AI
+            </div>
+          </GlassPanel>
+          
+          {/* AI Disabled */}
+          <GlassPanel padding={24} style={{ opacity: 0.7 }}>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: palette.textMuted,
+                marginBottom: 12,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                fontFamily: typography.body,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: palette.textMuted }} />
+              AI Disabled
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: palette.textMuted, fontFamily: typography.display }}>
+              $0.018
+              <span style={{ fontSize: 14, color: palette.textMuted }}>/min</span>
+            </div>
+            <div
+              style={{
+                fontSize: 12,
+                color: palette.textMuted,
+                margin: "12px 0",
+                lineHeight: 1.6,
+                textDecoration: "line-through",
+                fontFamily: typography.body,
+              }}
+            >
+              Contact Lens · Q in Connect · Perf Eval · Screen Rec · Scheduling · AI Lex
+            </div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+              {tenants.map(t => (
+                <span
+                  key={t.name}
+                  style={{
+                    padding: "3px 10px",
+                    borderRadius: 6,
+                    background: `${palette.textMuted}15`,
+                    color: palette.textMuted,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    fontFamily: typography.body,
+                  }}
+                >
+                  {t.name}
+                </span>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: palette.danger, fontWeight: 600, fontFamily: typography.body }}>
+              ❌ NO tenants get AI — even those that need it
+            </div>
+          </GlassPanel>
+        </div>
+        
+        <div
+          style={{
+            padding: "20px 24px",
+            borderRadius: 16,
+            background: `linear-gradient(135deg, ${palette.warnDim}, ${palette.dangerDim})`,
+            border: `1px solid ${palette.warn}33`,
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: 15, fontWeight: 700, color: palette.warn, marginBottom: 8, fontFamily: typography.display }}>
+            The Unanimous-Consent Problem
+          </div>
+          <p style={{ fontSize: 13, color: palette.textSecondary, lineHeight: 1.7, margin: 0, fontFamily: typography.body }}>
+            NHS needs Contact Lens for <strong style={{ color: palette.success }}>safeguarding keyword detection</strong>. 
+            DWP refuses the higher rate. <strong style={{ color: palette.danger }}>Neither gets what they need.</strong>
+          </p>
+        </div>
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 7: TECHNICAL SOLUTION PATH
+// ═══════════════════════════════════════════════════════════════════
+
+function TechnicalSlide({ visible }) {
+  const mitigations = [
+    {
+      name: "Bootstrap Flows + DynamoDB Config",
+      what: "Centralized IVR routing with per-tenant config lookup via DynamoDB.",
+      status: "valid",
+      verdict: "Addresses routing only. No data isolation.",
+      color: palette.success,
+    },
+    {
+      name: "TBAC on Agents, Queues, Routing Profiles",
+      what: "Tag resources with tenant identifier. Security profiles restrict by access control tags.",
+      status: "partial",
+      verdict: "Works for operational resources. Does NOT cover Contacts, S3, Contact Lens, Kinesis, CloudWatch, Profiles, Cases, or Q.",
+      color: palette.warn,
+    },
+    {
+      name: "KMS + S3 Lambda Pipeline",
+      what: "Per-tenant KMS keys. Lambda on S3 PutObject moves recordings to tenant-specific buckets.",
+      status: "fragile",
+      verdict: "Race condition: data in shared bucket until Lambda completes. Any failure leaves data exposed.",
+      color: palette.warn,
+    },
+    {
+      name: "Athena CTR Billing",
+      what: "Query CTRs in Athena, filter by queue/tenant, generate per-tenant cost reports.",
+      status: "partial",
+      verdict: "CTR costs only (50-70%). Cannot track Lambda, DynamoDB, Kinesis, Lex, S3, KMS, or CloudWatch.",
+      color: palette.warn,
+    },
+    {
+      name: "Managed-Access Model",
+      what: "Tenants never access Connect UI. Maximus operates instance, exports reports.",
+      status: "best",
+      verdict: "Most defensible. But loses native supervisor capabilities. Months to replicate. Does not achieve NCSC Principle 3.",
+      color: palette.accent,
+    },
+    {
+      name: "Hierarchy-Based Access Control",
+      what: "Assign agents to hierarchy groups per tenant. Restrict contact access by hierarchy.",
+      status: "partial",
+      verdict: "Only restricts by which agent handled the contact. No effect on S3, Kinesis, or domain-locked services.",
+      color: palette.warn,
+    },
+  ];
+
+  const limitations = [
+    "Contacts are not taggable — the fundamental resource has no access control",
+    "Contact Lens dashboards explicitly do not support TBAC",
+    "Customer Profiles, Cases, Q, Scheduling: 1 domain per instance, no sub-tenancy",
+    "Security profile misconfiguration is a single point of failure for all tenants",
+    "S3 recordings have no native tenant partition; requires custom Lambda pipeline",
+    "Outbound campaign quotas are per-account, not per-tenant",
+    "Unlimited AI pricing is instance-wide binary toggle",
+    "No native per-tenant billing; custom Athena pipeline with incomplete cost coverage",
+  ];
+
+  const statusMap = {
+    valid: { label: "Works", color: palette.success },
+    partial: { label: "Partial", color: palette.warn },
+    fragile: { label: "Fragile", color: palette.danger },
+    best: { label: "Best Option", color: palette.accent },
+  };
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color="#2dd4bf" size={400} top={-80} left="15%" opacity={0.06} />
+      
+      <SectionHeader
+        badge="Technical Solution Path"
+        badgeColor="#2dd4bf"
+        title="If You Must"
+        highlight="Share an Instance"
+        highlightColor="#2dd4bf"
+        subtitle="Every mitigation, its coverage, and what it leaves exposed"
+      />
+      
+      <div style={{ maxWidth: 750, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {mitigations.map((m, i) => {
+          const s = statusMap[m.status];
+          return (
+            <div
+              key={m.name}
+              style={{
+                marginBottom: 12,
+                padding: "18px 22px",
+                borderRadius: 16,
+                border: `1px solid ${m.color}22`,
+                background: `${m.color}04`,
+                animation: `slideUp 350ms ${easing.outExpo} ${i * 60}ms backwards`,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                <Badge color={s.color} size="xs">{s.label}</Badge>
+                <span style={{ fontSize: 14, fontWeight: 700, color: palette.text, fontFamily: typography.display }}>
+                  {m.name}
+                </span>
+              </div>
+              <p style={{ fontSize: 12, color: palette.textSecondary, lineHeight: 1.6, margin: "0 0 10px", fontFamily: typography.body }}>
+                {m.what}
+              </p>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: m.color,
+                  lineHeight: 1.6,
+                  fontWeight: 500,
+                  fontFamily: typography.body,
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  background: `${m.color}08`,
+                }}
+              >
+                → {m.verdict}
+              </div>
+            </div>
+          );
+        })}
+        
+        {/* Hard limitations */}
+        <GlassPanel accent={palette.danger} padding={22} style={{ marginTop: 24 }}>
+          <div
+            style={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: palette.danger,
+              marginBottom: 16,
+              fontFamily: typography.display,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <span style={{ fontSize: 18 }}>⛔</span>
+            Hard Platform Limitations (Cannot Be Mitigated)
+          </div>
+          {limitations.map((l, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: 10,
+                marginBottom: i < limitations.length - 1 ? 10 : 0,
+                fontSize: 12,
+                color: palette.textSecondary,
+                lineHeight: 1.6,
+                fontFamily: typography.body,
+                animation: `slideUp 300ms ${easing.outExpo} ${400 + i * 40}ms backwards`,
+              }}
+            >
+              <span style={{ color: palette.danger, fontWeight: 700, flexShrink: 0 }}>✕</span>
+              <span>{l}</span>
+            </div>
+          ))}
+        </GlassPanel>
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 8: BUSINESS DECISION
+// ═══════════════════════════════════════════════════════════════════
+
+function BusinessSlide({ visible }) {
+  const [tab, setTab] = useState("compare");
+
+  const pros = [
+    { title: "Lower Initial Setup", desc: "One instance to configure, one set of flows, one deployment pipeline.", icon: "🚀" },
+    { title: "Shared Agent Pool", desc: "Cross-trained agents serve multiple tenants. Higher utilization.", icon: "👥" },
+    { title: "Centralized Operations", desc: "Single pane of glass for monitoring. One team manages all.", icon: "🖥️" },
+    { title: "Reusable Flow Library", desc: "Bootstrap flows, IVR templates, Lex bots shared across tenants.", icon: "🔄" },
+    { title: "Potential Volume Discounts", desc: "Aggregated usage may qualify for AWS Enterprise Discount Program.", icon: "📉" },
+  ];
+
+  const cons = [
+    { title: "UK GDPR Liability", desc: "Joint controllership confusion. ICO fines up to £17.5M or 4% turnover.", icon: "⚖️", severity: "critical" },
+    { title: "FOIA Cross-Contamination", desc: "Broad FOI request to one agency could sweep another's data.", icon: "📜", severity: "critical" },
+    { title: "NCSC Non-Compliance", desc: "No technically enforced separation between consumers.", icon: "🛡️", severity: "critical" },
+    { title: "Blocked AI Adoption", desc: "Instance-level toggle: one objecting tenant blocks AI for everyone.", icon: "🧠", severity: "high" },
+    { title: "No Native Supervision", desc: "Managed-access loses silent monitor, barge, whisper. Months to replicate.", icon: "👁️", severity: "high" },
+    { title: "Domain Lock-In", desc: "Profiles, Cases, Q, Scheduling — one domain per instance. PII commingled.", icon: "🔒", severity: "critical" },
+    { title: "Delivery Velocity Risk", desc: "Each new tenant requires TBAC validation, S3 pipeline confirmation.", icon: "🐌", severity: "medium" },
+    { title: "Billing Complexity", desc: "Custom Athena covers only CTR costs (50-70%). Rest unattributable.", icon: "💸", severity: "medium" },
+    { title: "Single Point of Failure", desc: "One misconfigured security profile exposes all tenants.", icon: "💥", severity: "high" },
+    { title: "Audit Burden", desc: "Shared instance makes DSPT scoping and DPIA assessments harder.", icon: "📋", severity: "high" },
+  ];
+
+  const scenarios = [
+    {
+      title: "Multi-Tenant Works Well",
+      color: palette.success,
+      icon: "✅",
+      items: [
+        "Single legal entity (multiple brands/divisions)",
+        "Commercial tenants accepting residual risk via contract",
+        "Internal operations (single controller)",
+        "All tenants agree on AI enablement and pricing model",
+        "Tenants share agent pools, don't need separate supervision",
+      ],
+    },
+    {
+      title: "Multi-Tenant is Dangerous",
+      color: palette.danger,
+      icon: "⛔",
+      items: [
+        "Independent UK government entities (separate data controllers)",
+        "NHS trusts handling patient data (DSPT requirements)",
+        "Tenants with different AI/budget requirements",
+        "Agencies subject to different FOI jurisdictions",
+        "Devolved administrations (Scotland, NI, own frameworks)",
+      ],
+    },
+  ];
+
+  const severityColors = { critical: palette.danger, high: palette.warn, medium: palette.textMuted };
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.home} size={400} top={-100} left="25%" opacity={0.06} />
+      
+      <SectionHeader
+        badge="Business Decision"
+        badgeColor={palette.home}
+        title="Should We"
+        highlight="Share an Instance?"
+        highlightColor={palette.home}
+        subtitle="A balanced view for business owners to weigh efficiency against risk"
+      />
+      
+      <div style={{ maxWidth: 750, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* Tab switcher */}
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 28 }}>
+          {[
+            { id: "compare", label: "Pros vs. Cons" },
+            { id: "scenarios", label: "When It Works vs. Doesn't" },
+          ].map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              style={{
+                padding: "10px 24px",
+                borderRadius: 12,
+                border: "none",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: typography.body,
+                transition: `all 200ms ${easing.outExpo}`,
+                background: tab === t.id ? `${palette.home}18` : palette.surface,
+                color: tab === t.id ? palette.home : palette.textSecondary,
+                outline: tab === t.id ? `1px solid ${palette.home}44` : `1px solid ${palette.borderLight}`,
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "compare" && (
+          <div>
+            {/* Pros */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                <span style={{ fontSize: 18 }}>👍</span>
+                <span style={{ fontSize: 16, fontWeight: 700, color: palette.success, fontFamily: typography.display }}>
+                  Arguments FOR Multi-Tenancy
+                </span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
+                {pros.map((p, i) => (
+                  <div
+                    key={p.title}
+                    style={{
+                      padding: "16px 18px",
+                      borderRadius: 14,
+                      border: `1px solid ${palette.success}22`,
+                      background: palette.successDim,
+                      animation: `slideUp 300ms ${easing.outExpo} ${i * 50}ms backwards`,
+                    }}
+                  >
+                    <div style={{ fontSize: 20, marginBottom: 8 }}>{p.icon}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: palette.success, marginBottom: 4, fontFamily: typography.body }}>
+                      {p.title}
+                    </div>
+                    <div style={{ fontSize: 12, color: palette.textSecondary, lineHeight: 1.6, fontFamily: typography.body }}>
+                      {p.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cons */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                <span style={{ fontSize: 18 }}>👎</span>
+                <span style={{ fontSize: 16, fontWeight: 700, color: palette.danger, fontFamily: typography.display }}>
+                  Arguments AGAINST (Sovereign Government Context)
+                </span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
+                {cons.map((c, i) => (
+                  <div
+                    key={c.title}
+                    style={{
+                      padding: "16px 18px",
+                      borderRadius: 14,
+                      border: `1px solid ${severityColors[c.severity]}22`,
+                      background: `${severityColors[c.severity]}08`,
+                      animation: `slideUp 300ms ${easing.outExpo} ${i * 40}ms backwards`,
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                      <span style={{ fontSize: 16 }}>{c.icon}</span>
+                      <Badge color={severityColors[c.severity]} size="xs">{c.severity}</Badge>
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: severityColors[c.severity],
+                        marginBottom: 4,
+                        fontFamily: typography.body,
+                      }}
+                    >
+                      {c.title}
+                    </div>
+                    <div style={{ fontSize: 12, color: palette.textSecondary, lineHeight: 1.6, fontFamily: typography.body }}>
+                      {c.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Summary */}
+            <div
+              style={{
+                marginTop: 24,
+                padding: "20px 24px",
+                borderRadius: 16,
+                background: `linear-gradient(135deg, ${palette.home}08, ${palette.dangerDim})`,
+                border: `1px solid ${palette.home}33`,
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: 14, fontWeight: 700, color: palette.home, marginBottom: 8, fontFamily: typography.display }}>
+                The Core Question
+              </div>
+              <p style={{ fontSize: 13, color: palette.textSecondary, lineHeight: 1.8, margin: 0, fontFamily: typography.body }}>
+                Do <strong style={{ color: palette.success }}>5 operational conveniences</strong> outweigh{" "}
+                <strong style={{ color: palette.danger }}>10 risks</strong> — including 4 rated{" "}
+                <strong style={{ color: palette.danger }}>critical</strong> under enforceable UK law? The benefits 
+                can be replicated via IaC. The regulatory risks{" "}
+                <strong style={{ color: palette.text }}>cannot be engineered away</strong>.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {tab === "scenarios" && (
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
+              {scenarios.map((s, si) => (
+                <GlassPanel
+                  key={s.title}
+                  accent={s.color}
+                  glow
+                  padding={24}
+                  style={{ animation: `slideUp 400ms ${easing.outExpo} ${si * 100}ms backwards` }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+                    <span style={{ fontSize: 28 }}>{s.icon}</span>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: s.color, fontFamily: typography.display }}>
+                      {s.title}
+                    </span>
+                  </div>
+                  {s.items.map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        gap: 10,
+                        marginBottom: 12,
+                        fontSize: 13,
+                        color: palette.textSecondary,
+                        lineHeight: 1.6,
+                        fontFamily: typography.body,
+                      }}
+                    >
+                      <span style={{ color: s.color, fontWeight: 700, flexShrink: 0, marginTop: 2 }}>●</span>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </GlassPanel>
+              ))}
+            </div>
+
+            <div
+              style={{
+                marginTop: 24,
+                padding: "20px 24px",
+                borderRadius: 16,
+                border: `1px solid ${palette.accent}33`,
+                background: palette.accentDim,
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: 15, fontWeight: 700, color: palette.accent, marginBottom: 10, fontFamily: typography.display }}>
+                The Boundary Is Sovereignty
+              </div>
+              <p style={{ fontSize: 13, color: palette.textSecondary, lineHeight: 1.8, margin: 0, fontFamily: typography.body }}>
+                Multi-tenancy works <strong style={{ color: palette.success }}>within a single data controller</strong>. 
+                It fails where tenants are{" "}
+                <strong style={{ color: palette.danger }}>independent controllers with independent legal obligations</strong>.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 9: FAQ
+// ═══════════════════════════════════════════════════════════════════
+
+function FAQSlide({ visible }) {
+  const [open, setOpen] = useState(null);
+
+  const faqs = [
+    {
+      q: "Doesn't Tag-Based Access Control (TBAC) solve multi-tenant isolation?",
+      a: "TBAC controls access to operational resources like agents, queues, and routing profiles. However, the most critical resource — the Contact itself — cannot be tagged. S3 recordings, Kinesis streams, and CloudWatch logs have no TBAC support. The Contact Lens dashboard explicitly does not support tag-based access controls. TBAC is a visibility filter on the admin UI, not a data-layer isolation boundary.",
+      sources: [
+        { label: "AWS: Add tags to resources (Contact = No)", url: "#" },
+        { label: "AWS: Tag-based access control (override risk)", url: "#" },
+        { label: "AWS: Contact Lens dashboard (TBAC not supported)", url: "#" },
+      ],
+      color: palette.warn,
+    },
+    {
+      q: "Is there a per-instance fee that makes separate instances more expensive?",
+      a: "No. Amazon Connect pricing is purely consumption-based. There are no per-instance fees, no minimum monthly commitments, and no upfront license charges. You pay only for what you use: per-minute for voice, per-message for chat, and per-use for individual features. Running four instances at 25% volume each costs the same as one instance at 100% volume.",
+      sources: [
+        { label: "AWS: Amazon Connect Pricing", url: "#" },
+        { label: "AWS: G-Cloud UK (individual call-off contracts)", url: "#" },
+      ],
+      color: palette.success,
+    },
+    {
+      q: "Can Customer Profiles be isolated per tenant on a shared instance?",
+      a: "No. Each Amazon Connect instance can only be associated with one Customer Profiles domain. All customer profile data — names, addresses, phone numbers, contact history — pools into that single domain. Identity Resolution will actively merge profiles that look similar across tenants. There is no TBAC, no sub-domain, and no per-tenant partition within a Profiles domain.",
+      sources: [
+        { label: "AWS: Enable Customer Profiles (1 domain per instance)", url: "#" },
+      ],
+      color: palette.accent,
+    },
+    {
+      q: "Can Amazon Q knowledge bases be scoped per tenant?",
+      a: "No. Each Connect instance can only be associated with one Amazon Q (AI agent) domain, which contains one knowledge base. All agents on the instance receive recommendations from the same knowledge base. HMRC tax procedures and NHS clinical pathways cannot be separated.",
+      sources: [
+        { label: "AWS: Initial setup for AI agents (1 domain per instance)", url: "#" },
+        { label: "AWS re:Post: Amazon Q domain limit confirmed", url: "#" },
+      ],
+      color: palette.nhs,
+    },
+    {
+      q: "Can we enable Contact Lens AI for one tenant but not another?",
+      a: "No. The Unlimited AI pricing toggle is an instance-level binary switch. When enabled, all traffic on the instance is billed at the AI-inclusive rate ($0.038/min voice). When disabled, no tenant gets Contact Lens, Q in Connect, performance evaluation, screen recording, or agent scheduling. There is no per-queue, per-tenant, or per-flow granularity.",
+      sources: [
+        { label: "AWS: Enable/Disable Unlimited AI Pricing (instance toggle)", url: "#" },
+        { label: "AWS: Amazon Connect Pricing (Unlimited AI model)", url: "#" },
+      ],
+      color: palette.warn,
+    },
+    {
+      q: "Does NCSC require hard separation between tenants?",
+      a: "Yes. NCSC Cloud Security Principle 3 (Separation Between Consumers) requires that a malicious or compromised consumer of the service cannot affect the service or data of another. The guidance specifies that the separation should be technically enforced, not dependent on operational controls alone.",
+      sources: [
+        { label: "NCSC: Cloud Security Principles (Principle 3)", url: "#" },
+        { label: "NCSC: Summary of Cloud Security Principles (PDF)", url: "#" },
+      ],
+      color: palette.danger,
+    },
+    {
+      q: "What does UK GDPR say about multiple government entities sharing a platform?",
+      a: "Each UK government entity is a separate data controller under UK GDPR. Sharing an instance creates either inadvertent joint controllership under Article 26 (requiring a formal arrangement with mutual liability) or controller-processor confusion under Article 28. The ICO's Data Sharing Code requires a DPIA when data from multiple sources is combined.",
+      sources: [
+        { label: "ICO: Controllers and processors", url: "#" },
+        { label: "ICO: Data sharing code of practice", url: "#" },
+        { label: "ICO: Data Protection Impact Assessments", url: "#" },
+      ],
+      color: palette.danger,
+    },
+    {
+      q: "What happens if one agency receives a Freedom of Information request?",
+      a: "FOIA 2000 applies to all UK public authorities, covering any recorded information held. Disclosures under FOIA are \"to the world.\" Shared infrastructure means a broad FOI request to one agency could sweep metadata, dashboards, operational reports, or contact records that include data belonging to another agency.",
+      sources: [
+        { label: "ICO: FOI Act coverage", url: "#" },
+        { label: "UK Legislation: FOIA 2000 (full text)", url: "#" },
+      ],
+      color: "#fb7185",
+    },
+  ];
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.dwp} size={400} top={-100} left="20%" opacity={0.06} />
+      <GlowOrb color={palette.accent} size={300} top={600} right={-50} opacity={0.04} />
+      
+      <SectionHeader
+        badge="Frequently Asked Questions"
+        badgeColor={palette.dwp}
+        title="Questions"
+        highlight="& Answers"
+        highlightColor={palette.dwp}
+        subtitle="Click any question to expand. All answers include citations."
+      />
+      
+      <div style={{ maxWidth: 750, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {faqs.map((faq, i) => {
+          const isOpen = open === i;
+          return (
+            <div
+              key={i}
+              style={{
+                marginBottom: 10,
+                borderRadius: 16,
+                border: `1px solid ${isOpen ? faq.color + "44" : palette.borderLight}`,
+                background: isOpen ? `${faq.color}06` : palette.surface,
+                transition: `all 300ms ${easing.outExpo}`,
+                animation: `slideUp 300ms ${easing.outExpo} ${i * 40}ms backwards`,
+                overflow: "hidden",
+              }}
+            >
+              <button
+                onClick={() => setOpen(isOpen ? null : i)}
+                style={{
+                  width: "100%",
+                  padding: "18px 22px",
+                  border: "none",
+                  cursor: "pointer",
+                  background: "transparent",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 14,
+                  textAlign: "left",
+                }}
+              >
+                <span
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 8,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: `${faq.color}15`,
+                    color: faq.color,
+                    fontSize: 16,
+                    fontWeight: 700,
+                    flexShrink: 0,
+                    transition: `transform 300ms ${easing.outBack}`,
+                    transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                  }}
+                >
+                  +
+                </span>
+                <span
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: isOpen ? faq.color : palette.text,
+                    lineHeight: 1.5,
+                    fontFamily: typography.body,
+                  }}
+                >
+                  {faq.q}
+                </span>
+              </button>
+              {isOpen && (
+                <div style={{ padding: "0 22px 22px 64px" }}>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: palette.textSecondary,
+                      lineHeight: 1.75,
+                      margin: "0 0 16px",
+                      fontFamily: typography.body,
+                    }}
+                  >
+                    {faq.a}
+                  </p>
+                  <div
+                    style={{
+                      padding: "14px 16px",
+                      borderRadius: 12,
+                      background: `${faq.color}08`,
+                      border: `1px solid ${faq.color}18`,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 700,
+                        color: faq.color,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        marginBottom: 10,
+                        fontFamily: typography.body,
+                      }}
+                    >
+                      Sources
+                    </div>
+                    {faq.sources.map((src, si) => (
+                      <div key={si} style={{ marginBottom: si < faq.sources.length - 1 ? 8 : 0 }}>
+                        <a
+                          href={src.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontSize: 12,
+                            color: faq.color,
+                            textDecoration: "none",
+                            fontFamily: typography.body,
+                            display: "flex",
+                            alignItems: "flex-start",
+                            gap: 8,
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          <span style={{ flexShrink: 0, marginTop: 2 }}>🔗</span>
+                          <span style={{ borderBottom: `1px solid ${faq.color}33` }}>{src.label}</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SLIDE 10: RECOMMENDED SOLUTION
+// ═══════════════════════════════════════════════════════════════════
+
+function SolutionSlide({ visible }) {
+  const benefits = [
+    { label: "Same Cost", desc: "Consumption pricing, no per-instance fee", icon: "💰", color: palette.success },
+    { label: "Separate Domains", desc: "Profiles, Cases, Q — each agency owns data", icon: "🔐", color: "#fb7185" },
+    { label: "Full AI Freedom", desc: "Each agency enables AI independently", icon: "🧠", color: palette.accent },
+    { label: "Native Supervision", desc: "Silent monitor, barge, whisper — native", icon: "👁️", color: palette.home },
+  ];
+
+  return (
+    <SlideContainer visible={visible}>
+      <GlowOrb color={palette.success} size={500} top={-150} left="15%" opacity={0.06} />
+      <GlowOrb color={palette.accent} size={350} top={350} right={-100} opacity={0.04} />
+      
+      <SectionHeader
+        badge="Recommended Architecture"
+        badgeColor={palette.success}
+        title="Per-Agency"
+        highlight="Instances"
+        highlightColor={palette.success}
+        subtitle="Separate AWS accounts per entity — same cost, hard boundaries, independent domains"
+      />
+      
+      <div style={{ maxWidth: 750, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* AWS Organization header */}
+        <div
+          style={{
+            padding: "14px 24px",
+            borderRadius: "16px 16px 0 0",
+            background: palette.accentDim,
+            border: `1px solid ${palette.accent}22`,
+            borderBottom: "none",
+            textAlign: "center",
+          }}
+        >
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: palette.accent,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              fontFamily: typography.mono,
+            }}
+          >
+            AWS Organization — Shared Billing · Monitoring · IaC Templates · Deployment Automation
+          </span>
+        </div>
+        
+        {/* Tenant cards */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 12,
+            padding: 16,
+            border: `1px solid ${palette.accent}22`,
+            borderRadius: "0 0 16px 16px",
+            background: palette.surface,
+          }}
+        >
+          {tenants.map((t, i) => (
+            <GlassPanel
+              key={t.name}
+              accent={t.color}
+              padding={16}
+              style={{ animation: `slideUp 500ms ${easing.outExpo} ${200 + i * 100}ms backwards` }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                <span
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 10,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: `${t.color}20`,
+                    color: t.color,
+                    fontSize: 16,
+                    fontWeight: 700,
+                    fontFamily: typography.display,
+                  }}
+                >
+                  {t.icon}
+                </span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: t.color, fontFamily: typography.body }}>
+                  {t.name}
+                </span>
+              </div>
+              {[
+                "Own AWS Account",
+                "Own Connect Instance",
+                "Own Profiles Domain",
+                "Own Cases Domain",
+                "Own Q Knowledge Base",
+                "Own Outbound Campaigns",
+                "Own S3 / KMS / Kinesis",
+                "Own DSPT / DPIA",
+                "AI: Independent toggle",
+              ].map(item => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    marginBottom: 4,
+                    fontSize: 10,
+                    color: palette.textSecondary,
+                    fontFamily: typography.body,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 4,
+                      height: 4,
+                      borderRadius: 2,
+                      background: t.color,
+                      opacity: 0.7,
+                      flexShrink: 0,
+                    }}
+                  />
+                  {item}
+                </div>
+              ))}
+              <div
+                style={{
+                  marginTop: 12,
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  background: `${palette.success}12`,
+                  border: `1px solid ${palette.success}22`,
+                  fontSize: 9,
+                  fontWeight: 700,
+                  color: palette.success,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  textAlign: "center",
+                  fontFamily: typography.body,
+                }}
+              >
+                Hard boundary
+              </div>
+            </GlassPanel>
+          ))}
+        </div>
+        
+        {/* Benefits */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 12,
+            marginTop: 20,
+          }}
+        >
+          {benefits.map((b, i) => (
+            <div
+              key={b.label}
+              style={{
+                padding: "18px 20px",
+                borderRadius: 14,
+                border: `1px solid ${b.color}22`,
+                background: `${b.color}06`,
+                animation: `slideUp 400ms ${easing.outExpo} ${500 + i * 80}ms backwards`,
+              }}
+            >
+              <div style={{ fontSize: 22, marginBottom: 10 }}>{b.icon}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: b.color, fontFamily: typography.display }}>
+                {b.label}
+              </div>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: palette.textSecondary,
+                  marginTop: 6,
+                  lineHeight: 1.5,
+                  fontFamily: typography.body,
+                }}
+              >
+                {b.desc}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </SlideContainer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════════════════════════
+
+export default function ConnectPresentation() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slideComponents = [
+    HeroSlide,
+    SharedInstanceSlide,
+    TaggingSlide,
+    DomainLocksSlide,
+    GapsSlide,
+    AIBundleSlide,
+    TechnicalSlide,
+    BusinessSlide,
+    FAQSlide,
+    SolutionSlide,
+  ];
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") {
+        setCurrentSlide(s => Math.min(slides.length - 1, s + 1));
+      } else if (e.key === "ArrowLeft") {
+        setCurrentSlide(s => Math.max(0, s - 1));
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: `linear-gradient(180deg, ${palette.bg} 0%, #080c14 100%)`,
+        color: palette.text,
+        fontFamily: typography.body,
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.85); }
+        }
+        
+        @keyframes borderRotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: ${palette.borderLight}; border-radius: 6px; }
+        ::-webkit-scrollbar-thumb:hover { background: ${palette.textMuted}; }
+        
+        button { font-family: inherit; }
+      `}</style>
+
+      {/* Subtle grid background */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          opacity: 0.025,
+          pointerEvents: "none",
+          zIndex: 0,
+          backgroundImage: `linear-gradient(${palette.accent} 1px, transparent 1px),
+                            linear-gradient(90deg, ${palette.accent} 1px, transparent 1px)`,
+          backgroundSize: "80px 80px",
+        }}
+      />
+
+      {/* Navigation */}
+      <nav
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          padding: "14px 16px",
+          background: `${palette.bg}e8`,
+          backdropFilter: "blur(16px) saturate(150%)",
+          WebkitBackdropFilter: "blur(16px) saturate(150%)",
+          borderBottom: `1px solid ${palette.border}`,
+          display: "flex",
+          gap: 4,
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        {slides.map((s, i) => (
+          <button
+            key={s.id}
+            onClick={() => setCurrentSlide(i)}
+            style={{
+              padding: "8px 14px",
+              borderRadius: 10,
+              border: "none",
+              cursor: "pointer",
+              fontSize: 11,
+              fontWeight: 600,
+              fontFamily: typography.body,
+              letterSpacing: "0.02em",
+              transition: `all 200ms ${easing.outExpo}`,
+              background: currentSlide === i ? palette.accentDim : "transparent",
+              color: currentSlide === i ? palette.accent : palette.textSecondary,
+              outline: currentSlide === i ? `1px solid ${palette.borderAccent}` : "1px solid transparent",
+            }}
+          >
+            <span style={{ opacity: 0.5, marginRight: 6, fontFamily: typography.mono, fontSize: 10 }}>
+              {s.num}
+            </span>
+            {s.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* Slide content */}
+      <main
+        style={{
+          maxWidth: 900,
+          margin: "0 auto",
+          position: "relative",
+          minHeight: "calc(100vh - 120px)",
+          paddingBottom: 80,
+        }}
+      >
+        {slideComponents.map((SlideComponent, i) => (
+          <SlideComponent key={i} visible={currentSlide === i} />
+        ))}
+      </main>
+
+      {/* Bottom navigation */}
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          padding: "14px 24px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 20,
+          background: `${palette.bg}e8`,
+          backdropFilter: "blur(16px) saturate(150%)",
+          WebkitBackdropFilter: "blur(16px) saturate(150%)",
+          borderTop: `1px solid ${palette.border}`,
+        }}
+      >
+        <button
+          onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
+          disabled={currentSlide === 0}
+          style={{
+            padding: "10px 24px",
+            borderRadius: 12,
+            border: `1px solid ${palette.borderLight}`,
+            background: palette.surface,
+            color: currentSlide === 0 ? palette.textMuted : palette.text,
+            fontSize: 13,
+            fontWeight: 600,
+            cursor: currentSlide === 0 ? "default" : "pointer",
+            opacity: currentSlide === 0 ? 0.4 : 1,
+            fontFamily: typography.body,
+            transition: `all 200ms ${easing.outExpo}`,
+          }}
+        >
+          ← Prev
+        </button>
+
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {slides.map((_, i) => (
+            <div
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              style={{
+                width: currentSlide === i ? 24 : 8,
+                height: 8,
+                borderRadius: 4,
+                cursor: "pointer",
+                background: currentSlide === i ? palette.accent : palette.borderLight,
+                boxShadow: currentSlide === i ? `0 0 12px ${palette.accentGlow}` : "none",
+                transition: `all 300ms ${easing.outExpo}`,
+              }}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={() => setCurrentSlide(Math.min(slides.length - 1, currentSlide + 1))}
+          disabled={currentSlide === slides.length - 1}
+          style={{
+            padding: "10px 24px",
+            borderRadius: 12,
+            border: `1px solid ${currentSlide === slides.length - 1 ? palette.borderLight : palette.borderAccent}`,
+            background: currentSlide === slides.length - 1 ? palette.surface : palette.accentDim,
+            color: currentSlide === slides.length - 1 ? palette.textMuted : palette.accent,
+            fontSize: 13,
+            fontWeight: 600,
+            cursor: currentSlide === slides.length - 1 ? "default" : "pointer",
+            opacity: currentSlide === slides.length - 1 ? 0.4 : 1,
+            fontFamily: typography.body,
+            transition: `all 200ms ${easing.outExpo}`,
+          }}
+        >
+          Next →
+        </button>
+      </footer>
+    </div>
+  );
+}
