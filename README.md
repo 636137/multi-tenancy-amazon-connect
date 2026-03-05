@@ -24,13 +24,22 @@ python voice_tester/sonic_live_playback.py
 
 ## 🚀 Quick Start
 
-### Requirements
+### One-Command Setup
 
+```bash
+# Automated setup - checks everything and installs dependencies
+python deploy_nova_sonic.py
+
+# Or run with demo
+python deploy_nova_sonic.py --run-demo
+```
+
+### Manual Setup
+
+**Requirements:**
 - **Python 3.12+** (required for AWS Smithy SDK)
 - **AWS Account** with Nova Sonic access enabled in Bedrock
 - **macOS/Linux** with audio output
-
-### Setup
 
 ```bash
 # 1. Create Python 3.12 virtual environment
@@ -51,6 +60,15 @@ aws configure
 python voice_tester/sonic_live_playback.py
 ```
 
+## 🤖 Copilot Agent Skill
+
+This project includes a **Copilot AI agent skill** for automated deployment and development:
+
+- **[.github/nova-sonic-agent.md](.github/nova-sonic-agent.md)** - Complete knowledge base for Copilot
+- Enables Copilot to deploy Nova Sonic projects automatically
+- Contains all technical specs, troubleshooting, and patterns
+- Use as a template for your own Nova Sonic applications
+
 ## 📁 Key Files
 
 | File | Description |
@@ -58,6 +76,8 @@ python voice_tester/sonic_live_playback.py
 | `voice_tester/sonic_live_playback.py` | Main demo - records conversation, plays back |
 | `voice_tester/sonic_to_sonic.py` | Basic AI-to-AI conversation |
 | `voice_tester/nova_sonic_live.py` | Live microphone conversation with Nova Sonic |
+| `deploy_nova_sonic.py` | Automated setup and validation script |
+| `.github/nova-sonic-agent.md` | Copilot AI agent skill for deployment |
 
 ## 🔧 Technical Details
 
