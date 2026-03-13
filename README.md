@@ -4,13 +4,13 @@ This code is proprietary to **Maximus**. **No public license is granted**. See [
 
 ---
 
-# Amazon Connect Voice Testing Framework
+# Amazon Connect Voice Testing & Agent Guides Framework
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![AWS](https://img.shields.io/badge/AWS-Connect%20%7C%20Chime%20%7C%20Bedrock-orange.svg)](https://aws.amazon.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Automated voice testing for Amazon Connect contact centers** — Make real phone calls with AI-powered callers, test IVR flows, and validate Lex bot conversations.
+**Automated voice testing for Amazon Connect contact centers** — Make real phone calls with AI-powered callers, test IVR flows, validate Lex bot conversations, and deploy step-by-step agent guides.
 
 ## What This Does
 
@@ -19,14 +19,85 @@ This code is proprietary to **Maximus**. **No public license is granted**. See [
 | **Real Phone Calls** | Initiates actual PSTN calls via AWS Chime SDK to test your contact centers |
 | **AI Caller** | Lambda-based caller speaks via Polly, listens, and responds intelligently |
 | **AI-to-AI Conversations** | Two Nova Sonic instances talking to each other (demo included) |
+| **Agent Step-by-Step Guides** | Cards-based views that pop up when agents accept calls |
 | **Status Tracking** | Real-time call state tracking via DynamoDB |
 | **Copilot Skills** | 4 reusable agent skills for deployment, testing, and voice workflows |
 
-## Latest Test Results
+## Live Demo
+
+| Instance | Phone | Agent Login |
+|----------|-------|-------------|
+| **Treasury Connect** | +1 833-289-6602 | [Agent Workspace](https://treasury-connect-prod.my.connect.aws/agent-app-v2) |
 
 ```
-✅ Census Survey (+18332895330): received_input in 12.5s
-✅ Treasury IVR (+18332896602): received_input in 10.4s
+✅ Direct-to-agent routing (no IVR menu)
+✅ IRS Agent Guide Cards display on call accept
+✅ 5 IRS use case cards with procedures and policies
+```
+
+---
+
+## IRS Agent Step-by-Step Guides
+
+This framework includes a complete **Agent Guides** implementation that displays interactive cards when agents accept voice calls.
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    AGENT GUIDE FLOW                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  📞 Caller dials +1 833-289-6602                                     │
+│       ↓                                                              │
+│  🔊 Brief greeting → Transfer to queue                               │
+│       ↓                                                              │
+│  ⚙️  UpdateContactEventHooks sets DefaultAgentUI                     │
+│       ↓                                                              │
+│  👤 Agent accepts call                                               │
+│       ↓                                                              │
+│  📋 Event flow triggers → ShowView → Cards appear!                   │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### IRS Use Case Cards (5 Topics)
+
+| Card | Icon | Description |
+|------|------|-------------|
+| **Refund Status Inquiry** | 💰 | E-file: 21 days, Paper: 6-8 weeks, IDRS IMFOL codes |
+| **Identity Verification** | 🛡️ | Letter 5071C/6331C, ID.me, phone verification |
+| **Payment Plan Setup** | 💳 | Installment agreements, $50K threshold, Form 433 |
+| **Transcript Request** | 📄 | Form 4506-T, online portal, 3-year availability |
+| **Notice Explanation** | 📬 | CP2000, CP14, LTR notices, response deadlines |
+
+### Technical Implementation
+
+The guides use Amazon Connect's **AWS Managed Views** with the `Cards` template:
+
+```json
+{
+  "ViewResource": {
+    "Id": "arn:aws:connect:us-east-1:aws:view/cards"
+  },
+  "ViewData": {
+    "Heading": "IRS Taxpayer Services Guide",
+    "CardsPerRow": "1",
+    "Cards": [...]
+  }
+}
+```
+
+**Key insight:** AWS managed views use `arn:aws:connect:REGION:aws:view/TEMPLATE` (with `aws` as account), NOT your account ID.
+
+### Files
+
+```
+irs-agent-views/
+├── SETUP_GUIDE.md              # Configuration instructions
+├── irs_dashboard_cards.json    # Main dashboard view definition
+├── flows/                      # Contact flow exports
+└── *_detail.json               # Individual card detail views
 ```
 
 ---
@@ -110,6 +181,11 @@ python voice_tester/sonic_live_playback.py
 │       ├── testing-automation/     # Generate tests
 │       └── voice-testing/          # PSTN call testing
 │
+├── irs-agent-views/                # 🆕 Agent Step-by-Step Guides
+│   ├── SETUP_GUIDE.md              # Configuration documentation
+│   ├── irs_dashboard_cards.json    # Main view definition
+│   └── flows/                      # Contact flow exports
+│
 ├── voice_tester/                   # Main testing framework
 │   ├── run_pstn_tests.py          # ⭐ Main test runner
 │   ├── sonic_live_playback.py     # ⭐ AI-to-AI demo
@@ -144,6 +220,57 @@ python voice_tester/sonic_live_playback.py
 | `python scripts/fix_sip_lambda.py` | Update the SIP Lambda handler |
 | `python scripts/check_lambda_logs.py` | View recent Lambda logs |
 | `python scripts/analyze_connect_flows.py` | Analyze Connect instance flows |
+
+---
+
+## Agent Guides Configuration
+
+### Prerequisites
+
+1. Amazon Connect instance with Views enabled
+2. Agent Workspace access (not CCP)
+3. Security profile with Views permissions
+
+### Flow Architecture
+
+For views to display on voice calls, you need:
+
+1. **Main Inbound Flow** with `UpdateContactEventHooks`:
+   ```json
+   {
+     "Type": "UpdateContactEventHooks",
+     "Parameters": {
+       "EventHooks": {
+         "DefaultAgentUI": "arn:aws:connect:REGION:ACCOUNT:instance/ID/contact-flow/EVENT_FLOW_ID"
+       }
+     }
+   }
+   ```
+
+2. **Event Flow** with `ShowView`:
+   ```json
+   {
+     "Type": "ShowView",
+     "Parameters": {
+       "ViewResource": {
+         "Id": "arn:aws:connect:us-east-1:aws:view/cards"
+       },
+       "ViewData": { ... }
+     }
+   }
+   ```
+
+### AWS Managed View Templates
+
+| Template | ARN | Use For |
+|----------|-----|---------|
+| Cards | `arn:aws:connect:REGION:aws:view/cards` | Dashboard with clickable cards |
+| Detail | `arn:aws:connect:REGION:aws:view/detail` | Single topic detail view |
+| Form | `arn:aws:connect:REGION:aws:view/form` | Data collection forms |
+| List | `arn:aws:connect:REGION:aws:view/list` | Scrollable item lists |
+| Confirmation | `arn:aws:connect:REGION:aws:view/confirmation` | Action confirmations |
+
+**Important:** Use `aws` as the account ID for managed views, not your AWS account number.
 
 ---
 
@@ -238,6 +365,23 @@ status: "received_input" → "completed"
 ---
 
 ## Troubleshooting
+
+### Views Not Displaying
+
+**Symptom:** Agent accepts call but no view appears
+
+**Checklist:**
+1. Using Agent Workspace (`/agent-app-v2`) not legacy CCP
+2. `UpdateContactEventHooks` with `DefaultAgentUI` is in the flow
+3. Event flow has `ShowView` block
+4. View ARN uses correct format:
+   - AWS managed: `arn:aws:connect:REGION:aws:view/cards`
+   - Custom: `arn:aws:connect:REGION:ACCOUNT:instance/ID/view/VIEW_ID:$LATEST`
+5. Agent security profile has Views permissions
+
+**"View resource is not available" error:**
+- Wrong ARN format - use `aws` account for managed views
+- View not published (check status in Views console)
 
 ### Call Timeouts
 ```bash

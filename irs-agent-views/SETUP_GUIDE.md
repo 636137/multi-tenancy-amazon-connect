@@ -2,146 +2,166 @@
 
 ## Current Status
 
-✅ **Views created and published** (6 views)  
-✅ **Event flow created:** `IRS-Agent-Guide-Event` (shows view when agent connects)  
-⚠️ **ONE STEP REMAINING:** Add "Set event flow" block in Console
+✅ **All components configured and working!**
+
+| Component | Status | Details |
+|-----------|--------|---------|
+| IRS-Taxpayer-Services view | ✅ Ready | Uses AWS managed Cards template |
+| IRS-Agent-Guide-Event flow | ✅ Active | ShowView with ViewData |
+| IRS-Inbound-Agent-Transfer | ✅ Configured | UpdateContactEventHooks set |
+| TreasuryConversationalFlow | ✅ Simplified | Direct to agent (no IVR menu) |
+| Phone routing | ✅ Working | +1 833-289-6602 |
 
 ---
 
-## Final Step: Add "Set event flow" Block (2 minutes)
+## Quick Test
 
-**Why Event Flow?** For voice calls, ShowView must run in a separate "event flow" that triggers when the agent accepts the call - not during IVR routing.
-
-### Step 1: Open Flow Editor
-
-Direct link:
-```
-https://us-east-1.console.aws.amazon.com/connect/contact-flows/editor?instanceId=a88ddab9-3b29-409f-87f0-bdb614abafef&flowId=08728175-2bd5-452d-a68e-901fa36ab7eb
-```
-
-Or via Connect Admin:
-1. Go to: https://treasury-connect-prod.my.connect.aws
-2. Navigate to: **Routing** → **Contact flows**
-3. Click on: **IRS-Inbound-Agent-Transfer**
-
-### Step 2: Replace ShowView with Set Event Flow
-
-1. **DELETE** the current "Show view" block (it's in the wrong place)
-2. From the block palette, drag **Set event flow** block
-3. Place it where ShowView was (after Set contact attributes)
-4. Connect the blocks:
-   ```
-   [Set contact attributes] → [Set event flow] → [Transfer to queue]
-   ```
-
-### Step 3: Configure Set Event Flow
-
-1. Click on the **Set event flow** block
-2. In properties, select:
-   - **Event**: `Default flow for agent UI`
-   - **Flow**: `IRS-Agent-Guide-Event`
-
-### Step 4: Save and Publish
-
-1. Click **Save** (top right)
-2. Click **Publish**
+1. **Agent Login:** https://treasury-connect-prod.my.connect.aws/agent-app-v2
+2. **Set Status:** Available
+3. **Call:** +1 833-289-6602
+4. **Result:** Cards view appears when you accept the call!
 
 ---
 
-## Architecture (Event Flow Pattern)
+## Architecture (Working Configuration)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│              MAIN FLOW: IRS-Inbound-Agent-Transfer                   │
+│                    CALL FLOW                                         │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  [Entry Point]                                                       │
+│  📞 Caller dials +1 833-289-6602                                     │
 │       ↓                                                              │
-│  [Play prompt: "Thank you for calling IRS..."]                       │
+│  TreasuryConversationalFlow                                          │
+│       ↓ (greeting → immediate transfer)                              │
+│  TransferToFlow: IRS-Inbound-Agent-Transfer                          │
 │       ↓                                                              │
-│  [Set working queue: TreasuryIRSQueue]                               │
+│  UpdateContactTargetQueue: TreasuryIRSQueue                          │
 │       ↓                                                              │
-│  [Set contact attributes: IRS Guide info]                            │
+│  UpdateContactEventHooks:                                            │
+│    DefaultAgentUI → IRS-Agent-Guide-Event                            │
 │       ↓                                                              │
-│  [Set event flow: IRS-Agent-Guide-Event] ← ADD THIS                  │
+│  TransferContactToQueue                                              │
 │       ↓                                                              │
-│  [Transfer to queue]                                                 │
-│                                                                      │
-└─────────────────────────────────────────────────────────────────────┘
-                                 │
-                    When agent accepts call...
-                                 ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│              EVENT FLOW: IRS-Agent-Guide-Event (CREATED)             │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  [Show view: IRS-Taxpayer-Services] ← 5 IRS use case cards           │
+│  👤 Agent accepts call                                               │
 │       ↓                                                              │
-│  [End flow]                                                          │
+│  EVENT FLOW TRIGGERS:                                                │
+│    ShowView → Cards template with IRS ViewData                       │
+│       ↓                                                              │
+│  📋 IRS Agent Guide Cards appear in Agent Workspace!                 │
 │                                                                      │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## What's Already Done
+## Key Technical Details
 
-| Resource | Status | ID |
-|----------|--------|-----|
-| IRS-Taxpayer-Services view | ✅ Published | `4b281dc3-bf4f-4e48-b27a-e17ea1fdb954` |
-| IRS-Refund-Status-Detail | ✅ Published | `01c39969-8c8a-4bcb-bfa4-69e83939b810` |
-| IRS-Identity-Verification-Detail | ✅ Published | `a6be4da3-891d-4f38-a180-fd384a361af2` |
-| IRS-Payment-Plan-Detail | ✅ Published | `8c96d2ce-ae3c-468a-a06d-d68ddd42c9a9` |
-| IRS-Transcript-Request-Detail | ✅ Published | `adb87dfd-329a-4646-8db5-b0fb84c06f0c` |
-| IRS-Notice-Explanation-Detail | ✅ Published | `3028976b-94cf-4547-b4b9-ee77351149a0` |
-| IRS-Agent-Guide-Event flow | ✅ Created | `4f9dbdf9-f62b-4558-97ca-198a00e9832a` |
-| IRS-Inbound-Agent-Transfer | ⚠️ Needs Set event flow | `08728175-2bd5-452d-a68e-901fa36ab7eb` |
-| Contact attributes | ✅ Working | 12 attributes set |
+### AWS Managed View ARN Format
+
+```
+arn:aws:connect:us-east-1:aws:view/cards
+                          ^^^
+                    Use "aws" as account ID!
+```
+
+**NOT:** `arn:aws:connect:us-east-1:593804350786:instance/.../view/...`
+
+### ShowView Configuration
+
+```json
+{
+  "Type": "ShowView",
+  "Parameters": {
+    "ViewResource": {
+      "Id": "arn:aws:connect:us-east-1:aws:view/cards"
+    },
+    "InvocationTimeLimitSeconds": "400",
+    "ViewData": {
+      "Heading": "IRS Taxpayer Services Guide",
+      "CardsPerRow": "1",
+      "Cards": [
+        {
+          "Summary": {
+            "Id": "refund-status",
+            "Icon": "document",
+            "Heading": "💰 Refund Status Inquiry",
+            "Status": "HIGH VOLUME",
+            "Description": "E-file: 21 days | Paper: 6-8 weeks"
+          }
+        },
+        ...
+      ]
+    }
+  }
+}
+```
+
+### UpdateContactEventHooks Configuration
+
+```json
+{
+  "Type": "UpdateContactEventHooks",
+  "Parameters": {
+    "EventHooks": {
+      "DefaultAgentUI": "arn:aws:connect:us-east-1:593804350786:instance/a88ddab9-3b29-409f-87f0-bdb614abafef/contact-flow/4f9dbdf9-f62b-4558-97ca-198a00e9832a"
+    }
+  }
+}
+```
 
 ---
 
-## Testing
+## IRS Agent Guide Cards (5 Topics)
 
-1. **Call:** +1 833-289-6602
-2. **Press:** 0 for representative
-3. **Login:** https://treasury-connect-prod.my.connect.aws (as agent)
-4. **Accept call**
-5. **Verify:** IRS Agent Guide card dashboard appears automatically
-
----
-
-## Why "Set event flow" Requires Console
-
-Amazon Connect's "Set event flow" block:
-- Cannot be created via CLI/API (requires Console-generated metadata)
-- Is the ONLY way to display ShowView for voice calls
-- Triggers a "side-channel" UI when the agent accepts
-
-This is a documented AWS limitation.
+| # | Card | Icon | Status | Key Info |
+|---|------|------|--------|----------|
+| 1 | Refund Status Inquiry | 💰 | HIGH VOLUME | E-file 21 days, Paper 6-8 wks, IMFOL TC846 |
+| 2 | Identity Verification | 🛡️ | REQUIRED | Letter 5071C/6331C, ID.me, phone verify |
+| 3 | Payment Plan Setup | 💳 | - | <$10K guaranteed, <$50K streamlined |
+| 4 | Transcript Request | 📄 | - | Form 4506-T, online portal, 3 years |
+| 5 | Notice Explanation | 📬 | - | CP2000, CP14, LTR notices |
 
 ---
 
-## IRS Agent Guide Cards (5 Use Cases)
+## Resource IDs
 
-When the view appears, agents see:
+| Resource | ID |
+|----------|-----|
+| Instance | `a88ddab9-3b29-409f-87f0-bdb614abafef` |
+| TreasuryConversationalFlow | `8dfd7f4a-e383-4889-a941-d516d4919a50` |
+| IRS-Inbound-Agent-Transfer | `08728175-2bd5-452d-a68e-901fa36ab7eb` |
+| IRS-Agent-Guide-Event | `4f9dbdf9-f62b-4558-97ca-198a00e9832a` |
+| TreasuryIRSQueue | `7e2fbca2-82c2-4fd8-addd-444b0dbdb2fd` |
+| Phone Number | `c3f388bc-0eeb-489a-b7d5-916758416f4a` |
 
-1. **Refund Status** - IMFOL TC846, auth requirements, wheres-my-refund
-2. **Identity Verification (5071C)** - Fraud detection, identity theft procedures
-3. **Payment Plans** - Guaranteed (<$10K), Streamlined (<$50K), criteria
-4. **Transcript Requests** - Form 4506-T, self-service portal, timing
-5. **Notice Explanations** - CP/LTR notice handling, taxpayer rights
+---
 
-Each card includes:
-- Step-by-step instructions
-- Required documentation
-- Policy references (IRM chapters)
-- Fraud alerts and warnings
+## Troubleshooting
+
+### View Not Displaying
+
+1. **Check Agent Workspace URL** - Must use `/agent-app-v2`, not legacy CCP
+2. **Check View ARN format** - Use `aws` account for managed templates
+3. **Check flow order** - UpdateContactEventHooks must be BEFORE TransferContactToQueue
+4. **Check browser console** - Look for JavaScript errors
+
+### "View resource is not available"
+
+This means ShowView triggered but ARN is wrong. Fix:
+```
+Wrong: arn:aws:connect:us-east-1:593804350786:instance/.../view/cards:$LATEST
+Right: arn:aws:connect:us-east-1:aws:view/cards
+```
 
 ---
 
 ## Support
 
-Instance: `treasury-connect-prod`  
-Region: `us-east-1`  
-Phone: `+1 833-289-6602`  
-Admin URL: https://treasury-connect-prod.my.connect.aws
+| Resource | Value |
+|----------|-------|
+| Instance | `treasury-connect-prod` |
+| Region | `us-east-1` |
+| Phone | `+1 833-289-6602` |
+| Admin URL | https://treasury-connect-prod.my.connect.aws |
+| Agent Workspace | https://treasury-connect-prod.my.connect.aws/agent-app-v2 |
