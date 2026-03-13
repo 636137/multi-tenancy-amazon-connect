@@ -1,33 +1,15 @@
 """
-Census Survey LLM Agent
-=======================
-Amazon Bedrock Nova Premier-powered survey agent for Amazon Connect.
-
-This Lambda handles all survey logic via FallbackIntent in Lex V2.
-All user input goes through Nova Premier LLM for natural conversation.
-
-Architecture:
-  Connect → Lex V2 (FallbackIntent) → This Lambda → Nova Premier → Response
-
-Resources:
-  - Model: us.amazon.nova-premier-v1:0
-  - DynamoDB: CensusSurveyConversations (conversation history)
-  - Lex Bot: CensusSurveyAI (BSAIKYT20J) / Alias: prod (UMMWRQRQ8Q)
-  - Contact Flow: 1 - Census Survey AI Agent
-  - Phone: +1 (844) 593-5770
-
-Features:
-  - Full conversation history passed to LLM each turn
-  - Context-aware data extraction (only extracts when relevant question was asked)
-  - Explicit state tracking (KNOWN FACTS vs STILL NEED)
-  - Proper Lex Close response for call termination
+Census Survey AI Agent - Enhanced UX
+====================================
+Natural, warm, conversational survey experience.
+Agent name: Sarah
+Model: Amazon Nova Premier
 """
 
 import json
 import boto3
 import re
 from datetime import datetime
-from decimal import Decimal
 
 bedrock = boto3.client('bedrock-runtime', region_name='us-west-2')
 dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
@@ -41,14 +23,12 @@ def get_table():
 
 
 def strip_markdown(text):
-    """Remove markdown formatting from LLM responses"""
     text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)
     text = re.sub(r'\*([^*]+)\*', r'\1', text)
     return text.strip()
 
 
 def get_conversation(contact_id):
-    """Get conversation history from DynamoDB"""
     table = get_table()
     try:
         response = table.get_item(Key={'contact_id': contact_id})
@@ -60,7 +40,6 @@ def get_conversation(contact_id):
 
 
 def save_conversation(contact_id, history, survey_data, complete):
-    """Save conversation history to DynamoDB"""
     table = get_table()
     try:
         table.put_item(Item={
@@ -74,83 +53,123 @@ def save_conversation(contact_id, history, survey_data, complete):
         print(f"DynamoDB save error: {e}")
 
 
-def extract_survey_data(user_input, last_agent_msg, current_data):
+def smart_extract(user_input, last_agent_msg, survey_data):
     """
-    Context-aware extraction - only extracts data when the agent 
-    actually asked the relevant question.
+    Smart extraction that understands natural language and context.
+    Can extract multiple pieces of info from a single response.
     """
-    data = current_data.copy()
-    text_lower = user_input.lower()
-    agent_lower = (last_agent_msg or '').lower()
+    data = survey_data.copy()
+    text = user_input.lower()
     
-    # Extract household size only if we asked about it
-    if 'household_size' not in data and ('how many' in agent_lower or 'people' in agent_lower or 'household' in agent_lower):
+    # Extract household size - look for numbers in context
+    if 'household_size' not in data:
+        # Direct numbers
         nums = re.findall(r'\b(\d+)\b', user_input)
-        words_to_num = {'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9,'ten':10}
-        for word, num in words_to_num.items():
-            if word in text_lower:
+        word_nums = {'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9,'ten':10}
+        for word, num in word_nums.items():
+            if word in text:
                 nums.append(str(num))
-        if nums:
+        
+        # Context clues
+        if 'just me' in text or 'only me' in text or 'i live alone' in text:
+            data['household_size'] = 1
+        elif 'me and my' in text and ('husband' in text or 'wife' in text or 'partner' in text or 'spouse' in text):
+            base = 2
+            # Check for kids mentioned
+            if 'kid' in text or 'child' in text:
+                kid_nums = re.findall(r'(\d+)\s*(?:kid|child)', text)
+                if kid_nums:
+                    base += int(kid_nums[0])
+                elif 'two' in text:
+                    base += 2
+                elif 'three' in text:
+                    base += 3
+                else:
+                    base += 1  # At least one if mentioned
+            data['household_size'] = base
+        elif nums:
             data['household_size'] = int(nums[0])
     
-    # Extract ownership only if we asked about it
-    if 'ownership' not in data and ('own' in agent_lower or 'rent' in agent_lower):
-        if 'own' in text_lower:
-            data['ownership'] = 'own'
-        elif 'rent' in text_lower:
-            data['ownership'] = 'rent'
-    
-    # Extract children info only if we asked about children
-    if 'has_children' not in data and ('child' in agent_lower or 'kids' in agent_lower or 'under 18' in agent_lower):
-        yes_words = ['yes','yeah','yep','sure','yea','correct']
-        no_words = ['no','nope','nah','none']
-        if any(w in text_lower for w in no_words):
+    # Extract children info - be smart about it
+    if 'has_children' not in data:
+        # Explicit mentions
+        if any(phrase in text for phrase in ['no kids', 'no children', 'dont have kids', "don't have kids", 
+                                              'empty nester', 'moved out', 'no one under']):
             data['has_children'] = 'no'
-        elif any(w in text_lower for w in yes_words):
+        elif any(phrase in text for phrase in ['have kids', 'have children', 'our kids', 'my kids',
+                                                'teenager', 'toddler', 'baby', 'year old', 'years old']):
             data['has_children'] = 'yes'
+        # Ages mentioned
+        elif re.search(r'\b(\d{1,2})\s*(and|,|&)\s*(\d{1,2})\b', text):
+            data['has_children'] = 'yes'
+        # Response to direct question
+        elif last_agent_msg and 'child' in last_agent_msg.lower():
+            if any(w in text for w in ['yes','yeah','yep','one','two','three']):
+                data['has_children'] = 'yes'
+            elif any(w in text for w in ['no','nope','none','zero']):
+                data['has_children'] = 'no'
+    
+    # Extract ownership - comprehensive
+    if 'ownership' not in data:
+        if any(phrase in text for phrase in ['we own', 'i own', 'own it', 'own our', 'own my', 
+                                              'own the', 'homeowner', 'our house', 'my house']):
+            data['ownership'] = 'own'
+        elif any(phrase in text for phrase in ['rent', 'renting', 'renter', 'lease', 'apartment']):
+            data['ownership'] = 'rent'
+        # Response to direct question
+        elif last_agent_msg and ('own' in last_agent_msg.lower() or 'rent' in last_agent_msg.lower()):
+            if 'own' in text:
+                data['ownership'] = 'own'
+            elif 'rent' in text:
+                data['ownership'] = 'rent'
     
     return data
 
 
-def call_llm_with_history(history, survey_data, user_input):
-    """
-    Call Nova Premier with full conversation context.
-    Returns (response_text, is_complete)
-    """
-    # Build context of what we know
-    known = []
+def generate_response(history, survey_data, user_input):
+    """Generate a warm, natural response using Nova Premier."""
+    
+    # Build context
+    collected = []
     if 'household_size' in survey_data:
-        known.append(f"Household has {survey_data['household_size']} people")
+        collected.append(f"household size: {survey_data['household_size']}")
     if 'has_children' in survey_data:
-        known.append(f"Children under 18: {survey_data['has_children']}")
+        collected.append(f"children under 18: {survey_data['has_children']}")
     if 'ownership' in survey_data:
-        known.append(f"Housing: {survey_data['ownership']}")
+        collected.append(f"housing: {survey_data['ownership']}")
     
-    # Determine what we still need
-    needed = []
+    missing = []
     if 'household_size' not in survey_data:
-        needed.append("household size")
+        missing.append("how many people live in the household")
     if 'has_children' not in survey_data:
-        needed.append("whether there are children under 18")
+        missing.append("whether there are children under 18")
     if 'ownership' not in survey_data:
-        needed.append("whether they own or rent")
+        missing.append("whether they own or rent")
     
-    complete = len(needed) == 0
+    is_complete = len(missing) == 0
     
-    system_prompt = f"""You are a Census Bureau survey agent. Be conversational and natural.
+    system_prompt = f"""You are Sarah, a friendly Census Bureau representative. You're warm, conversational, and efficient.
 
-KNOWN FACTS: {', '.join(known) if known else 'None yet'}
-STILL NEED: {', '.join(needed) if needed else 'Survey complete!'}
+PERSONALITY:
+- Warm and genuine - you care about people
+- Natural conversational style - use contractions, casual language
+- Acknowledge what people say before asking the next question
+- If someone gives multiple pieces of info, acknowledge all of them
+- Keep responses SHORT (under 25 words ideally)
 
-{'SURVEY COMPLETE: Thank them warmly and say goodbye.' if complete else 'Ask the FIRST item in STILL NEED naturally.'}
+ALREADY COLLECTED: {', '.join(collected) if collected else 'Nothing yet'}
+STILL NEED: {', '.join(missing) if missing else 'SURVEY COMPLETE!'}
+
+{"SURVEY IS COMPLETE! Thank them warmly, tell them their responses help their community, and wish them well. Be genuine, not scripted." if is_complete else f"Ask about: {missing[0]}. Make it natural, not robotic."}
 
 RULES:
-- NEVER re-ask something already known
-- Keep responses under 30 words
-- No asterisks or markdown
-- Sound friendly and human"""
+- NEVER repeat a question if you have the answer
+- NEVER use asterisks or markdown
+- Sound like a real person, not a bot
+- If user gave multiple answers, acknowledge each briefly
+- One question at a time if needed
+- Match their energy - if they're brief, be brief back"""
 
-    # Build messages with full history
     messages = []
     for turn in history:
         messages.append({"role": "user", "content": [{"text": turn['user']}]})
@@ -161,19 +180,13 @@ RULES:
         modelId=MODEL_ID,
         system=[{"text": system_prompt}],
         messages=messages,
-        inferenceConfig={"maxTokens": 80, "temperature": 0.4}
+        inferenceConfig={"maxTokens": 100, "temperature": 0.6}
     )
     
-    return strip_markdown(response['output']['message']['content'][0]['text']), complete
+    return strip_markdown(response['output']['message']['content'][0]['text']), is_complete
 
 
 def lambda_handler(event, context):
-    """
-    Main Lambda handler for Lex V2 fulfillment.
-    
-    All user input comes through FallbackIntent and is processed by Nova Premier.
-    Returns Close action with fulfillmentState when survey is complete.
-    """
     print(f"EVENT: {json.dumps(event)}")
     
     try:
@@ -186,7 +199,6 @@ def lambda_handler(event, context):
         user_input = event.get('inputTranscript', '').strip()
         print(f"CONTACT: {contact_id}, INPUT: '{user_input}'")
         
-        # Handle empty input
         if not user_input:
             return {
                 "sessionState": {
@@ -194,52 +206,37 @@ def lambda_handler(event, context):
                     "intent": {"name": intent_name, "state": "InProgress"},
                     "sessionAttributes": session_attrs
                 },
-                "messages": [{"contentType": "PlainText", "content": "I didn't catch that. Could you repeat?"}]
+                "messages": [{"contentType": "PlainText", "content": "Sorry, I didn't catch that. Could you say that again?"}]
             }
         
-        # Get existing conversation
+        # Get conversation state
         conv = get_conversation(contact_id)
-        if conv:
-            history = conv.get('history', [])
-            survey_data = conv.get('survey_data', {})
-        else:
-            history = []
-            survey_data = {}
+        history = conv.get('history', []) if conv else []
+        survey_data = conv.get('survey_data', {}) if conv else {}
         
-        # Get last agent message for context-aware extraction
+        # Smart extraction
         last_agent_msg = history[-1]['assistant'] if history else ''
+        survey_data = smart_extract(user_input, last_agent_msg, survey_data)
+        print(f"Survey data after extraction: {survey_data}")
         
-        # Extract data based on context
-        survey_data = extract_survey_data(user_input, last_agent_msg, survey_data)
-        print(f"Survey data: {survey_data}")
+        # Generate response
+        response_text, complete = generate_response(history, survey_data, user_input)
+        print(f"Response: '{response_text}', Complete: {complete}")
         
-        # Call LLM with full history
-        response_text, complete = call_llm_with_history(history, survey_data, user_input)
-        print(f"LLM response: {response_text}, Complete: {complete}")
-        
-        # Save updated conversation
+        # Save state
         history.append({'user': user_input, 'assistant': response_text})
         save_conversation(contact_id, history, survey_data, complete)
         
-        # Return Close action when complete
         if complete:
-            print("SURVEY COMPLETE - returning Close with fulfillmentState")
             return {
                 "sessionState": {
-                    "dialogAction": {
-                        "type": "Close",
-                        "fulfillmentState": "Fulfilled"
-                    },
-                    "intent": {
-                        "name": intent_name,
-                        "state": "Fulfilled"
-                    },
+                    "dialogAction": {"type": "Close", "fulfillmentState": "Fulfilled"},
+                    "intent": {"name": intent_name, "state": "Fulfilled"},
                     "sessionAttributes": session_attrs
                 },
                 "messages": [{"contentType": "PlainText", "content": response_text}]
             }
         
-        # Continue conversation
         return {
             "sessionState": {
                 "dialogAction": {"type": "ElicitIntent"},
@@ -255,12 +252,9 @@ def lambda_handler(event, context):
         traceback.print_exc()
         return {
             "sessionState": {
-                "dialogAction": {
-                    "type": "Close",
-                    "fulfillmentState": "Failed"
-                },
+                "dialogAction": {"type": "Close", "fulfillmentState": "Failed"},
                 "intent": {"name": "FallbackIntent", "state": "Failed"},
                 "sessionAttributes": {}
             },
-            "messages": [{"contentType": "PlainText", "content": "Sorry, there was an issue. Goodbye."}]
+            "messages": [{"contentType": "PlainText", "content": "I apologize, we're having technical difficulties. Please try again later."}]
         }
