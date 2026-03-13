@@ -1,6 +1,15 @@
 {
-  "Heading": "IRS Taxpayer Services - Agent Dashboard",
+  "Heading": "IRS Taxpayer Services | MAXIMUS",
   "CardsPerRow": "2",
+  "ThemeColors": {
+    "primary": "#6e43c2",
+    "primaryDark": "#4a2b87",
+    "danger": "#dc3545",
+    "warning": "#ffc107",
+    "success": "#28a745",
+    "lightBackground": "#f8f9fa",
+    "border": "#dee2e6"
+  },
   "AttributeBar": [
     {
       "Label": "Agent ID",
@@ -9,17 +18,13 @@
     },
     {
       "Label": "Queue",
-      "Value": "{{Queue.Name}}"
+      "Value": "TreasuryIRSQueue"
     },
     {
       "Label": "IRM Reference",
       "Value": "IRM 21.1.1",
       "LinkType": "external",
       "Url": "https://www.irs.gov/irm/part21/irm_21-001-001"
-    },
-    {
-      "Label": "Shift",
-      "Value": "{{Contact.Attributes.shift}}"
     }
   ],
   "Cards": [
@@ -27,181 +32,45 @@
       "Summary": {
         "Id": "refund_status",
         "Icon": "wallet",
-        "Heading": "Refund Status Inquiry",
+        "Heading": "💰 Refund Status Inquiry",
         "Status": "High Volume",
-        "Description": "Where's My Refund? - Most common call type"
-      },
-      "Detail": {
-        "Heading": "Refund Status Inquiry Procedures",
-        "Description": "Handle taxpayer inquiries about refund status, processing times, and direct deposit issues.",
-        "Sections": [
-          {
-            "TemplateString": "<h4>🔐 Required Authentication</h4><ul><li>Full SSN or ITIN</li><li>Filing status from return</li><li>Exact refund amount claimed</li><li>Tax year in question</li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📋 Agent Instructions</h4><ol><li>Verify identity using IRM 21.1.3.2.3</li><li>Access IDRS command code IMFOL</li><li>Check TC 846 (refund issued) or TC 840 (manual refund)</li><li>If no TC 846: Check for freeze codes (−R, −A, −C)</li><li>Provide realistic timeframe based on processing cycle</li></ol>"
-          },
-          {
-            "TemplateString": "<h4>⏱️ Standard Processing Times</h4><table border='1' cellpadding='5'><tr><td><b>E-filed + Direct Deposit</b></td><td>21 days</td></tr><tr><td><b>Paper filed</b></td><td>6-8 weeks</td></tr><tr><td><b>Amended (1040-X)</b></td><td>16-20 weeks</td></tr><tr><td><b>With EITC/ACTC</b></td><td>Mid-February (PATH Act)</td></tr></table>"
-          },
-          {
-            "TemplateString": "<h4>⚠️ MUST CAPTURE</h4><ul><li><b>Caller's callback number</b></li><li><b>Best time to reach</b></li><li><b>Confirmation of mailing address</b></li><li><b>Direct deposit info if changed</b></li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📚 Policy References</h4><ul><li><a href='https://www.irs.gov/irm/part21/irm_21-004-001'>IRM 21.4.1 - Refund Research</a></li><li><a href='https://www.irs.gov/irm/part21/irm_21-004-002'>IRM 21.4.2 - Refund Trace</a></li><li><a href='https://www.irs.gov/refunds'>Where's My Refund Tool</a></li></ul>"
-          }
-        ],
-        "Actions": [
-          "Initiate Refund Trace",
-          "Update Direct Deposit",
-          "Schedule Callback",
-          "Transfer to Specialist"
-        ]
+        "Description": "Where's My Refund • Auth: SSN + Filing + Amount • IDRS: IMFOL TC 846 • 21 days e-file"
       }
     },
     {
       "Summary": {
         "Id": "identity_verification",
         "Icon": "shield",
-        "Heading": "Identity Verification (5071C/5747C)",
-        "Status": "Security Priority",
-        "Description": "Letter recipients needing ID verification"
-      },
-      "Detail": {
-        "Heading": "Identity Verification Procedures",
-        "Description": "Verify taxpayer identity for those who received Letter 5071C, 5747C, 6331C, or 4883C.",
-        "Sections": [
-          {
-            "TemplateString": "<h4>🔐 Mandatory Verification Items</h4><ul><li><b>Letter number</b> (5071C, 5747C, 6331C, 4883C)</li><li><b>Control number</b> from letter</li><li>SSN and date of birth</li><li>Current mailing address</li><li>One financial account number (last 4 digits)</li><li>Information from prior year return</li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📋 Agent Instructions</h4><ol><li>NEVER process without completing full ID verification</li><li>Access ID Verify application via SERP</li><li>Ask knowledge-based questions from system</li><li>Document all responses in AMS</li><li>If verification fails 2x, require in-person visit</li><li>Issue Letter 5747C if online verification unavailable</li></ol>"
-          },
-          {
-            "TemplateString": "<h4>🚨 FRAUD INDICATORS - STOP & ESCALATE</h4><ul style='color:red;'><li>Caller unable to answer basic questions</li><li>Background noise suggesting call center</li><li>Rushing agent to complete quickly</li><li>Address change requested immediately after verification</li><li>Multiple failed verification attempts same day</li></ul>"
-          },
-          {
-            "TemplateString": "<h4>⚠️ MUST CAPTURE</h4><ul><li><b>Letter number and control number</b></li><li><b>All KBA responses (pass/fail)</b></li><li><b>Caller's relationship to taxpayer</b></li><li><b>Any third-party authorization (Form 2848/8821)</b></li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📚 Policy References</h4><ul><li><a href='https://www.irs.gov/irm/part25/irm_25-023-002'>IRM 25.23.2 - Identity Protection</a></li><li><a href='https://www.irs.gov/irm/part21/irm_21-001-003'>IRM 21.1.3 - Authentication</a></li><li><a href='https://www.irs.gov/identity-theft-fraud-scams'>Identity Theft Resources</a></li></ul>"
-          }
-        ],
-        "Actions": [
-          "Complete ID Verification",
-          "Escalate Fraud Concern",
-          "Issue 5747C Letter",
-          "Schedule In-Person Appt"
-        ]
+        "Heading": "🛡️ Identity Verification (5071C)",
+        "Status": "🔴 Security Priority",
+        "Description": "5071C/5747C Letters • NEVER skip verification • Watch for fraud indicators • Escalate concerns"
       }
     },
     {
       "Summary": {
         "Id": "payment_plan",
         "Icon": "document",
-        "Heading": "Payment Plan / Installment Agreement",
+        "Heading": "📄 Payment Plan / Installment Agreement",
         "Status": "Active",
-        "Description": "Setup or modify installment agreements"
-      },
-      "Detail": {
-        "Heading": "Installment Agreement Procedures",
-        "Description": "Assist taxpayers with setting up, modifying, or reinstating payment plans for tax liabilities.",
-        "Sections": [
-          {
-            "TemplateString": "<h4>🔐 Required Information</h4><ul><li>All tax years with balance due</li><li>Total amount owed (access SUMRY)</li><li>Monthly income and expenses</li><li>Bank account info for direct debit</li><li>Employer name and address</li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📋 Installment Agreement Types</h4><table border='1' cellpadding='5'><tr><th>Type</th><th>Criteria</th><th>Setup Fee</th></tr><tr><td><b>Guaranteed</b></td><td>≤$10,000, filed all returns</td><td>$31 (DD) / $107</td></tr><tr><td><b>Streamlined</b></td><td>≤$50,000, 72-month payoff</td><td>$31 (DD) / $107</td></tr><tr><td><b>Non-Streamlined</b></td><td>>$50,000 or >72 months</td><td>$107 + F433</td></tr><tr><td><b>PPIA</b></td><td>Cannot full-pay in CSED</td><td>Requires F433-A</td></tr></table>"
-          },
-          {
-            "TemplateString": "<h4>📋 Agent Instructions</h4><ol><li>Verify all returns are filed (access TXMODA)</li><li>Calculate minimum payment: Balance ÷ months to CSED</li><li>For streamlined: Use Online Payment Agreement if eligible</li><li>Set up direct debit to reduce user fee</li><li>Explain: Miss 2 payments = default + full balance due</li><li>Document agreement terms in AMS history</li></ol>"
-          },
-          {
-            "TemplateString": "<h4>⚠️ MUST CAPTURE</h4><ul><li><b>All tax years included in agreement</b></li><li><b>Monthly payment amount agreed</b></li><li><b>Payment due date (1st-28th)</b></li><li><b>Bank routing and account number (direct debit)</b></li><li><b>Taxpayer agreement to terms verbally confirmed</b></li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📚 Policy References</h4><ul><li><a href='https://www.irs.gov/irm/part5/irm_05-014-001'>IRM 5.14.1 - Installment Agreements</a></li><li><a href='https://www.irs.gov/irm/part5/irm_05-019-001'>IRM 5.19.1 - Balance Due</a></li><li><a href='https://www.irs.gov/payments/online-payment-agreement-application'>Online Payment Agreement</a></li></ul>"
-          }
-        ],
-        "Actions": [
-          "Setup New IA",
-          "Modify Existing IA",
-          "Reinstate Defaulted IA",
-          "Calculate Minimum Payment"
-        ]
+        "Description": "Guaranteed ≤$10K • Streamlined ≤$50K • Direct Debit saves $76 • Verify returns filed"
       }
     },
     {
       "Summary": {
         "Id": "tax_transcript",
         "Icon": "document",
-        "Heading": "Transcript Requests",
+        "Heading": "📑 Transcript Requests",
         "Status": "Active",
-        "Description": "Tax return and account transcripts"
-      },
-      "Detail": {
-        "Heading": "Transcript Request Procedures",
-        "Description": "Process requests for tax return transcripts, account transcripts, and wage/income transcripts.",
-        "Sections": [
-          {
-            "TemplateString": "<h4>🔐 Authentication Required</h4><ul><li>Full SSN and date of birth</li><li>Current mailing address on file</li><li>Tax year(s) requested</li><li>For third party: Form 4506-T or POA on file</li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📋 Transcript Types</h4><table border='1' cellpadding='5'><tr><th>Type</th><th>Contains</th><th>Use For</th></tr><tr><td><b>Tax Return</b></td><td>Line items from return</td><td>Mortgage, student loans</td></tr><tr><td><b>Tax Account</b></td><td>Filing status, payments, adjustments</td><td>Amended return status</td></tr><tr><td><b>Wage & Income</b></td><td>W-2s, 1099s received</td><td>Verify income, filing</td></tr><tr><td><b>Record of Account</b></td><td>Return + Account combined</td><td>Full tax picture</td></tr><tr><td><b>Verification of Non-Filing</b></td><td>Confirms no return filed</td><td>Financial aid, benefits</td></tr></table>"
-          },
-          {
-            "TemplateString": "<h4>📋 Agent Instructions</h4><ol><li>First: Direct to IRS.gov/transcripts (instant online)</li><li>If online not available: Use Get Transcript by Mail</li><li>Phone requests: Order via IDRS or IAT tool</li><li>Processing time: 5-10 business days by mail</li><li>Wage transcripts available after July 31 for prior year</li></ol>"
-          },
-          {
-            "TemplateString": "<h4>⚠️ MUST CAPTURE</h4><ul><li><b>Transcript type requested</b></li><li><b>Tax year(s)</b></li><li><b>Mailing address confirmation</b></li><li><b>Third-party authorization if applicable</b></li><li><b>Reason for request (for notes)</b></li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📚 Policy References</h4><ul><li><a href='https://www.irs.gov/irm/part21/irm_21-002-003'>IRM 21.2.3 - Transcripts</a></li><li><a href='https://www.irs.gov/individuals/get-transcript'>Get Transcript Online</a></li><li><a href='https://www.irs.gov/forms-pubs/about-form-4506-t'>Form 4506-T Instructions</a></li></ul>"
-          }
-        ],
-        "Actions": [
-          "Order Transcript",
-          "Reset Online Access",
-          "Mail Form 4506-T",
-          "Transfer to e-Services"
-        ]
+        "Description": "Tax Return • Account • Wage Transcripts • FIRST: Direct to IRS.gov/transcripts"
       }
     },
     {
       "Summary": {
         "Id": "notice_explanation",
         "Icon": "alert",
-        "Heading": "IRS Notice Explanation",
+        "Heading": "📬 IRS Notice Explanation",
         "Status": "High Volume",
-        "Description": "CP and LTR notice inquiries"
-      },
-      "Detail": {
-        "Heading": "Notice Explanation Procedures",
-        "Description": "Explain IRS notices (CP series, Letters) and guide taxpayers on required responses.",
-        "Sections": [
-          {
-            "TemplateString": "<h4>🔐 Required Information</h4><ul><li>Notice number (CP or LTR)</li><li>Notice date</li><li>Tax year referenced</li><li>Amount due (if applicable)</li><li>Response deadline</li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📋 Common Notice Types</h4><table border='1' cellpadding='5'><tr><th>Notice</th><th>Meaning</th><th>Action Required</th></tr><tr><td><b>CP14</b></td><td>Balance due</td><td>Pay or set up plan</td></tr><tr><td><b>CP2000</b></td><td>Income mismatch</td><td>Agree or dispute</td></tr><tr><td><b>CP501-504</b></td><td>Payment reminders</td><td>Pay immediately</td></tr><tr><td><b>LT11</b></td><td>Final notice - levy</td><td>Pay or request CDP</td></tr><tr><td><b>CP75</b></td><td>EITC audit</td><td>Submit documentation</td></tr><tr><td><b>Letter 12C</b></td><td>Missing information</td><td>Submit within 20 days</td></tr></table>"
-          },
-          {
-            "TemplateString": "<h4>📋 Agent Instructions</h4><ol><li>Ask for exact notice number (top right corner)</li><li>Pull up notice on IDRS (ENMOD, TXMOD)</li><li>Explain in plain language what IRS is asking</li><li>Calculate response deadline from notice date</li><li>Explain consequences of non-response</li><li>Offer to set up payment plan if balance due</li><li>Document call even if 'information only'</li></ol>"
-          },
-          {
-            "TemplateString": "<h4>⚠️ MUST CAPTURE</h4><ul><li><b>Notice number and date</b></li><li><b>Tax year</b></li><li><b>Whether taxpayer agrees or disputes</b></li><li><b>Response deadline communicated</b></li><li><b>Any documentation taxpayer will submit</b></li></ul>"
-          },
-          {
-            "TemplateString": "<h4>📚 Policy References</h4><ul><li><a href='https://www.irs.gov/irm/part21/irm_21-003-001'>IRM 21.3.1 - Notices</a></li><li><a href='https://www.irs.gov/individuals/understanding-your-irs-notice-or-letter'>Understanding Your Notice</a></li><li><a href='https://www.irs.gov/payments/collection-process'>Collection Process Overview</a></li></ul>"
-          }
-        ],
-        "Actions": [
-          "Explain Notice",
-          "Request Penalty Abatement",
-          "Dispute CP2000",
-          "Setup Payment Plan",
-          "Request CDP Hearing"
-        ]
+        "Description": "CP and LTR notices • Get notice # from top right corner • LT11 = URGENT levy"
       }
     }
   ]
