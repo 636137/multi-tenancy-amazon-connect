@@ -1,135 +1,109 @@
 # Census Survey AI Agent
 
-An LLM-powered Census Survey system using Amazon Connect, Lex V2, Amazon Bedrock Nova Premier, and Deepgram voices.
-
-## Quick Start
-
-**Call the survey:** +1 (844) 593-5770
-
-**View results:** https://d2z5yerl8hzju3.cloudfront.net
+A conversational AI agent for conducting Census Bureau surveys via Amazon Connect voice calls.
 
 ## Architecture
 
 ```
-Phone Call → Amazon Connect → Lex V2 (FallbackIntent) → Lambda → Nova Premier
-                  ↓                                               ↓
-            Deepgram Aura 2                              Full conversation
-            (Thalia - young female)                      history context
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  Phone Call     │────▶│  Amazon Connect  │────▶│  Lambda         │
+│  +1 833-289-5330│     │  Census AI Agent │     │  CensusStrands  │
+└─────────────────┘     │  Contact Flow    │     │  Agent          │
+                        └──────────────────┘     └────────┬────────┘
+                                                          │
+                        ┌──────────────────┐     ┌────────▼────────┐
+                        │  DynamoDB        │◀────│  Amazon Bedrock │
+                        │  Sessions &      │     │  Nova Premier   │
+                        │  Responses       │     └─────────────────┘
+                        └──────────────────┘
 ```
 
-**Key Design:**
-- ALL input goes through Lex FallbackIntent → Lambda
-- No Lex intent matching - the LLM handles all conversation logic
-- Full conversation history passed to Nova Premier each turn
-- Context-aware data extraction (only extracts when agent asked relevant question)
+## Phone Number
 
-## Features
+**📞 +1 (833) 289-5330**
 
-- **Nova Premier LLM**: Amazon's most capable model for natural conversation
-- **Full Context**: Complete conversation history passed to LLM each turn
-- **Smart Extraction**: Only extracts data when relevant question was asked
-- **Deepgram Voice**: Natural-sounding Aura 2 voice (Thalia - young female)
-- **Proper Call Termination**: Returns Close with fulfillmentState when complete
-- **Real-time Dashboard**: View survey results via CloudFront
+## Survey Questions
+
+Sarah (the AI agent) asks 3 questions:
+1. How many people live in your household?
+2. Are there any children under 18?
+3. Do you own or rent your home?
+
+## How It Works
+
+1. **Caller dials** the toll-free number
+2. **Connect Flow** invokes Lambda with `__greeting__` for initial greeting
+3. **Lambda** uses Nova Premier to generate conversational responses
+4. **Flow loops**: speak response → wait for input → invoke Lambda
+5. **Survey complete**: Lambda marks session complete, returns goodbye
+6. **Disconnect**: On next invocation, Lambda throws `SURVEY_COMPLETE` exception
+7. **Flow error branch** catches exception → disconnects call
 
 ## AWS Resources
 
 | Resource | ID/Name |
 |----------|---------|
-| Lambda (Survey) | CensusSurveyLLMAgent |
-| Lambda (API) | CensusSurveyApiHandler |
-| Lex Bot | CensusSurveyAI (BSAIKYT20J) |
-| Lex Alias | prod (UMMWRQRQ8Q) - Version 19 |
-| DynamoDB | CensusSurveyConversations |
-| API Gateway | eaae6ys28g |
-| CloudFront | d2z5yerl8hzju3 |
-| S3 | census-survey-dashboard-593804350786 |
-| Connect Instance | 3b3a1349-4cff-40f4-aed7-b19e2e1644b2 |
-| Connect Flow | 1 - Census Survey AI Agent (d2312c30-066d-4115-a1a2-dba411c2725a) |
+| Connect Instance | census-enumerator-9652 (`1d3555df-0f7a-4c78-9177-d42253597de2`) |
+| Contact Flow | Census AI Agent (`4a2354b7-b179-400d-b175-82051ff9059d`) |
+| Lambda | CensusStrandsAgent |
+| DynamoDB Sessions | CensusChatSessions |
+| DynamoDB Responses | CensusResponses |
 | Bedrock Model | us.amazon.nova-premier-v1:0 |
-| Voice Engine | deepgram:aura-2 / thalia |
-
-## Survey Data Collected
-
-1. **Household size** - How many people live in the household
-2. **Children** - Whether there are children under 18
-3. **Ownership** - Whether they own or rent their home
-
-## Files
-
-- `lambda/census_llm_agent.py` - Main LLM survey Lambda (Nova Premier)
-- `lambda/census_llm_agent_old.py` - Previous version (archived)
-- `ui/index.html` - Dashboard frontend
-- `skill/` - Copilot skill for redeployment
-
-## How It Works
-
-1. **Call comes in** → Connect plays greeting via Deepgram TTS
-2. **User speaks** → Lex transcribes via STT, triggers FallbackIntent
-3. **Lambda invoked** → Retrieves conversation history from DynamoDB
-4. **Nova Premier** → Receives full history + system prompt with KNOWN FACTS / STILL NEED
-5. **Response** → Lambda returns response via Lex TTS (Deepgram)
-6. **Survey complete** → Lambda returns `Close` with `fulfillmentState: Fulfilled`
-7. **Call ends** → Connect disconnects
-
-## Troubleshooting
-
-### Call doesn't connect
-```bash
-# Verify phone-to-flow association
-aws connect list-phone-numbers-v2 --target-arn arn:aws:connect:us-west-2:593804350786:instance/3b3a1349-4cff-40f4-aed7-b19e2e1644b2
-```
-
-### Check Lambda logs
-```bash
-aws logs tail /aws/lambda/CensusSurveyLLMAgent --follow --region us-west-2
-```
-
-### Test Lambda directly
-```bash
-aws lambda invoke --function-name CensusSurveyLLMAgent \
-  --payload '{"sessionId":"test","inputTranscript":"yes","sessionState":{"intent":{"name":"FallbackIntent"}}}' \
-  --region us-west-2 /dev/stdout
-```
-
-### Call ends immediately
-Check that Lambda is associated with Lex alias:
-```bash
-aws lexv2-models describe-bot-alias --bot-id BSAIKYT20J --bot-alias-id UMMWRQRQ8Q --region us-west-2
-```
-
-### Survey doesn't end
-Lambda must return `dialogAction.type: Close` with `fulfillmentState: Fulfilled`.
-
-### Test API
-```bash
-curl https://eaae6ys28g.execute-api.us-west-2.amazonaws.com/prod/surveys
-```
-
-## Copilot Skill
-
-Use the `census-survey-agent` skill to redeploy or modify the system.
 
 ## Lambda Response Format
 
-**Continue conversation:**
-```json
-{
-  "sessionState": {
-    "dialogAction": {"type": "ElicitIntent"},
-    "intent": {"name": "FallbackIntent", "state": "InProgress"}
-  },
-  "messages": [{"contentType": "PlainText", "content": "..."}]
-}
+```python
+# Normal turn
+{"response": "...", "sessionId": "contact-id"}
+
+# After completion - triggers disconnect via exception
+raise Exception("SURVEY_COMPLETE")
 ```
 
-**End survey:**
-```json
-{
-  "sessionState": {
-    "dialogAction": {"type": "Close", "fulfillmentState": "Fulfilled"},
-    "intent": {"name": "FallbackIntent", "state": "Fulfilled"}
-  },
-  "messages": [{"contentType": "PlainText", "content": "Thank you..."}]
-}
+## Contact Flow Design
+
+```
+Start → Enable Logging → Set Voice → Invoke Greeting Lambda
+                                            ↓
+                                    Speak $.External.response
+                                            ↓
+                                    Wait for Input (30s timeout)
+                                            ↓
+                                    Invoke Turn Lambda ←──┐
+                                            ↓             │
+                                    Speak Response ───────┘
+                                            
+On Lambda Error (SURVEY_COMPLETE) → Disconnect
+```
+
+## Troubleshooting
+
+### Call doesn't disconnect
+- Check Lambda logs for "COMPLETE - triggering disconnect"
+- Verify flow's Lambda error branch goes to Disconnect block
+- Check DynamoDB session has `complete: true`
+
+### "I didn't catch that" loops
+- Ensure phone number routes to "Census AI Agent" flow (not Census Survey Flow)
+- Check Lambda handler name matches deployed code
+
+### Lambda timeout
+- Current timeout: 60s
+- Nova Premier can take 5-10s per turn
+
+## Files
+
+- `lambda/census_survey_agent.py` - Main Lambda code
+- `lambda/census_llm_agent.py` - Previous Lex-based version (archived)
+
+## Deployment
+
+```bash
+# Package and deploy Lambda
+cd lambda
+zip census_survey.zip census_survey_agent.py
+aws lambda update-function-code --function-name CensusStrandsAgent \
+    --zip-file fileb://census_survey.zip
+aws lambda update-function-configuration --function-name CensusStrandsAgent \
+    --handler census_survey_agent.lambda_handler
 ```
