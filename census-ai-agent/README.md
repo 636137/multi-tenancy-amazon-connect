@@ -1,150 +1,135 @@
-# Census AI Agent for Amazon Connect
+# Census Survey AI Agent
 
-An LLM-powered AI agent that conducts US Census surveys through Amazon Connect using natural voice conversations.
-
-## Overview
-
-This project deploys a fully autonomous Census Survey AI Agent that:
-- Greets callers naturally using Deepgram TTS
-- Asks dynamic survey questions powered by Claude 3 Haiku
-- Captures responses using Deepgram STT through Lex
-- Maintains conversation state in DynamoDB
-- Stores completed surveys in S3
-- Provides a real-time analytics dashboard
+An LLM-powered Census Survey system using Amazon Connect, Lex V2, Amazon Bedrock Nova Premier, and Deepgram voices.
 
 ## Quick Start
 
-**Phone Number**: +1 (844) 593-5770
+**Call the survey:** +1 (844) 593-5770
 
-Call to experience the AI agent conducting a Census survey.
+**View results:** https://d2z5yerl8hzju3.cloudfront.net
 
 ## Architecture
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Caller    │────▶│   Connect   │────▶│   Lambda    │
-└─────────────┘     │   Flow      │     │  (Claude)   │
-                    └──────┬──────┘     └──────┬──────┘
-                           │                    │
-                    ┌──────▼──────┐     ┌──────▼──────┐
-                    │  Lex V2 Bot │     │  DynamoDB   │
-                    │ (Deepgram)  │     │   State     │
-                    └─────────────┘     └─────────────┘
+Phone Call → Amazon Connect → Lex V2 (FallbackIntent) → Lambda → Nova Premier
+                  ↓                                               ↓
+            Deepgram Aura 2                              Full conversation
+            (Thalia - young female)                      history context
 ```
 
-## Components
+**Key Design:**
+- ALL input goes through Lex FallbackIntent → Lambda
+- No Lex intent matching - the LLM handles all conversation logic
+- Full conversation history passed to Nova Premier each turn
+- Context-aware data extraction (only extracts when agent asked relevant question)
 
-### Lambda Function
-- **Name**: CensusSurveyLLMAgent
-- **Runtime**: Python 3.11
-- **Purpose**: Generates AI responses using Bedrock Converse API
-- **Model**: Claude 3 Haiku (anthropic.claude-3-haiku-20240307-v1:0)
+## Features
 
-### Lex Bot
-- **Name**: CensusSurveyAI
-- **STT**: Deepgram (flux-general-en)
-- **Fulfillment**: Lambda with InputTranscript
-
-### Contact Flow
-- **Name**: 1 - Census Survey AI Agent
-- **TTS**: Deepgram Aura 2 (odysseus voice)
-- **Pattern**: Lambda → Lex → Lambda (loop)
-
-### Storage
-- **DynamoDB**: CensusSurveyConversations (call state)
-- **S3**: census-survey-results-593804350786 (completed surveys)
-
-### Dashboard
-- **URL**: https://d2z5yerl8hzju3.cloudfront.net
-- **Features**: Real-time stats, survey list, analytics
-
-## Files
-
-```
-census-ai-agent/
-├── README.md                 # This file
-├── lambda/
-│   └── census_llm_agent.py  # Lambda source code
-├── ui/
-│   └── index.html           # Dashboard UI
-├── skill/
-│   └── SKILL.md             # Copilot skill definition
-└── Q_CONNECT_SETUP_GUIDE.md # Q Connect setup docs
-```
+- **Nova Premier LLM**: Amazon's most capable model for natural conversation
+- **Full Context**: Complete conversation history passed to LLM each turn
+- **Smart Extraction**: Only extracts data when relevant question was asked
+- **Deepgram Voice**: Natural-sounding Aura 2 voice (Thalia - young female)
+- **Proper Call Termination**: Returns Close with fulfillmentState when complete
+- **Real-time Dashboard**: View survey results via CloudFront
 
 ## AWS Resources
 
-| Resource | ARN/ID |
-|----------|--------|
-| Lambda | arn:aws:lambda:us-west-2:593804350786:function:CensusSurveyLLMAgent |
+| Resource | ID/Name |
+|----------|---------|
+| Lambda (Survey) | CensusSurveyLLMAgent |
+| Lambda (API) | CensusSurveyApiHandler |
+| Lex Bot | CensusSurveyAI (BSAIKYT20J) |
+| Lex Alias | prod (UMMWRQRQ8Q) - Version 19 |
 | DynamoDB | CensusSurveyConversations |
-| Lex Bot | BSAIKYT20J |
-| Lex Alias | UMMWRQRQ8Q (version 9) |
-| Connect Flow | d2312c30-066d-4115-a1a2-dba411c2725a |
-| CloudFront | E3A2AN195NO14F |
-| Dashboard | https://d2z5yerl8hzju3.cloudfront.net |
+| API Gateway | eaae6ys28g |
+| CloudFront | d2z5yerl8hzju3 |
+| S3 | census-survey-dashboard-593804350786 |
+| Connect Instance | 3b3a1349-4cff-40f4-aed7-b19e2e1644b2 |
+| Connect Flow | 1 - Census Survey AI Agent (d2312c30-066d-4115-a1a2-dba411c2725a) |
+| Bedrock Model | us.amazon.nova-premier-v1:0 |
+| Voice Engine | deepgram:aura-2 / thalia |
 
-## Survey Questions
+## Survey Data Collected
 
-The AI asks these questions in a natural conversational flow:
+1. **Household size** - How many people live in the household
+2. **Children** - Whether there are children under 18
+3. **Ownership** - Whether they own or rent their home
 
-1. Greeting and consent to participate
-2. How many people live at this address?
-3. What are the ages of household members?
-4. Is this a house, apartment, condo, or other?
-5. Do you own or rent?
-6. How many bedrooms?
-7. Thank you and completion
+## Files
 
-## Configuration
+- `lambda/census_llm_agent.py` - Main LLM survey Lambda (Nova Premier)
+- `lambda/census_llm_agent_old.py` - Previous version (archived)
+- `ui/index.html` - Dashboard frontend
+- `skill/` - Copilot skill for redeployment
 
-### Deepgram TTS Voice Options
-- odysseus (male, warm)
-- thalia (female, friendly)
-- angus (male, authoritative)
+## How It Works
 
-### Bedrock Models
-- Claude 3 Haiku (fast, cost-effective)
-- Claude 3 Sonnet (higher quality)
-- Claude 3.5 Sonnet (best quality)
-
-## Monitoring
-
-### CloudWatch Logs
-- Lambda: `/aws/lambda/CensusSurveyLLMAgent`
-- Connect: Flow logging enabled
-
-### Metrics to Watch
-- Lambda duration (should be < 3s)
-- Bedrock throttling errors
-- DynamoDB consumed capacity
-
-## Cost
-
-Estimated per 1000 surveys:
-- Amazon Connect: $0.50
-- Lambda: $0.10
-- Bedrock (Haiku): $2.00
-- DynamoDB: $0.01
-- **Total**: ~$2.61
+1. **Call comes in** → Connect plays greeting via Deepgram TTS
+2. **User speaks** → Lex transcribes via STT, triggers FallbackIntent
+3. **Lambda invoked** → Retrieves conversation history from DynamoDB
+4. **Nova Premier** → Receives full history + system prompt with KNOWN FACTS / STILL NEED
+5. **Response** → Lambda returns response via Lex TTS (Deepgram)
+6. **Survey complete** → Lambda returns `Close` with `fulfillmentState: Fulfilled`
+7. **Call ends** → Connect disconnects
 
 ## Troubleshooting
 
-### "Technical difficulty" message
-- Check Lambda CloudWatch logs
-- Verify Bedrock permissions
-- Check DynamoDB table exists
+### Call doesn't connect
+```bash
+# Verify phone-to-flow association
+aws connect list-phone-numbers-v2 --target-arn arn:aws:connect:us-west-2:593804350786:instance/3b3a1349-4cff-40f4-aed7-b19e2e1644b2
+```
 
-### No speech recognition
-- Verify Lex bot is built
-- Check Deepgram API key in Secrets Manager
-- Ensure Unlimited AI is enabled on Connect instance
+### Check Lambda logs
+```bash
+aws logs tail /aws/lambda/CensusSurveyLLMAgent --follow --region us-west-2
+```
 
-### Dashboard not loading
-- CloudFront can take 5-10 minutes to deploy
-- Check browser console for errors
-- Verify S3 bucket policy
+### Test Lambda directly
+```bash
+aws lambda invoke --function-name CensusSurveyLLMAgent \
+  --payload '{"sessionId":"test","inputTranscript":"yes","sessionState":{"intent":{"name":"FallbackIntent"}}}' \
+  --region us-west-2 /dev/stdout
+```
 
-## License
+### Call ends immediately
+Check that Lambda is associated with Lex alias:
+```bash
+aws lexv2-models describe-bot-alias --bot-id BSAIKYT20J --bot-alias-id UMMWRQRQ8Q --region us-west-2
+```
 
-Internal use only - Maximus
+### Survey doesn't end
+Lambda must return `dialogAction.type: Close` with `fulfillmentState: Fulfilled`.
+
+### Test API
+```bash
+curl https://eaae6ys28g.execute-api.us-west-2.amazonaws.com/prod/surveys
+```
+
+## Copilot Skill
+
+Use the `census-survey-agent` skill to redeploy or modify the system.
+
+## Lambda Response Format
+
+**Continue conversation:**
+```json
+{
+  "sessionState": {
+    "dialogAction": {"type": "ElicitIntent"},
+    "intent": {"name": "FallbackIntent", "state": "InProgress"}
+  },
+  "messages": [{"contentType": "PlainText", "content": "..."}]
+}
+```
+
+**End survey:**
+```json
+{
+  "sessionState": {
+    "dialogAction": {"type": "Close", "fulfillmentState": "Fulfilled"},
+    "intent": {"name": "FallbackIntent", "state": "Fulfilled"}
+  },
+  "messages": [{"contentType": "PlainText", "content": "Thank you..."}]
+}
+```
