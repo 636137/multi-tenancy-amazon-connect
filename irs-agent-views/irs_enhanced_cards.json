@@ -1,0 +1,173 @@
+{
+  "Heading": "IRS Taxpayer Services",
+  "SubHeading": "MAXIMUS Agent Quick Reference Guide",
+  "CardsPerRow": "1",
+  "NoMatchingCardsText": "No guides available for this contact type.",
+  "Cards": [
+    {
+      "Summary": {
+        "Id": "refund-status",
+        "Icon": "document",
+        "Heading": "\ud83d\udcb0 Refund Status Inquiry",
+        "Status": "HIGH VOLUME",
+        "Description": "Check refund status, timelines, and IDRS codes"
+      },
+      "Detail": {
+        "Heading": "Refund Status Procedures",
+        "Description": "Verify caller identity and check refund status in IDRS",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udd10 Authentication Required</h4><ul><li>Full SSN (last 4 not sufficient)</li><li>Date of Birth</li><li>Filing Status (Single/MFJ/MFS/HOH)</li><li>Exact refund amount from return</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udcca IDRS Lookup Steps</h4><ol><li>Access IMFOL using SSN</li><li>Check for TC 846 (refund issued) or TC 840 (manual refund)</li><li>Note: TC 971 AC 111 = ID Verify hold</li><li>Verify account freeze indicators</li></ol>"
+          },
+          {
+            "TemplateString": "<h4>\u23f1\ufe0f Standard Processing Times</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px; text-align:left;'>Type</th><th style='padding:8px;'>Timeline</th></tr><tr><td style='padding:8px;'>E-file + Direct Deposit</td><td style='padding:8px;'><b>21 days</b></td></tr><tr><td style='padding:8px;'>E-file + Paper Check</td><td style='padding:8px;'>4-6 weeks</td></tr><tr><td style='padding:8px;'>Paper Return</td><td style='padding:8px;'>6-8 weeks</td></tr><tr><td style='padding:8px;'>Amended (1040-X)</td><td style='padding:8px;'>16-20 weeks</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udd17 Quick Links</h4><p><a href='https://www.irs.gov/refunds' target='_blank'>Where's My Refund (IRS.gov)</a></p><p><a href='https://www.irs.gov/irm/part21' target='_blank'>IRM Part 21 - Customer Account Services</a></p>"
+          }
+        ],
+        "Actions": [
+          "Open IDRS IMFOL",
+          "Send Refund Status Letter",
+          "Escalate to Supervisor",
+          "Transfer to Refund Hotline"
+        ]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "identity-verify",
+        "Icon": "shield",
+        "Heading": "\ud83d\udee1\ufe0f Identity Verification",
+        "Status": "REQUIRED",
+        "Description": "Letter 5071C, 5747C, 6331C - ID.me or phone verification"
+      },
+      "Detail": {
+        "Heading": "Identity Verification (5071C/6331C)",
+        "Description": "Verify taxpayer identity for returns flagged by IRS fraud filters",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udce7 Letter Types</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Letter</th><th style='padding:8px;'>Meaning</th><th style='padding:8px;'>Action</th></tr><tr><td style='padding:8px;'><b>5071C</b></td><td style='padding:8px;'>ID Verify - Online/Phone</td><td style='padding:8px;'>idverify.irs.gov</td></tr><tr><td style='padding:8px;'><b>5747C</b></td><td style='padding:8px;'>ID Verify - In Person</td><td style='padding:8px;'>TAC appointment</td></tr><tr><td style='padding:8px;'><b>6331C</b></td><td style='padding:8px;'>Phone Verify Required</td><td style='padding:8px;'>Call IRS directly</td></tr><tr><td style='padding:8px;'><b>4883C</b></td><td style='padding:8px;'>Additional Info Needed</td><td style='padding:8px;'>Call IRS</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>\u2705 Phone Verification Checklist</h4><ul><li>\u2610 Confirm letter number and tax year</li><li>\u2610 Verify SSN, DOB, and current address</li><li>\u2610 Ask security questions from return</li><li>\u2610 Confirm filing status and dependents</li><li>\u2610 <b>Supervisor approval required</b> for completion</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>\u26a0\ufe0f Fraud Indicators</h4><div style='background:#fff3cd; padding:10px; border-radius:5px;'><b>STOP if caller:</b><ul style='margin:5px 0;'><li>Cannot verify basic return info</li><li>Asks to change direct deposit info</li><li>Claims to be calling for someone else</li><li>Refuses to answer security questions</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udd17 Resources</h4><p><a href='https://www.irs.gov/identity-theft-fraud-scams/identity-verification-for-irs-letter-recipients' target='_blank'>IRS Identity Verification Portal</a></p><p><a href='https://idverify.irs.gov' target='_blank'>ID.me Verification (idverify.irs.gov)</a></p>"
+          }
+        ],
+        "Actions": [
+          "Start ID Verification",
+          "Request Supervisor Approval",
+          "Mark as Fraud Referral",
+          "Schedule TAC Appointment"
+        ]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "payment-plan",
+        "Icon": "wallet",
+        "Heading": "\ud83d\udcb3 Payment Plan Setup",
+        "Status": "",
+        "Description": "Installment agreements for balances $50K or less"
+      },
+      "Detail": {
+        "Heading": "Installment Agreement Options",
+        "Description": "Help taxpayers set up payment plans based on balance owed",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udccb Agreement Types by Balance</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Balance</th><th style='padding:8px;'>Type</th><th style='padding:8px;'>Requirements</th></tr><tr style='background:#d4edda;'><td style='padding:8px;'><b>&lt; $10,000</b></td><td style='padding:8px;'>Guaranteed IA</td><td style='padding:8px;'>Auto-approved, 36 months</td></tr><tr><td style='padding:8px;'><b>$10K - $25K</b></td><td style='padding:8px;'>Streamlined IA</td><td style='padding:8px;'>Direct Debit required, 72 mo</td></tr><tr><td style='padding:8px;'><b>$25K - $50K</b></td><td style='padding:8px;'>Streamlined IA</td><td style='padding:8px;'>Direct Debit required, 72 mo</td></tr><tr style='background:#f8d7da;'><td style='padding:8px;'><b>&gt; $50,000</b></td><td style='padding:8px;'>Non-Streamlined</td><td style='padding:8px;'>Form 433-F required</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udcb5 Setup Fees (2024)</h4><ul><li><b>Online + Direct Debit:</b> $22</li><li><b>Online + Other Payment:</b> $69</li><li><b>Phone/Mail Setup:</b> $178</li><li><b>Low Income:</b> Fee waived/reduced</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udcdd Required Information</h4><ul><li>\u2610 Monthly income and expenses</li><li>\u2610 Bank account for Direct Debit</li><li>\u2610 Preferred payment date (1-28)</li><li>\u2610 All returns filed (compliance check)</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udd17 Self-Service Portal</h4><p><a href='https://www.irs.gov/payments/online-payment-agreement-application' target='_blank'>IRS Online Payment Agreement (OPA)</a></p><p>Encourage taxpayers to use OPA for lower fees!</p>"
+          }
+        ],
+        "Actions": [
+          "Start IA Setup in IDRS",
+          "Check Filing Compliance",
+          "Calculate Monthly Payment",
+          "Email OPA Instructions"
+        ]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "transcript",
+        "Icon": "document",
+        "Heading": "\ud83d\udcc4 Transcript Request",
+        "Status": "",
+        "Description": "Tax return, account, and wage transcripts"
+      },
+      "Detail": {
+        "Heading": "Transcript Types & Delivery",
+        "Description": "Help taxpayers obtain tax records and transcripts",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udcd1 Transcript Types</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Type</th><th style='padding:8px;'>Contains</th><th style='padding:8px;'>Use For</th></tr><tr><td style='padding:8px;'><b>Tax Return</b></td><td style='padding:8px;'>Line items from filed return</td><td style='padding:8px;'>Mortgage, loans</td></tr><tr><td style='padding:8px;'><b>Tax Account</b></td><td style='padding:8px;'>Payments, penalties, balance</td><td style='padding:8px;'>Payment history</td></tr><tr><td style='padding:8px;'><b>Wage & Income</b></td><td style='padding:8px;'>W-2, 1099 data</td><td style='padding:8px;'>Verify income</td></tr><tr><td style='padding:8px;'><b>Record of Account</b></td><td style='padding:8px;'>Combined return + account</td><td style='padding:8px;'>Complete record</td></tr><tr><td style='padding:8px;'><b>Verification (VoNF)</b></td><td style='padding:8px;'>Non-filer confirmation</td><td style='padding:8px;'>FAFSA, benefits</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>\u23f1\ufe0f Delivery Options</h4><ul><li><b>Online (IRS.gov):</b> Instant access</li><li><b>By Mail:</b> 5-10 business days</li><li><b>Form 4506-T:</b> Fax request, 10 days</li><li><b>Form 4506:</b> Full copy, $43 fee, 75 days</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udcc5 Availability</h4><ul><li>Current year + 3 prior years (online)</li><li>Wage & Income: Current + 10 prior years</li><li>Older records: Form 4506 only</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udd17 Self-Service Options</h4><p><a href='https://www.irs.gov/individuals/get-transcript' target='_blank'>Get Transcript Online (IRS.gov)</a></p><p><a href='https://www.irs.gov/forms-pubs/about-form-4506-t' target='_blank'>Form 4506-T Instructions</a></p>"
+          }
+        ],
+        "Actions": [
+          "Generate Transcript",
+          "Mail Transcript Request",
+          "Email Self-Service Link",
+          "Process Form 4506-T"
+        ]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "notice",
+        "Icon": "alert",
+        "Heading": "\ud83d\udcec Notice Explanation",
+        "Status": "",
+        "Description": "CP, LTR notice clarification and response deadlines"
+      },
+      "Detail": {
+        "Heading": "IRS Notice Guide",
+        "Description": "Explain notices and guide taxpayers on required actions",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udccb Common CP Notices</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Notice</th><th style='padding:8px;'>Meaning</th><th style='padding:8px;'>Response</th></tr><tr style='background:#f8d7da;'><td style='padding:8px;'><b>CP14</b></td><td style='padding:8px;'>Balance Due</td><td style='padding:8px;'>Pay or set up plan</td></tr><tr><td style='padding:8px;'><b>CP2000</b></td><td style='padding:8px;'>Income Mismatch</td><td style='padding:8px;'>Agree or dispute, 30 days</td></tr><tr><td style='padding:8px;'><b>CP501-504</b></td><td style='padding:8px;'>Balance Reminders</td><td style='padding:8px;'>Pay immediately</td></tr><tr style='background:#fff3cd;'><td style='padding:8px;'><b>CP504</b></td><td style='padding:8px;'>Intent to Levy</td><td style='padding:8px;'><b>URGENT - 30 days</b></td></tr><tr><td style='padding:8px;'><b>CP11/CP12</b></td><td style='padding:8px;'>Math Error</td><td style='padding:8px;'>Review changes</td></tr><tr><td style='padding:8px;'><b>CP49</b></td><td style='padding:8px;'>Refund Applied to Debt</td><td style='padding:8px;'>Informational</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>\u23f0 Response Deadlines</h4><div style='background:#fff3cd; padding:10px; border-radius:5px;'><ul style='margin:0;'><li><b>CP2000:</b> 30 days from notice date</li><li><b>CP504:</b> 30 days before levy</li><li><b>90-Day Letter:</b> 90 days to petition Tax Court</li><li><b>Appeals:</b> 30 days from adverse determination</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udee1\ufe0f Taxpayer Rights</h4><ul><li>Right to representation</li><li>Right to appeal</li><li>Right to pay no more than correct amount</li><li>Innocent spouse relief (Form 8857)</li></ul><p><a href='https://www.irs.gov/taxpayer-bill-of-rights' target='_blank'>Taxpayer Bill of Rights</a></p>"
+          },
+          {
+            "TemplateString": "<h4>\ud83d\udd17 Notice Lookup</h4><p><a href='https://www.irs.gov/individuals/understanding-your-irs-notice-or-letter' target='_blank'>Understanding Your IRS Notice (IRS.gov)</a></p>"
+          }
+        ],
+        "Actions": [
+          "Look Up Notice Details",
+          "Start Response Letter",
+          "Request Penalty Abatement",
+          "Transfer to Collections"
+        ]
+      }
+    }
+  ]
+}
