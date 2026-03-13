@@ -2,37 +2,19 @@
 
 ## Current Status
 
-✅ **Working NOW:** Contact attributes appear in agent screenpop  
-⚠️ **Requires Console:** ShowView block for full visual guide popup
+✅ **Views created and published** (6 views)  
+✅ **Event flow created:** `IRS-Agent-Guide-Event` (shows view when agent connects)  
+⚠️ **ONE STEP REMAINING:** Add "Set event flow" block in Console
 
 ---
 
-## What Works Immediately
+## Final Step: Add "Set event flow" Block (2 minutes)
 
-When you call **+1 833-289-6602** and press **0**, the agent will see these attributes in their Contact Control Panel:
-
-```
-IRS_GUIDE: === IRS TAXPAYER SERVICES ===
-STEP_1: VERIFY: SSN + DOB + Filing Status + Address
-STEP_2: DOCUMENT: Issue type + IDRS codes used
-STEP_3: RESOLVE: Use IRM guidance + document resolution
-USE_CASE_1: REFUND STATUS: IMFOL TC846 - Auth: SSN+Filing+Amount
-USE_CASE_2: ID VERIFY 5071C: NEVER skip - Watch fraud indicators
-USE_CASE_3: PAYMENT PLAN: Guaranteed <10K, Streamlined <50K
-USE_CASE_4: TRANSCRIPTS: Direct to IRS.gov/transcripts first
-USE_CASE_5: NOTICES: Get notice # from top right corner
-FRAUD_ALERT: *** NEVER verify identity for INBOUND caller ***
-POLICY_URL: https://www.irs.gov/irm/part21
-```
-
----
-
-## To Add Visual Card Popup (5 minutes)
-
-The ShowView block **cannot be created via API** - Amazon Connect requires the Console UI.
+**Why Event Flow?** For voice calls, ShowView must run in a separate "event flow" that triggers when the agent accepts the call - not during IVR routing.
 
 ### Step 1: Open Flow Editor
-Direct link to the flow:
+
+Direct link:
 ```
 https://us-east-1.console.aws.amazon.com/connect/contact-flows/editor?instanceId=a88ddab9-3b29-409f-87f0-bdb614abafef&flowId=08728175-2bd5-452d-a68e-901fa36ab7eb
 ```
@@ -42,50 +24,79 @@ Or via Connect Admin:
 2. Navigate to: **Routing** → **Contact flows**
 3. Click on: **IRS-Inbound-Agent-Transfer**
 
-### Step 2: Add Show View Block
-1. From the block palette, drag **Show view** block
-2. Place it after the **Set contact attributes** block
-3. Connect the blocks:
+### Step 2: Replace ShowView with Set Event Flow
+
+1. **DELETE** the current "Show view" block (it's in the wrong place)
+2. From the block palette, drag **Set event flow** block
+3. Place it where ShowView was (after Set contact attributes)
+4. Connect the blocks:
    ```
-   [Set contact attributes] → [Show view] → [Transfer to queue]
+   [Set contact attributes] → [Set event flow] → [Transfer to queue]
    ```
 
-### Step 3: Configure Show View
-1. Click on the **Show view** block
+### Step 3: Configure Set Event Flow
+
+1. Click on the **Set event flow** block
 2. In properties, select:
-   - **View**: `IRS-Taxpayer-Services`
-   - **Timeout**: 400 (default)
-3. Connect error branch to **Transfer to queue**
+   - **Event**: `Default flow for agent UI`
+   - **Flow**: `IRS-Agent-Guide-Event`
 
 ### Step 4: Save and Publish
+
 1. Click **Save** (top right)
 2. Click **Publish**
 
 ---
 
-## Flow Diagram (After Adding ShowView)
+## Architecture (Event Flow Pattern)
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                    IRS-Inbound-Agent-Transfer                     │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  [Entry Point]                                                    │
-│       ↓                                                           │
-│  [Play prompt: "Thank you for calling IRS..."]                   │
-│       ↓                                                           │
-│  [Set working queue: TreasuryIRSQueue]                           │
-│       ↓                                                           │
-│  [Set contact attributes: IRS Guide info]  ← Working now!        │
-│       ↓                                                           │
-│  [Show view: IRS-Taxpayer-Services]  ← Add via Console           │
-│       ↓                                                           │
-│  [Transfer to queue]                                              │
-│       ↓                                                           │
-│  Agent sees both attributes AND visual cards!                     │
-│                                                                   │
-└──────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│              MAIN FLOW: IRS-Inbound-Agent-Transfer                   │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  [Entry Point]                                                       │
+│       ↓                                                              │
+│  [Play prompt: "Thank you for calling IRS..."]                       │
+│       ↓                                                              │
+│  [Set working queue: TreasuryIRSQueue]                               │
+│       ↓                                                              │
+│  [Set contact attributes: IRS Guide info]                            │
+│       ↓                                                              │
+│  [Set event flow: IRS-Agent-Guide-Event] ← ADD THIS                  │
+│       ↓                                                              │
+│  [Transfer to queue]                                                 │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                    When agent accepts call...
+                                 ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│              EVENT FLOW: IRS-Agent-Guide-Event (CREATED)             │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  [Show view: IRS-Taxpayer-Services] ← 5 IRS use case cards           │
+│       ↓                                                              │
+│  [End flow]                                                          │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## What's Already Done
+
+| Resource | Status | ID |
+|----------|--------|-----|
+| IRS-Taxpayer-Services view | ✅ Published | `4b281dc3-bf4f-4e48-b27a-e17ea1fdb954` |
+| IRS-Refund-Status-Detail | ✅ Published | `01c39969-8c8a-4bcb-bfa4-69e83939b810` |
+| IRS-Identity-Verification-Detail | ✅ Published | `a6be4da3-891d-4f38-a180-fd384a361af2` |
+| IRS-Payment-Plan-Detail | ✅ Published | `8c96d2ce-ae3c-468a-a06d-d68ddd42c9a9` |
+| IRS-Transcript-Request-Detail | ✅ Published | `adb87dfd-329a-4646-8db5-b0fb84c06f0c` |
+| IRS-Notice-Explanation-Detail | ✅ Published | `3028976b-94cf-4547-b4b9-ee77351149a0` |
+| IRS-Agent-Guide-Event flow | ✅ Created | `4f9dbdf9-f62b-4558-97ca-198a00e9832a` |
+| IRS-Inbound-Agent-Transfer | ⚠️ Needs Set event flow | `08728175-2bd5-452d-a68e-901fa36ab7eb` |
+| Contact attributes | ✅ Working | 12 attributes set |
 
 ---
 
@@ -95,30 +106,36 @@ Or via Connect Admin:
 2. **Press:** 0 for representative
 3. **Login:** https://treasury-connect-prod.my.connect.aws (as agent)
 4. **Accept call**
-5. **Verify:** 
-   - Contact attributes appear in screenpop ✓
-   - Visual cards appear (after adding ShowView in Console)
+5. **Verify:** IRS Agent Guide card dashboard appears automatically
 
 ---
 
-## Why ShowView Requires Console
+## Why "Set event flow" Requires Console
 
-Amazon Connect's ShowView block:
-- Works only on **chat channel** programmatically
-- For **voice calls**, requires Console-generated metadata
-- Creates a "side-channel" chat contact to deliver the view
+Amazon Connect's "Set event flow" block:
+- Cannot be created via CLI/API (requires Console-generated metadata)
+- Is the ONLY way to display ShowView for voice calls
+- Triggers a "side-channel" UI when the agent accepts
 
-This is a documented AWS limitation, not a bug in our implementation.
+This is a documented AWS limitation.
 
 ---
 
-## Files Reference
+## IRS Agent Guide Cards (5 Use Cases)
 
-| File | Description |
-|------|-------------|
-| `flows/irs_inbound_agent_transfer.json` | Flow with contact attributes |
-| `irs_dashboard_cards.json` | View JSON definition |
-| `README.md` | Complete documentation |
+When the view appears, agents see:
+
+1. **Refund Status** - IMFOL TC846, auth requirements, wheres-my-refund
+2. **Identity Verification (5071C)** - Fraud detection, identity theft procedures
+3. **Payment Plans** - Guaranteed (<$10K), Streamlined (<$50K), criteria
+4. **Transcript Requests** - Form 4506-T, self-service portal, timing
+5. **Notice Explanations** - CP/LTR notice handling, taxpayer rights
+
+Each card includes:
+- Step-by-step instructions
+- Required documentation
+- Policy references (IRM chapters)
+- Fraud alerts and warnings
 
 ---
 
