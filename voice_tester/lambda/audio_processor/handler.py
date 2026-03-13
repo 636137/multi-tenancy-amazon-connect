@@ -12,6 +12,8 @@ import json
 import logging
 import os
 import base64
+import time
+import urllib.request
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Generator
 import boto3
@@ -106,6 +108,8 @@ def lambda_handler(event: Dict[str, Any], context) -> Dict[str, Any]:
     try:
         if operation == 'transcribe_audio':
             return handle_transcribe_audio(event)
+        elif operation == 'transcribe_s3':
+            return handle_transcribe_s3(event)
         elif operation == 'synthesize_speech':
             return handle_synthesize_speech(event)
         elif operation == 'process_utterance':
@@ -178,6 +182,87 @@ def handle_transcribe_audio(event: Dict[str, Any]) -> Dict[str, Any]:
             return {'statusCode': 500, 'error': str(e)}
     
     return {'statusCode': 400, 'error': 'Missing bucket or call_id'}
+
+
+def _read_transcribe_transcript_from_uri(uri: str) -> str:
+    if not uri:
+        return ""
+    try:
+        with urllib.request.urlopen(uri, timeout=10) as resp:
+            data = resp.read()
+        out = json.loads(data.decode('utf-8'))
+        transcripts = (((out.get('results') or {}).get('transcripts')) or [])
+        if transcripts:
+            return (transcripts[0].get('transcript') or '').strip()
+    except Exception as e:
+        logger.error(f"Failed to read transcript from uri: {e}")
+    return ""
+
+
+def handle_transcribe_s3(event: Dict[str, Any]) -> Dict[str, Any]:
+    """Start/poll an Amazon Transcribe job for an existing S3 media object.
+
+    Input:
+      - bucket, key (required to start)
+      - job_name (optional; if provided, we poll that job)
+      - media_format (default: wav)
+      - sample_rate (default: 8000)
+
+    Output:
+      - statusCode: 202 when started
+      - statusCode: 200 with status=IN_PROGRESS/COMPLETED/FAILED when polled
+      - transcript provided only when COMPLETED
+    """
+    job_name = event.get('job_name')
+    media_format = (event.get('media_format') or 'wav').lower()
+    sample_rate = int(event.get('sample_rate') or 8000)
+    language_code = event.get('language_code') or TRANSCRIBE_LANGUAGE
+
+    if not job_name:
+        bucket = event.get('bucket') or RECORDINGS_BUCKET
+        key = event.get('key')
+        if not bucket or not key:
+            return {'statusCode': 400, 'error': 'bucket and key are required when starting'}
+
+        ts = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
+        # Job name must be unique and <=200 chars; keep it compact.
+        job_name = f"voice-test-{ts}-{int(time.time()*1000)}"
+
+        try:
+            transcribe.start_transcription_job(
+                TranscriptionJobName=job_name,
+                Media={'MediaFileUri': f"s3://{bucket}/{key}"},
+                MediaFormat=media_format,
+                MediaSampleRateHertz=sample_rate,
+                LanguageCode=language_code,
+            )
+        except Exception as e:
+            logger.error(f"Error starting transcribe job: {e}")
+            return {'statusCode': 500, 'error': str(e)}
+
+        return {'statusCode': 202, 'job_name': job_name, 'status': 'STARTED'}
+
+    # Poll existing job
+    try:
+        job = transcribe.get_transcription_job(TranscriptionJobName=job_name).get('TranscriptionJob', {})
+        status = job.get('TranscriptionJobStatus')
+        if status in ('QUEUED', 'IN_PROGRESS'):
+            return {'statusCode': 200, 'job_name': job_name, 'status': status}
+        if status == 'FAILED':
+            return {
+                'statusCode': 200,
+                'job_name': job_name,
+                'status': status,
+                'failure_reason': job.get('FailureReason', ''),
+            }
+        if status == 'COMPLETED':
+            uri = (((job.get('Transcript') or {}).get('TranscriptFileUri')) or '')
+            transcript = _read_transcribe_transcript_from_uri(uri)
+            return {'statusCode': 200, 'job_name': job_name, 'status': status, 'transcript': transcript}
+        return {'statusCode': 200, 'job_name': job_name, 'status': status or 'UNKNOWN'}
+    except Exception as e:
+        logger.error(f"Error polling transcribe job: {e}")
+        return {'statusCode': 500, 'error': str(e)}
 
 
 def handle_synthesize_speech(event: Dict[str, Any]) -> Dict[str, Any]:

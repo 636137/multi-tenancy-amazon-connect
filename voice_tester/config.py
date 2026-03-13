@@ -292,11 +292,46 @@ def validate_scenario(scenario: Dict[str, Any]) -> List[str]:
 _config: Optional[Config] = None
 
 
+def _apply_cloudformation_outputs(config: Config) -> None:
+    """Best-effort: auto-load VoiceTestStack outputs if present.
+
+    This keeps local CLI usage simple (no need to manually export Lambda ARNs/table names).
+    """
+    stack_name = os.getenv('VOICE_TEST_STACK_NAME', 'VoiceTestStack')
+    region = config.aws_region or os.getenv('AWS_REGION') or os.getenv('AWS_DEFAULT_REGION') or 'us-east-1'
+
+    try:
+        import boto3  # local import to avoid hard dependency during docs-only usage
+
+        cf = boto3.client('cloudformation', region_name=region)
+        resp = cf.describe_stacks(StackName=stack_name)
+        stacks = resp.get('Stacks', [])
+        if not stacks:
+            return
+        outputs = {o['OutputKey']: o['OutputValue'] for o in stacks[0].get('Outputs', [])}
+
+        # Lambdas
+        config.lambdas.test_runner_arn = config.lambdas.test_runner_arn or outputs.get('TestRunnerArn', '')
+        config.lambdas.call_handler_arn = config.lambdas.call_handler_arn or outputs.get('CallHandlerArn', '')
+        config.lambdas.audio_processor_arn = config.lambdas.audio_processor_arn or outputs.get('AudioProcessorArn', '')
+        config.lambdas.webrtc_tester_arn = config.lambdas.webrtc_tester_arn or outputs.get('WebRTCTesterArn', '')
+        config.lambdas.nova_sonic_processor_arn = config.lambdas.nova_sonic_processor_arn or outputs.get('NovaSonicProcessorArn', '')
+
+        # Storage
+        config.storage.recordings_bucket = config.storage.recordings_bucket or outputs.get('RecordingsBucketName', '')
+        config.storage.reports_bucket = config.storage.reports_bucket or outputs.get('ReportsBucketName', '')
+        config.storage.test_results_table = config.storage.test_results_table or outputs.get('TestResultsTableName', '')
+    except Exception:
+        # Best-effort only; fall back to env/defaults
+        return
+
+
 def get_config() -> Config:
     """Get or create config singleton"""
     global _config
     if _config is None:
         _config = Config.from_env()
+        _apply_cloudformation_outputs(_config)
     return _config
 
 

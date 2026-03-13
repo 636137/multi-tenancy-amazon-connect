@@ -147,12 +147,14 @@ class VoiceTestStack(Stack):
             resources=["*"]
         ))
         
-        # Transcribe Streaming permissions
+        # Transcribe permissions (streaming + async job transcription)
         self.lambda_role.add_to_policy(iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
             actions=[
                 "transcribe:StartStreamTranscription",
                 "transcribe:StartStreamTranscriptionWebSocket",
+                "transcribe:StartTranscriptionJob",
+                "transcribe:GetTranscriptionJob",
             ],
             resources=["*"]
         ))

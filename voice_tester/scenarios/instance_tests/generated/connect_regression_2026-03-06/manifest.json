@@ -1,0 +1,353 @@
+{
+  "generated_at": "2026-03-06",
+  "regions_scanned": [
+    "us-east-1",
+    "us-west-2"
+  ],
+  "instances": [
+    {
+      "region": "us-east-1",
+      "instance_id": "1d3555df-0f7a-4c78-9177-d42253597de2",
+      "instance_alias": "census-enumerator-9652",
+      "instance_arn": "arn:aws:connect:us-east-1:593804350786:instance/1d3555df-0f7a-4c78-9177-d42253597de2",
+      "instance_status": "ACTIVE",
+      "phone_numbers": [
+        {
+          "phone_number": "+18332895330",
+          "phone_number_id": "2f2c10bc-a87f-479b-98ce-28cacddc66a9",
+          "phone_number_type": "TOLL_FREE",
+          "phone_number_description": "Census Bureau Survey Line",
+          "inbound_flow_id": "4a2354b7-b179-400d-b175-82051ff9059d",
+          "inbound_flow_name": "Census AI Agent"
+        }
+      ],
+      "custom_contact_flows": [
+        {
+          "name": "Census AI Agent",
+          "contact_flow_id": "4a2354b7-b179-400d-b175-82051ff9059d",
+          "type": "CONTACT_FLOW"
+        },
+        {
+          "name": "Census Survey Flow",
+          "contact_flow_id": "4ed0dc27-6319-47e6-b98d-71cac718e656",
+          "type": "CONTACT_FLOW"
+        },
+        {
+          "name": "ChatTest",
+          "contact_flow_id": "5b0b9a21-42ec-45d2-b3a8-e3d67aabf49d",
+          "type": "CONTACT_FLOW"
+        }
+      ]
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a1f79dc3-8a46-481d-bf15-b214a7a8b05f",
+      "instance_alias": "censussurvey",
+      "instance_arn": "arn:aws:connect:us-east-1:593804350786:instance/a1f79dc3-8a46-481d-bf15-b214a7a8b05f",
+      "instance_status": "ACTIVE",
+      "phone_numbers": [],
+      "custom_contact_flows": []
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_alias": "treasury-connect-prod",
+      "instance_arn": "arn:aws:connect:us-east-1:593804350786:instance/a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_status": "ACTIVE",
+      "phone_numbers": [
+        {
+          "phone_number": "+18332896602",
+          "phone_number_id": "c3f388bc-0eeb-489a-b7d5-916758416f4a",
+          "phone_number_type": "TOLL_FREE",
+          "phone_number_description": "",
+          "inbound_flow_id": "8dfd7f4a-e383-4889-a941-d516d4919a50",
+          "inbound_flow_name": "TreasuryConversationalFlow"
+        }
+      ],
+      "custom_contact_flows": [
+        {
+          "name": "Treasury-Realtime-Tracker",
+          "contact_flow_id": "39ff7a3a-bf0a-4d0f-9def-921b1e541ac6",
+          "type": "CONTACT_FLOW"
+        },
+        {
+          "name": "TreasuryAgentCoreFlow",
+          "contact_flow_id": "27e3aaec-09ca-40d1-8101-90b1b921712e",
+          "type": "CONTACT_FLOW"
+        },
+        {
+          "name": "TreasuryChatFlow",
+          "contact_flow_id": "e9ead9c0-9b7d-472d-8379-bb58360f87dd",
+          "type": "CONTACT_FLOW"
+        },
+        {
+          "name": "TreasuryConversationalFlow",
+          "contact_flow_id": "8dfd7f4a-e383-4889-a941-d516d4919a50",
+          "type": "CONTACT_FLOW"
+        }
+      ]
+    },
+    {
+      "region": "us-west-2",
+      "instance_id": "3b3a1349-4cff-40f4-aed7-b19e2e1644b2",
+      "instance_alias": "maximus-gov-ccaas-in-a-box-1",
+      "instance_arn": "arn:aws:connect:us-west-2:593804350786:instance/3b3a1349-4cff-40f4-aed7-b19e2e1644b2",
+      "instance_status": "ACTIVE",
+      "phone_numbers": [
+        {
+          "phone_number": "+18445935770",
+          "phone_number_id": "a0025855-9c00-420f-a4d8-82ba7c0270a5",
+          "phone_number_type": "TOLL_FREE",
+          "phone_number_description": "",
+          "inbound_flow_id": "653bd2ac-2f22-4b9a-8409-6655315f92b9",
+          "inbound_flow_name": "1 - Outbound Transfer Billing Proof"
+        }
+      ],
+      "custom_contact_flows": [
+        {
+          "name": "1 - Outbound Transfer Billing Proof",
+          "contact_flow_id": "653bd2ac-2f22-4b9a-8409-6655315f92b9",
+          "type": "CONTACT_FLOW"
+        }
+      ]
+    }
+  ],
+  "phone_numbers": [
+    {
+      "region": "us-east-1",
+      "instance_id": "1d3555df-0f7a-4c78-9177-d42253597de2",
+      "instance_alias": "census-enumerator-9652",
+      "phone_number": "+18332895330",
+      "phone_number_id": "2f2c10bc-a87f-479b-98ce-28cacddc66a9",
+      "phone_number_arn": "arn:aws:connect:us-east-1:593804350786:phone-number/2f2c10bc-a87f-479b-98ce-28cacddc66a9",
+      "phone_number_type": "TOLL_FREE",
+      "phone_number_description": "Census Bureau Survey Line",
+      "target_arn": "arn:aws:connect:us-east-1:593804350786:instance/1d3555df-0f7a-4c78-9177-d42253597de2",
+      "inbound_flow_arn": "arn:aws:connect:us-east-1:593804350786:instance/1d3555df-0f7a-4c78-9177-d42253597de2/contact-flow/4a2354b7-b179-400d-b175-82051ff9059d",
+      "inbound_flow_id": "4a2354b7-b179-400d-b175-82051ff9059d",
+      "inbound_flow_name": "Census AI Agent"
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_alias": "treasury-connect-prod",
+      "phone_number": "+18332896602",
+      "phone_number_id": "c3f388bc-0eeb-489a-b7d5-916758416f4a",
+      "phone_number_arn": "arn:aws:connect:us-east-1:593804350786:phone-number/c3f388bc-0eeb-489a-b7d5-916758416f4a",
+      "phone_number_type": "TOLL_FREE",
+      "phone_number_description": "",
+      "target_arn": "arn:aws:connect:us-east-1:593804350786:instance/a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "inbound_flow_arn": "arn:aws:connect:us-east-1:593804350786:instance/a88ddab9-3b29-409f-87f0-bdb614abafef/contact-flow/8dfd7f4a-e383-4889-a941-d516d4919a50",
+      "inbound_flow_id": "8dfd7f4a-e383-4889-a941-d516d4919a50",
+      "inbound_flow_name": "TreasuryConversationalFlow"
+    },
+    {
+      "region": "us-west-2",
+      "instance_id": "3b3a1349-4cff-40f4-aed7-b19e2e1644b2",
+      "instance_alias": "maximus-gov-ccaas-in-a-box-1",
+      "phone_number": "+18445935770",
+      "phone_number_id": "a0025855-9c00-420f-a4d8-82ba7c0270a5",
+      "phone_number_arn": "arn:aws:connect:us-west-2:593804350786:phone-number/a0025855-9c00-420f-a4d8-82ba7c0270a5",
+      "phone_number_type": "TOLL_FREE",
+      "phone_number_description": "",
+      "target_arn": "arn:aws:connect:us-west-2:593804350786:instance/3b3a1349-4cff-40f4-aed7-b19e2e1644b2",
+      "inbound_flow_arn": "arn:aws:connect:us-west-2:593804350786:instance/3b3a1349-4cff-40f4-aed7-b19e2e1644b2/contact-flow/653bd2ac-2f22-4b9a-8409-6655315f92b9",
+      "inbound_flow_id": "653bd2ac-2f22-4b9a-8409-6655315f92b9",
+      "inbound_flow_name": "1 - Outbound Transfer Billing Proof"
+    }
+  ],
+  "flows": [
+    {
+      "region": "us-east-1",
+      "instance_id": "1d3555df-0f7a-4c78-9177-d42253597de2",
+      "instance_alias": "census-enumerator-9652",
+      "contact_flow_id": "4a2354b7-b179-400d-b175-82051ff9059d",
+      "name": "Census AI Agent",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 11,
+        "prompts": [
+          "Of course! Please hold while I connect you with a live agent.",
+          "Please type your response.",
+          "$.External.response"
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "1d3555df-0f7a-4c78-9177-d42253597de2",
+      "instance_alias": "census-enumerator-9652",
+      "contact_flow_id": "4ed0dc27-6319-47e6-b98d-71cac718e656",
+      "name": "Census Survey Flow",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 27,
+        "prompts": [
+          "Thank you for calling the U.S. Census Bureau. This call may be recorded for quality assurance. Please stay on the line and one of our representatives will assist you with completing your census survey.",
+          "You rolled a 2!",
+          "You rolled a 3!",
+          "You rolled a 4!",
+          "You rolled a 5!",
+          "You rolled a 6!",
+          "You rolled a 7!",
+          "You rolled a 8!",
+          "You rolled a 9!",
+          "You rolled a 10!"
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "1d3555df-0f7a-4c78-9177-d42253597de2",
+      "instance_alias": "census-enumerator-9652",
+      "contact_flow_id": "5b0b9a21-42ec-45d2-b3a8-e3d67aabf49d",
+      "name": "ChatTest",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 2,
+        "prompts": [
+          "Hi from ChatTest flow!"
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_alias": "treasury-connect-prod",
+      "contact_flow_id": "39ff7a3a-bf0a-4d0f-9def-921b1e541ac6",
+      "name": "Treasury-Realtime-Tracker",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 2,
+        "prompts": [],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_alias": "treasury-connect-prod",
+      "contact_flow_id": "27e3aaec-09ca-40d1-8101-90b1b921712e",
+      "name": "TreasuryAgentCoreFlow",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 12,
+        "prompts": [
+          "Now performing a data dip using AWS Lambda. Based on your phone number, we will lookup the state you are calling from if you are on a voice call or tell you a fun fact if you are on chat.",
+          "Sorry, we failed to find the state for your phone number's area code.",
+          "Based on the number you are calling from, your area code is located in $.External.State",
+          "Here is your fun fact: $.External.Fact",
+          "Now returning you to the main menu.",
+          "Failed to transfer back to main flow"
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_alias": "treasury-connect-prod",
+      "contact_flow_id": "e9ead9c0-9b7d-472d-8379-bb58360f87dd",
+      "name": "TreasuryChatFlow",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 3,
+        "prompts": [
+          "$.External.response"
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-east-1",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "instance_alias": "treasury-connect-prod",
+      "contact_flow_id": "8dfd7f4a-e383-4889-a941-d516d4919a50",
+      "name": "TreasuryConversationalFlow",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 15,
+        "prompts": [
+          "Thank you for calling U.S. Treasury. Press 1 for I.R.S., 2 for U.S. Mint, 3 for Treasury Offset, 4 for Treasury Direct, or 5 for Debt Exclusions.",
+          "Please press a number now.",
+          "You have reached the $.Attributes.Bureau service. How can I help you today?",
+          "Please speak your question after the tone.",
+          "$.External.response",
+          "Is there anything else I can help you with?",
+          "Thank you for calling U.S. Treasury. Have a great day!"
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    },
+    {
+      "region": "us-west-2",
+      "instance_id": "3b3a1349-4cff-40f4-aed7-b19e2e1644b2",
+      "instance_alias": "maximus-gov-ccaas-in-a-box-1",
+      "contact_flow_id": "653bd2ac-2f22-4b9a-8409-6655315f92b9",
+      "name": "1 - Outbound Transfer Billing Proof",
+      "type": "CONTACT_FLOW",
+      "analysis": {
+        "action_count": 5,
+        "prompts": [
+          "Thanks for calling Chad's Billing Proof Demo.  Transferring to outbound number."
+        ],
+        "lex_bots": [],
+        "errors": []
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "phone_number": "+18332895330",
+      "phone_number_redacted": "+XXXXXXXXX30",
+      "instance_alias": "census-enumerator-9652",
+      "instance_id": "1d3555df-0f7a-4c78-9177-d42253597de2",
+      "region": "us-east-1",
+      "existing_scenarios": [
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/census_ai_agent_test.yaml",
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/census_survey_flow_test.yaml"
+      ],
+      "generated_scenarios": [
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/generated/connect_regression_2026-03-06/pstn_smoke_census-enumerator-9652_2f2c10bc-a87f-479b-98ce-28cacddc66a9.yaml"
+      ]
+    },
+    {
+      "phone_number": "+18332896602",
+      "phone_number_redacted": "+XXXXXXXXX02",
+      "instance_alias": "treasury-connect-prod",
+      "instance_id": "a88ddab9-3b29-409f-87f0-bdb614abafef",
+      "region": "us-east-1",
+      "existing_scenarios": [
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/treasury_agent_core_test.yaml",
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/treasury_ivr_test.yaml"
+      ],
+      "generated_scenarios": [
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/generated/connect_regression_2026-03-06/pstn_smoke_treasury-connect-prod_c3f388bc-0eeb-489a-b7d5-916758416f4a.yaml"
+      ]
+    },
+    {
+      "phone_number": "+18445935770",
+      "phone_number_redacted": "+XXXXXXXXX70",
+      "instance_alias": "maximus-gov-ccaas-in-a-box-1",
+      "instance_id": "3b3a1349-4cff-40f4-aed7-b19e2e1644b2",
+      "region": "us-west-2",
+      "existing_scenarios": [],
+      "generated_scenarios": [
+        "/Users/ChadDHendren/AmazonConnect1/voice_tester/scenarios/instance_tests/generated/connect_regression_2026-03-06/pstn_smoke_maximus-gov-ccaas-in-a-box-1_a0025855-9c00-420f-a4d8-82ba7c0270a5.yaml"
+      ]
+    }
+  ],
+  "notes": {
+    "phone_to_flow_association": "This manifest attempts to map each claimed VOICE phone number to its inbound contact flow using ListFlowAssociations (ResourceType=VOICE_PHONE_NUMBER), which returns ResourceId=phone-number ARN and FlowId=contact-flow ARN. Where no association is returned, the inbound flow may be unset or not discoverable for that number in this region/instance context."
+  }
+}

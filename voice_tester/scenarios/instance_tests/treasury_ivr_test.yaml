@@ -120,7 +120,7 @@ steps:
         - "tax|refund|return"
         - "how can I help"
       timeout_seconds: 20
-    on_match: "ai_conversation"
+    on_match: "ivr_agent"
     on_timeout: "retry_selection"
 
   - id: "retry_selection"
@@ -138,25 +138,26 @@ steps:
       patterns:
         - "IRS|tax|refund|help"
       timeout_seconds: 20
-    on_match: "ai_conversation"
+    on_match: "ivr_agent"
     on_timeout: "call_end"
 
-  - id: "ai_conversation"
-    description: "Engage with IRS service AI"
-    action: "ai_conversation"
+  - id: "ivr_agent"
+    description: "Drive IRS prompts realistically"
+    action: "agent"
     config:
-      max_turns: 5
-      turn_timeout_seconds: 30
+      goal: |
+        Check my IRS tax refund status.
+        If asked for SSN, offer the last 4 digits only.
+        If asked for filing status, say single.
+        If asked if you need anything else, say no thank you.
+      max_turns: 8
+      turn_timeout_seconds: 20
+      timeout_seconds: 90
       end_on_patterns:
         - "anything else"
         - "goodbye"
         - "thank you for calling"
-      
-      guidance: |
-        Ask about tax refund status:
-        1. First ask about your refund status
-        2. If asked for SSN, say you'll provide partial
-        3. If offered more help, say no thank you
+    next: "call_end"
 
   - id: "call_end"
     description: "End the call politely"

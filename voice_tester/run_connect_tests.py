@@ -104,7 +104,7 @@ class ConnectTestRunner:
             warnings.append("No test steps defined")
         
         # Check for valid step actions
-        valid_actions = {"listen", "speak", "dtmf", "wait", "hangup", "ai_conversation"}
+        valid_actions = {"listen", "speak", "dtmf", "wait", "hangup", "ai_conversation", "agent"}
         for step in steps:
             action = step.get("action")
             if action not in valid_actions:

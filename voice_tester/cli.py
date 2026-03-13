@@ -65,6 +65,7 @@ Examples:
     test_parser.add_argument('--test-id', help='Custom test ID')
     test_parser.add_argument('--wait', '-w', action='store_true', help='Wait for test to complete')
     test_parser.add_argument('--timeout', type=int, default=300, help='Wait timeout in seconds')
+    test_parser.add_argument('--include-recording', action='store_true', help='Print recording URLs after completion (requires --wait)')
     test_parser.add_argument('--mode', '-m', choices=['pstn', 'webrtc'], default='webrtc',
                             help='Test mode: pstn (phone call) or webrtc (direct connect)')
     test_parser.add_argument('--instance-id', help='Amazon Connect instance ID (for webrtc mode)')
@@ -235,7 +236,58 @@ def cmd_test_pstn(args, scenario: Dict) -> int:
     
     if args.wait:
         print(f"\nWaiting for test to complete (timeout: {args.timeout}s)...")
-        return wait_for_test(test_id, args.timeout, config)
+        rc = wait_for_test(test_id, args.timeout, config)
+
+        if getattr(args, 'include_recording', False):
+            import time
+
+            try:
+                # Recordings may land in S3 a few seconds after the call completes.
+                max_wait_s = 20
+                interval_s = 2
+                waited = 0
+                printed_wait = False
+
+                while waited <= max_wait_s:
+                    # Fetch recording URLs from the TestRunner (or locally) after completion.
+                    if config.lambdas.test_runner_arn:
+                        lambda_client = boto3.client('lambda')
+                        response = lambda_client.invoke(
+                            FunctionName=config.lambdas.test_runner_arn,
+                            InvocationType='RequestResponse',
+                            Payload=json.dumps({
+                                'operation': 'get_results',
+                                'test_id': test_id,
+                                'include_recording': True,
+                            })
+                        )
+                        result = json.loads(response['Payload'].read())
+                    else:
+                        result = get_results_locally(test_id, True, config)
+
+                    test = (result or {}).get('test', {}) or {}
+                    recordings = test.get('recordings', []) or []
+                    if recordings:
+                        print("\nRECORDINGS:")
+                        for rec in recordings:
+                            url = rec.get('url')
+                            if url:
+                                print(url)
+                        break
+
+                    if not printed_wait:
+                        print("\nWaiting for recording to land in S3...")
+                        printed_wait = True
+
+                    time.sleep(interval_s)
+                    waited += interval_s
+                else:
+                    print("\nRECORDINGS: (none found)")
+
+            except Exception as e:
+                print(f"\nRECORDINGS: error fetching links: {e}")
+
+        return rc
     
     print(f"\nTo check status: python -m voice_tester.cli status {test_id}")
     return 0
@@ -255,9 +307,22 @@ def cmd_test_webrtc(args, scenario: Dict, scenario_path: Path) -> int:
     # Get config
     config = get_config()
     
-    # Get Connect instance and flow IDs
-    instance_id = getattr(args, 'instance_id', None) or os.environ.get('CONNECT_INSTANCE_ID', '')
-    contact_flow_id = getattr(args, 'contact_flow_id', None) or os.environ.get('CONTACT_FLOW_ID', '')
+    # Get Connect instance and flow IDs (prefer explicit args/env, fall back to scenario target)
+    target = scenario.get('target', {}) or {}
+    instance_id = (
+        getattr(args, 'instance_id', None)
+        or os.environ.get('CONNECT_INSTANCE_ID', '')
+        or target.get('instance_id')
+        or target.get('InstanceId')
+    )
+    contact_flow_id = (
+        getattr(args, 'contact_flow_id', None)
+        or os.environ.get('CONTACT_FLOW_ID', '')
+        or target.get('contact_flow_id')
+        or target.get('ContactFlowId')
+        or target.get('flow_id')
+        or target.get('FlowId')
+    )
     
     if not instance_id:
         print("Error: Connect instance ID required (--instance-id or CONNECT_INSTANCE_ID env var)", file=sys.stderr)
@@ -797,7 +862,7 @@ def cmd_results(args) -> int:
         for rec in recordings:
             print(f"  {rec.get('key', 'unknown')}")
             if 'url' in rec:
-                print(f"    URL: {rec['url'][:80]}...")
+                print(f"    URL: {rec['url']}")
         print()
     
     # Save to file if requested

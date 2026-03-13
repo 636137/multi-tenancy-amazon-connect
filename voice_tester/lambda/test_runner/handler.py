@@ -92,7 +92,7 @@ def handle_start_test(event: Dict[str, Any]) -> Dict[str, Any]:
     """
     scenario = event.get('scenario', {})
     target_number = event.get('target_number') or scenario.get('target', {}).get('phone_number')
-    test_id = event.get('test_id', str(uuid.uuid4()))
+    test_id = event.get('test_id') or str(uuid.uuid4())
     
     if not scenario:
         return {'statusCode': 400, 'error': 'scenario is required'}
@@ -139,10 +139,12 @@ def handle_start_test(event: Dict[str, Any]) -> Dict[str, Any]:
             ToPhoneNumber=target_number,
             SipHeaders={
                 'X-Test-Id': test_id,
+                'X-Test-Timestamp': test_state['timestamp'],
                 'X-Scenario': scenario.get('name', 'unknown'),
             },
             ArgumentsMap={
                 'test_id': test_id,
+                'results_timestamp': test_state['timestamp'],
                 'scenario': json.dumps(scenario),
             }
         )
@@ -160,15 +162,21 @@ def handle_start_test(event: Dict[str, Any]) -> Dict[str, Any]:
             }
         )
         
-        # Initialize call state table for the call handler
+        # Initialize call state table for the call handler.
+        # DynamoDB does not accept float types; convert them to Decimal.
+        from decimal import Decimal
+
+        scenario_for_ddb = json.loads(json.dumps(scenario), parse_float=Decimal)
+
         call_state_table = dynamodb.Table(CALL_STATE_TABLE)
         call_state_table.put_item(Item={
             'call_id': transaction_id,
             'test_id': test_id,
+            'results_timestamp': test_state['timestamp'],
             'scenario_name': scenario.get('name', 'unknown'),
-            'scenario_data': scenario,
+            'scenario_data': scenario_for_ddb,
             'status': 'INITIATING',
-            'started_at': datetime.now(timezone.utc).isoformat(),
+            'started_at': test_state['started_at'],
             'current_step_index': 0,
             'conversation': [],
             'ttl': int(datetime.now(timezone.utc).timestamp()) + 3600,
@@ -467,7 +475,7 @@ def validate_scenario(scenario: Dict[str, Any]) -> List[str]:
             errors.append(f"Step {i} must have an action")
         
         action = step.get('action', '')
-        if action not in ['speak', 'listen', 'dtmf', 'wait', 'hangup']:
+        if action not in ['speak', 'listen', 'dtmf', 'wait', 'hangup', 'ai_conversation', 'agent']:
             errors.append(f"Step {i} has invalid action: {action}")
     
     return errors
