@@ -1,0 +1,95 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "greeting",
+  "Metadata": {
+    "entryPointPosition": {"x": 40, "y": 40},
+    "ActionMetadata": {
+      "greeting": {"position": {"x": 200, "y": 60}},
+      "set-queue": {"position": {"x": 450, "y": 60}},
+      "set-irs-guide": {"position": {"x": 700, "y": 60}},
+      "transfer-queue": {"position": {"x": 950, "y": 60}},
+      "at-capacity": {"position": {"x": 1200, "y": 150}},
+      "disconnect": {"position": {"x": 1450, "y": 200}}
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "greeting",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you for calling the Internal Revenue Service. For assistance with your tax matters, please hold while we connect you to the next available representative. Your call may be monitored for quality assurance."
+      },
+      "Transitions": {
+        "NextAction": "set-queue",
+        "Errors": [{"NextAction": "disconnect", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-queue",
+      "Type": "UpdateContactTargetQueue",
+      "Parameters": {
+        "QueueId": "arn:aws:connect:us-east-1:593804350786:instance/a88ddab9-3b29-409f-87f0-bdb614abafef/queue/7e2fbca2-82c2-4fd8-addd-444b0dbdb2fd"
+      },
+      "Transitions": {
+        "NextAction": "set-irs-guide",
+        "Errors": [{"NextAction": "disconnect", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-irs-guide",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "AgentGuide": "IRS Taxpayer Services",
+          "Step1_Auth": "Verify SSN, DOB, Filing Status, Address",
+          "Step2_Document": "Record issue type, IDRS command codes used",
+          "Step3_Resolve": "Use IRM guidance, document resolution",
+          "TopUseCase1": "Refund Status - IMFOL TC 846 check",
+          "TopUseCase2": "ID Verification - 5071C/5747C letters",
+          "TopUseCase3": "Payment Plans - Use OPA if eligible",
+          "TopUseCase4": "Transcript Requests - Direct to IRS.gov first",
+          "TopUseCase5": "Notice Explanation - Get notice number from top right",
+          "FraudAlert": "NEVER verify identity for inbound caller",
+          "PolicyLink": "https://www.irs.gov/irm/part21"
+        }
+      },
+      "Transitions": {
+        "NextAction": "transfer-queue",
+        "Errors": [{"NextAction": "transfer-queue", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "transfer-queue",
+      "Type": "TransferContactToQueue",
+      "Transitions": {
+        "NextAction": "at-capacity",
+        "Errors": [
+          {"NextAction": "at-capacity", "ErrorType": "NoMatchingError"},
+          {"NextAction": "at-capacity", "ErrorType": "QueueAtCapacity"}
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "at-capacity",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "We apologize, but all representatives are currently assisting other callers. Please try again later, or visit I.R.S. dot gov for self-service options including Where is My Refund, tax transcripts, and online payment plans."
+      },
+      "Transitions": {
+        "NextAction": "disconnect",
+        "Errors": [{"NextAction": "disconnect", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "disconnect",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

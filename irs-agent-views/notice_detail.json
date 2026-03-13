@@ -1,0 +1,29 @@
+{
+  "Head": { "Title": "Notice Explanation Procedures", "Configuration": {} },
+  "Body": [
+    {
+      "_id": "s1", "Type": "Section", "Props": { "Heading": "Required Information" },
+      "Content": [{ "_id": "t1", "Type": "TextBox", "Props": {}, "Content": ["Notice number (CP or LTR) | Notice date | Tax year referenced | Amount due (if applicable) | Response deadline"] }]
+    },
+    {
+      "_id": "s2", "Type": "Section", "Props": { "Heading": "Common Notice Types" },
+      "Content": [{ "_id": "t2", "Type": "TextBox", "Props": {}, "Content": ["CP14: Balance due - Pay or set up plan | CP2000: Income mismatch - Agree or dispute | CP501-504: Payment reminders - Pay immediately | LT11: Final notice levy - Pay or request CDP | CP75: EITC audit - Submit documentation | Letter 12C: Missing info - Submit within 20 days"] }]
+    },
+    {
+      "_id": "s3", "Type": "Section", "Props": { "Heading": "Agent Instructions" },
+      "Content": [{ "_id": "t3", "Type": "TextBox", "Props": {}, "Content": ["1. Ask for exact notice number (top right corner) | 2. Pull up notice on IDRS (ENMOD, TXMOD) | 3. Explain in plain language what IRS is asking | 4. Calculate response deadline from notice date | 5. Explain consequences of non-response | 6. Offer payment plan if balance due | 7. Document call even if information only"] }]
+    },
+    {
+      "_id": "s4", "Type": "Section", "Props": { "Heading": "MUST CAPTURE" },
+      "Content": [{ "_id": "a1", "Type": "Alert", "Props": { "Title": "Required Fields", "Body": "Notice number and date | Tax year | Whether taxpayer agrees or disputes | Response deadline communicated | Documentation taxpayer will submit" }, "Content": [] }]
+    },
+    {
+      "_id": "s5", "Type": "Section", "Props": { "Heading": "Policy References" },
+      "Content": [
+        { "_id": "l1", "Type": "Link", "Props": { "Url": "https://www.irs.gov/irm/part21/irm_21-003-001", "External": true }, "Content": ["IRM 21.3.1 - Notices"] },
+        { "_id": "l2", "Type": "Link", "Props": { "Url": "https://www.irs.gov/individuals/understanding-your-irs-notice-or-letter", "External": true }, "Content": ["Understanding Your Notice"] },
+        { "_id": "l3", "Type": "Link", "Props": { "Url": "https://www.irs.gov/payments/collection-process", "External": true }, "Content": ["Collection Process Overview"] }
+      ]
+    }
+  ]
+}

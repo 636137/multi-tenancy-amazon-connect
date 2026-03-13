@@ -1,0 +1,107 @@
+{
+  "Head": {
+    "Title": "Refund Status Procedures",
+    "Configuration": {}
+  },
+  "Body": [
+    {
+      "_id": "section1",
+      "Type": "Section",
+      "Props": {
+        "Heading": "Required Authentication"
+      },
+      "Content": [
+        {
+          "_id": "auth_list",
+          "Type": "TextBox",
+          "Props": {},
+          "Content": ["Full SSN or ITIN | Filing status from return | Exact refund amount claimed | Tax year in question"]
+        }
+      ]
+    },
+    {
+      "_id": "section2",
+      "Type": "Section",
+      "Props": {
+        "Heading": "Agent Instructions"
+      },
+      "Content": [
+        {
+          "_id": "instructions",
+          "Type": "TextBox",
+          "Props": {},
+          "Content": ["1. Verify identity using IRM 21.1.3.2.3 | 2. Access IDRS command code IMFOL | 3. Check TC 846 (refund issued) or TC 840 (manual) | 4. If no TC 846: Check freeze codes (-R, -A, -C) | 5. Provide realistic timeframe based on processing cycle"]
+        }
+      ]
+    },
+    {
+      "_id": "section3",
+      "Type": "Section",
+      "Props": {
+        "Heading": "Processing Times"
+      },
+      "Content": [
+        {
+          "_id": "times",
+          "Type": "TextBox",
+          "Props": {},
+          "Content": ["E-filed + Direct Deposit: 21 days | Paper filed: 6-8 weeks | Amended 1040-X: 16-20 weeks | EITC/ACTC: Mid-February (PATH Act)"]
+        }
+      ]
+    },
+    {
+      "_id": "section4",
+      "Type": "Section",
+      "Props": {
+        "Heading": "MUST CAPTURE"
+      },
+      "Content": [
+        {
+          "_id": "capture",
+          "Type": "Alert",
+          "Props": {
+            "Title": "Required Fields",
+            "Body": "Callback number | Best time to reach | Mailing address confirmation | Direct deposit info if changed"
+          },
+          "Content": []
+        }
+      ]
+    },
+    {
+      "_id": "section5",
+      "Type": "Section",
+      "Props": {
+        "Heading": "Policy References"
+      },
+      "Content": [
+        {
+          "_id": "policy1",
+          "Type": "Link",
+          "Props": {
+            "Url": "https://www.irs.gov/irm/part21/irm_21-004-001",
+            "External": true
+          },
+          "Content": ["IRM 21.4.1 - Refund Research"]
+        },
+        {
+          "_id": "policy2",
+          "Type": "Link",
+          "Props": {
+            "Url": "https://www.irs.gov/irm/part21/irm_21-004-002",
+            "External": true
+          },
+          "Content": ["IRM 21.4.2 - Refund Trace"]
+        },
+        {
+          "_id": "policy3",
+          "Type": "Link",
+          "Props": {
+            "Url": "https://www.irs.gov/refunds",
+            "External": true
+          },
+          "Content": ["Wheres My Refund Tool"]
+        }
+      ]
+    }
+  ]
+}

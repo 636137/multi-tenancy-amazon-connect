@@ -1,0 +1,151 @@
+# IRS Taxpayer Services - Agent Dashboard Views
+
+Custom Amazon Connect Views for IRS agent workspace.
+
+## Views Created
+
+| View | ID | Description |
+|------|-----|-------------|
+| IRS-Taxpayer-Services | 4b281dc3-bf4f-4e48-b27a-e17ea1fdb954 | Main dashboard with 5 cards |
+| IRS-Refund-Status-Detail | 01c39969-8c8a-4bcb-bfa4-69e83939b810 | Refund inquiry procedures |
+| IRS-Identity-Verification-Detail | a6be4da3-891d-4f38-a180-fd384a361af2 | ID verification procedures |
+| IRS-Payment-Plan-Detail | 8c96d2ce-ae3c-468a-a06d-d68ddd42c9a9 | Installment agreement procedures |
+| IRS-Transcript-Request-Detail | adb87dfd-329a-4646-8db5-b0fb84c06f0c | Transcript request procedures |
+| IRS-Notice-Explanation-Detail | 3028976b-94cf-4547-b4b9-ee77351149a0 | Notice explanation procedures |
+
+## Instance
+
+- **Instance**: treasury-connect-prod
+- **Instance ID**: a88ddab9-3b29-409f-87f0-bdb614abafef
+- **Region**: us-east-1
+
+## Top 5 IRS Use Cases
+
+### 1. Refund Status Inquiry (High Volume)
+- Authentication: SSN, filing status, exact refund amount, tax year
+- IDRS: IMFOL command, check TC 846 or TC 840
+- Processing times: E-file 21 days, Paper 6-8 weeks, Amended 16-20 weeks
+- Must capture: Callback number, mailing address, direct deposit changes
+
+### 2. Identity Verification - 5071C/5747C (Security Priority)
+- Required: Letter number, control number, SSN, DOB, address, financial account
+- NEVER skip full verification
+- Fraud indicators: Unable to answer questions, rushing, address change requests
+- Must capture: Letter/control numbers, KBA responses, third-party auth
+
+### 3. Payment Plan / Installment Agreement (Active)
+- Types: Guaranteed (≤$10K), Streamlined (≤$50K), Non-Streamlined (>$50K)
+- Verify ALL returns filed first
+- Must capture: Tax years, monthly amount, due date, bank info, verbal agreement
+
+### 4. Transcript Requests (Active)
+- Types: Tax Return, Tax Account, Wage & Income, Record of Account, Non-Filing
+- Direct to IRS.gov/transcripts first (instant online)
+- Must capture: Type, tax years, address, third-party auth, reason
+
+### 5. Notice Explanation (High Volume)
+- Common: CP14, CP2000, CP501-504, LT11, CP75, Letter 12C
+- Get exact notice number from top right corner
+- Must capture: Notice number/date, tax year, agree/dispute, deadline
+
+## Policy References (IRM)
+
+- [IRM 21.1.3](https://www.irs.gov/irm/part21/irm_21-001-003) - Authentication
+- [IRM 21.2.3](https://www.irs.gov/irm/part21/irm_21-002-003) - Transcripts
+- [IRM 21.3.1](https://www.irs.gov/irm/part21/irm_21-003-001) - Notices
+- [IRM 21.4.1](https://www.irs.gov/irm/part21/irm_21-004-001) - Refund Research
+- [IRM 5.14.1](https://www.irs.gov/irm/part5/irm_05-014-001) - Installment Agreements
+- [IRM 25.23.2](https://www.irs.gov/irm/part25/irm_25-023-002) - Identity Protection
+
+## Files
+
+- `irs_dashboard_cards.json` - Main dashboard card definitions
+- `refund_detail.json` - Refund status detail view
+- `idv_detail.json` - Identity verification detail view  
+- `payment_detail.json` - Payment plan detail view
+- `transcript_detail.json` - Transcript request detail view
+- `notice_detail.json` - Notice explanation detail view
+
+## Usage in Contact Flow
+
+Use "Show View" block with:
+```
+View: IRS-Taxpayer-Services
+```
+
+To show detail views based on card action, add condition branches for each action.
+
+---
+
+## Contact Flows
+
+### IRS-Inbound-Agent-Transfer
+**Flow ID:** `08728175-2bd5-452d-a68e-901fa36ab7eb`
+
+This flow:
+1. Greets the caller with an IRS welcome message
+2. Sets the target queue to TreasuryIRSQueue
+3. Sets comprehensive contact attributes with the IRS Agent Guide (Top 5 Use Cases)
+4. Transfers to queue
+
+**Contact Attributes Set:**
+- `AgentGuide`: IRS Taxpayer Services
+- `Step1_Auth`: Verify SSN, DOB, Filing Status, Address
+- `Step2_Document`: Record issue type, IDRS command codes used
+- `Step3_Resolve`: Use IRM guidance, document resolution
+- `TopUseCase1-5`: Quick reference for common scenarios
+- `FraudAlert`: NEVER verify identity for inbound caller
+- `PolicyLink`: https://www.irs.gov/irm/part21
+
+### TreasuryConversationalFlow (Updated)
+**Flow ID:** `8dfd7f4a-e383-4889-a941-d516d4919a50`
+
+Updated to include:
+- Press 0 option to transfer to live agent
+- Routes to IRS-Inbound-Agent-Transfer flow
+- Bureau selection (1=IRS, 2=Mint, 3=TOP, 4=TD, 5=DE)
+
+---
+
+## Adding ShowView Block (Chat Only)
+
+The ShowView block only works for **chat contacts**, not voice. To display the IRS-Taxpayer-Services view when an agent accepts a chat:
+
+### Via Amazon Connect Console:
+
+1. Go to: https://treasury-connect-prod.my.connect.aws
+2. Navigate to: **Routing** → **Contact flows**
+3. Open `TreasuryChatFlow` or create a new chat flow
+4. Add a **Show view** block before the transfer to queue
+5. Configure:
+   - View: Select `IRS-Taxpayer-Services`
+   - Timeout: 400 seconds
+6. Save and Publish
+
+### Programmatic (requires Contact Flow Designer):
+
+The ShowView action requires specific metadata that is generated by the visual designer. Use the console UI to create flows with ShowView blocks.
+
+---
+
+## Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              TreasuryConversationalFlow                          │
+├─────────────────────────────────────────────────────────────────┤
+│  Greeting: "Press 1 for IRS... or 0 for representative"        │
+│                           ↓                                      │
+│  ┌─ Press 0 ──────→ IRS-Inbound-Agent-Transfer                  │
+│  │                        ↓                                      │
+│  │                  Set IRS Guide Attributes                     │
+│  │                        ↓                                      │
+│  │                  Transfer to TreasuryIRSQueue                 │
+│  │                        ↓                                      │
+│  │                  Agent sees attributes in screenpop           │
+│  │                                                               │
+│  ├─ Press 1 ──────→ Set Bureau=IRS → AI Bot                     │
+│  ├─ Press 2 ──────→ Set Bureau=MINT → AI Bot                    │
+│  └─ etc.                                                         │
+└─────────────────────────────────────────────────────────────────┘
+```

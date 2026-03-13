@@ -1,0 +1,29 @@
+{
+  "Head": { "Title": "Installment Agreement Procedures", "Configuration": {} },
+  "Body": [
+    {
+      "_id": "s1", "Type": "Section", "Props": { "Heading": "Required Information" },
+      "Content": [{ "_id": "t1", "Type": "TextBox", "Props": {}, "Content": ["All tax years with balance due | Total amount owed (access SUMRY) | Monthly income and expenses | Bank account for direct debit | Employer name and address"] }]
+    },
+    {
+      "_id": "s2", "Type": "Section", "Props": { "Heading": "Installment Agreement Types" },
+      "Content": [{ "_id": "t2", "Type": "TextBox", "Props": {}, "Content": ["GUARANTEED: 10K or less, all returns filed - Fee $31 DD or $107 | STREAMLINED: 50K or less, 72-month payoff - Fee $31 DD or $107 | NON-STREAMLINED: Over 50K or 72+ months - Fee $107 + F433 | PPIA: Cannot full-pay in CSED - Requires F433-A"] }]
+    },
+    {
+      "_id": "s3", "Type": "Section", "Props": { "Heading": "Agent Instructions" },
+      "Content": [{ "_id": "t3", "Type": "TextBox", "Props": {}, "Content": ["1. Verify ALL returns are filed (TXMODA) | 2. Calculate minimum: Balance divided by months to CSED | 3. Use Online Payment Agreement if eligible | 4. Set up direct debit to reduce fee | 5. Explain: Miss 2 payments equals default | 6. Document terms in AMS history"] }]
+    },
+    {
+      "_id": "s4", "Type": "Section", "Props": { "Heading": "MUST CAPTURE" },
+      "Content": [{ "_id": "a1", "Type": "Alert", "Props": { "Title": "Required Fields", "Body": "All tax years in agreement | Monthly payment amount | Payment due date (1st-28th) | Bank routing and account number | Verbal agreement to terms confirmed" }, "Content": [] }]
+    },
+    {
+      "_id": "s5", "Type": "Section", "Props": { "Heading": "Policy References" },
+      "Content": [
+        { "_id": "l1", "Type": "Link", "Props": { "Url": "https://www.irs.gov/irm/part5/irm_05-014-001", "External": true }, "Content": ["IRM 5.14.1 - Installment Agreements"] },
+        { "_id": "l2", "Type": "Link", "Props": { "Url": "https://www.irs.gov/irm/part5/irm_05-019-001", "External": true }, "Content": ["IRM 5.19.1 - Balance Due"] },
+        { "_id": "l3", "Type": "Link", "Props": { "Url": "https://www.irs.gov/payments/online-payment-agreement-application", "External": true }, "Content": ["Online Payment Agreement Tool"] }
+      ]
+    }
+  ]
+}

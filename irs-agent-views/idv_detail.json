@@ -1,0 +1,29 @@
+{
+  "Head": { "Title": "Identity Verification Procedures", "Configuration": {} },
+  "Body": [
+    {
+      "_id": "s1", "Type": "Section", "Props": { "Heading": "Mandatory Verification Items" },
+      "Content": [{ "_id": "t1", "Type": "TextBox", "Props": {}, "Content": ["Letter number (5071C, 5747C, 6331C, 4883C) | Control number from letter | SSN and date of birth | Current mailing address | One financial account (last 4 digits) | Prior year return info"] }]
+    },
+    {
+      "_id": "s2", "Type": "Section", "Props": { "Heading": "Agent Instructions" },
+      "Content": [{ "_id": "t2", "Type": "TextBox", "Props": {}, "Content": ["1. NEVER process without full ID verification | 2. Access ID Verify via SERP | 3. Ask knowledge-based questions | 4. Document all responses in AMS | 5. If fails 2x require in-person visit | 6. Issue 5747C if online unavailable"] }]
+    },
+    {
+      "_id": "s3", "Type": "Section", "Props": { "Heading": "FRAUD INDICATORS - STOP AND ESCALATE" },
+      "Content": [{ "_id": "a1", "Type": "Alert", "Props": { "Title": "Red Flags", "Body": "Unable to answer basic questions | Background noise (call center) | Rushing agent | Address change after verification | Multiple failed attempts same day" }, "Content": [] }]
+    },
+    {
+      "_id": "s4", "Type": "Section", "Props": { "Heading": "MUST CAPTURE" },
+      "Content": [{ "_id": "a2", "Type": "Alert", "Props": { "Title": "Required Fields", "Body": "Letter and control number | All KBA responses (pass/fail) | Caller relationship to taxpayer | Third-party authorization (2848/8821)" }, "Content": [] }]
+    },
+    {
+      "_id": "s5", "Type": "Section", "Props": { "Heading": "Policy References" },
+      "Content": [
+        { "_id": "l1", "Type": "Link", "Props": { "Url": "https://www.irs.gov/irm/part25/irm_25-023-002", "External": true }, "Content": ["IRM 25.23.2 - Identity Protection"] },
+        { "_id": "l2", "Type": "Link", "Props": { "Url": "https://www.irs.gov/irm/part21/irm_21-001-003", "External": true }, "Content": ["IRM 21.1.3 - Authentication"] },
+        { "_id": "l3", "Type": "Link", "Props": { "Url": "https://www.irs.gov/identity-theft-fraud-scams", "External": true }, "Content": ["Identity Theft Resources"] }
+      ]
+    }
+  ]
+}

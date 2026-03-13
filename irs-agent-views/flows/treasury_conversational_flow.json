@@ -1,0 +1,224 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "start-greeting",
+  "Metadata": {
+    "entryPointPosition": {"x": 40, "y": 40},
+    "ActionMetadata": {
+      "lex-first": {
+        "useLexBotDropdown": true,
+        "useDynamicLexBotArn": false,
+        "LexV2Bot": {
+          "id": "arn:aws:lex:us-east-1:593804350786:bot-alias/XBM0II2LVX/3XYSFYN07K",
+          "text": "TreasuryVoiceBot"
+        }
+      },
+      "lex-continue": {
+        "useLexBotDropdown": true,
+        "useDynamicLexBotArn": false,
+        "LexV2Bot": {
+          "id": "arn:aws:lex:us-east-1:593804350786:bot-alias/XBM0II2LVX/3XYSFYN07K",
+          "text": "TreasuryVoiceBot"
+        }
+      }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "start-greeting",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you for calling U.S. Treasury. Press 1 for I.R.S., 2 for U.S. Mint, 3 for Treasury Offset, 4 for Treasury Direct, 5 for Debt Exclusions, or press 0 to speak with a representative."
+      },
+      "Transitions": {
+        "NextAction": "bureau-select",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "bureau-select",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "Text": "Please press a number now.",
+        "StoreInput": "False",
+        "InputTimeLimitSeconds": "8"
+      },
+      "Transitions": {
+        "NextAction": "set-irs",
+        "Errors": [
+          {"NextAction": "set-irs", "ErrorType": "NoMatchingError"},
+          {"NextAction": "set-irs", "ErrorType": "NoMatchingCondition"},
+          {"NextAction": "set-irs", "ErrorType": "InputTimeLimitExceeded"}
+        ],
+        "Conditions": [
+          {"NextAction": "transfer-to-agent", "Condition": {"Operator": "Equals", "Operands": ["0"]}},
+          {"NextAction": "set-irs", "Condition": {"Operator": "Equals", "Operands": ["1"]}},
+          {"NextAction": "set-mint", "Condition": {"Operator": "Equals", "Operands": ["2"]}},
+          {"NextAction": "set-top", "Condition": {"Operator": "Equals", "Operands": ["3"]}},
+          {"NextAction": "set-td", "Condition": {"Operator": "Equals", "Operands": ["4"]}},
+          {"NextAction": "set-de", "Condition": {"Operator": "Equals", "Operands": ["5"]}}
+        ]
+      }
+    },
+    {
+      "Identifier": "transfer-to-agent",
+      "Type": "TransferToFlow",
+      "Parameters": {
+        "ContactFlowId": "arn:aws:connect:us-east-1:593804350786:instance/a88ddab9-3b29-409f-87f0-bdb614abafef/contact-flow/08728175-2bd5-452d-a68e-901fa36ab7eb"
+      },
+      "Transitions": {
+        "NextAction": "closing",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-irs",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {"Attributes": {"Bureau": "IRS"}},
+      "Transitions": {
+        "NextAction": "bureau-greeting",
+        "Errors": [{"NextAction": "bureau-greeting", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-mint",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {"Attributes": {"Bureau": "MINT"}},
+      "Transitions": {
+        "NextAction": "bureau-greeting",
+        "Errors": [{"NextAction": "bureau-greeting", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-top",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {"Attributes": {"Bureau": "TOP"}},
+      "Transitions": {
+        "NextAction": "bureau-greeting",
+        "Errors": [{"NextAction": "bureau-greeting", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-td",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {"Attributes": {"Bureau": "TD"}},
+      "Transitions": {
+        "NextAction": "bureau-greeting",
+        "Errors": [{"NextAction": "bureau-greeting", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "set-de",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {"Attributes": {"Bureau": "DE"}},
+      "Transitions": {
+        "NextAction": "bureau-greeting",
+        "Errors": [{"NextAction": "bureau-greeting", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "bureau-greeting",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You have reached the $.Attributes.Bureau service. How can I help you today?"
+      },
+      "Transitions": {
+        "NextAction": "lex-first",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "lex-first",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "Text": "Please speak your question after the tone.",
+        "StoreInput": "True",
+        "InputTimeLimitSeconds": "8",
+        "InputValidation": {"CustomValidation": {"MaximumLength": "1024"}}
+      },
+      "Transitions": {
+        "NextAction": "invoke-agent",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "invoke-agent",
+      "Type": "InvokeLambdaFunction",
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:us-east-1:593804350786:function:treasury-conversational-handler",
+        "InvocationTimeLimitSeconds": "8",
+        "LambdaInvocationAttributes": {
+          "CustomerInput": "$.Lex.InputTranscript",
+          "Bureau": "$.Attributes.Bureau"
+        }
+      },
+      "Transitions": {
+        "NextAction": "speak-response",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "speak-response",
+      "Type": "MessageParticipant",
+      "Parameters": {"Text": "$.External.response"},
+      "Transitions": {
+        "NextAction": "check-continue",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "check-continue",
+      "Type": "Compare",
+      "Parameters": {"ComparisonValue": "$.External.continueConversation"},
+      "Transitions": {
+        "NextAction": "closing",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingCondition"}],
+        "Conditions": [
+          {"NextAction": "lex-continue", "Condition": {"Operator": "Equals", "Operands": ["True"]}},
+          {"NextAction": "lex-continue", "Condition": {"Operator": "Equals", "Operands": ["true"]}}
+        ]
+      }
+    },
+    {
+      "Identifier": "lex-continue",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "Text": "Is there anything else I can help you with?",
+        "StoreInput": "True",
+        "InputTimeLimitSeconds": "8",
+        "InputValidation": {"CustomValidation": {"MaximumLength": "1024"}}
+      },
+      "Transitions": {
+        "NextAction": "invoke-agent",
+        "Errors": [{"NextAction": "closing", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "closing",
+      "Type": "MessageParticipant",
+      "Parameters": {"Text": "Thank you for calling U.S. Treasury. Have a great day!"},
+      "Transitions": {
+        "NextAction": "disconnect",
+        "Errors": [{"NextAction": "disconnect", "ErrorType": "NoMatchingError"}],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "disconnect",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "Head": { "Title": "Transcript Request Procedures", "Configuration": {} },
+  "Body": [
+    {
+      "_id": "s1", "Type": "Section", "Props": { "Heading": "Authentication Required" },
+      "Content": [{ "_id": "t1", "Type": "TextBox", "Props": {}, "Content": ["Full SSN and date of birth | Current mailing address on file | Tax year(s) requested | For third party: Form 4506-T or POA on file"] }]
+    },
+    {
+      "_id": "s2", "Type": "Section", "Props": { "Heading": "Transcript Types" },
+      "Content": [{ "_id": "t2", "Type": "TextBox", "Props": {}, "Content": ["TAX RETURN: Line items from return - For mortgage, student loans | TAX ACCOUNT: Filing status, payments, adjustments - For amended status | WAGE AND INCOME: W-2s, 1099s received - For verify income | RECORD OF ACCOUNT: Return + Account combined - Full picture | VERIFICATION NON-FILING: Confirms no return filed - For financial aid"] }]
+    },
+    {
+      "_id": "s3", "Type": "Section", "Props": { "Heading": "Agent Instructions" },
+      "Content": [{ "_id": "t3", "Type": "TextBox", "Props": {}, "Content": ["1. FIRST: Direct to IRS.gov/transcripts (instant online) | 2. If online unavailable: Use Get Transcript by Mail | 3. Phone requests: Order via IDRS or IAT tool | 4. Processing: 5-10 business days by mail | 5. Wage transcripts available after July 31 for prior year"] }]
+    },
+    {
+      "_id": "s4", "Type": "Section", "Props": { "Heading": "MUST CAPTURE" },
+      "Content": [{ "_id": "a1", "Type": "Alert", "Props": { "Title": "Required Fields", "Body": "Transcript type requested | Tax year(s) | Mailing address confirmation | Third-party authorization if applicable | Reason for request (for notes)" }, "Content": [] }]
+    },
+    {
+      "_id": "s5", "Type": "Section", "Props": { "Heading": "Policy References" },
+      "Content": [
+        { "_id": "l1", "Type": "Link", "Props": { "Url": "https://www.irs.gov/irm/part21/irm_21-002-003", "External": true }, "Content": ["IRM 21.2.3 - Transcripts"] },
+        { "_id": "l2", "Type": "Link", "Props": { "Url": "https://www.irs.gov/individuals/get-transcript", "External": true }, "Content": ["Get Transcript Online"] },
+        { "_id": "l3", "Type": "Link", "Props": { "Url": "https://www.irs.gov/forms-pubs/about-form-4506-t", "External": true }, "Content": ["Form 4506-T Instructions"] }
+      ]
+    }
+  ]
+}
