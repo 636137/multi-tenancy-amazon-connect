@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRS Taxpayer Assistant - Live Test</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7928ca);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: #22c55e;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        
+        .agent-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .agent-info h2 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-section h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+        
+        .sample-questions {
+            list-style: none;
+        }
+        
+        .sample-questions li {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid #7928ca;
+        }
+        
+        .sample-questions li:hover {
+            background: rgba(121, 40, 202, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .widget-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .instructions {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .instructions h3 {
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #94a3b8;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏛️ IRS Taxpayer Assistant</h1>
+            <p class="subtitle">AI-Powered Tax Support Agent</p>
+            <span class="status-badge">✓ LIVE</span>
+        </header>
+        
+        <div class="instructions">
+            <h3>🎤 How to Test</h3>
+            <ol>
+                <li>Click the <strong>blue chat bubble</strong> in the bottom-right corner</li>
+                <li>Allow microphone access when prompted</li>
+                <li>Speak your question naturally (or use the questions below)</li>
+                <li>The agent will respond with voice and text</li>
+            </ol>
+        </div>
+        
+        <div class="agent-info">
+            <h2>Agent Details</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Agent ID</div>
+                    <div class="info-value"><code>agent_6201km43egt3f39tt000587m4ehp</code></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Voice</div>
+                    <div class="info-value">Sarah (Professional)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">LLM</div>
+                    <div class="info-value">Gemini 2.0 Flash</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">TTS Model</div>
+                    <div class="info-value">Eleven Turbo v2</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📝 Sample Questions to Try</h2>
+            <ul class="sample-questions">
+                <li>"Where is my refund? I filed 3 weeks ago."</li>
+                <li>"I owe $5,000 in taxes. What are my payment options?"</li>
+                <li>"How long does it take to get a refund if I filed by mail?"</li>
+                <li>"Can I set up a monthly payment plan?"</li>
+                <li>"How long should I keep my tax records?"</li>
+                <li>"I want to speak to a human agent."</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎯 What This Agent Can Do</h2>
+            <ul class="sample-questions">
+                <li><strong>Refund Status:</strong> E-file (21 days) vs Paper (6-8 weeks)</li>
+                <li><strong>Payment Plans:</strong> Short-term (120 days) or Long-term installments</li>
+                <li><strong>General Questions:</strong> Tax deadlines, record keeping, filing tips</li>
+                <li><strong>Escalation:</strong> Transfers to human for identity verification or complex issues</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Powered by ElevenLabs Conversational AI | Agent deployed March 19, 2026</p>
+        </footer>
+    </div>
+    
+    <!-- ElevenLabs Conversational AI Widget -->
+    <elevenlabs-convai agent-id="agent_6201km43egt3f39tt000587m4ehp"></elevenlabs-convai>
+    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+</body>
+</html>
