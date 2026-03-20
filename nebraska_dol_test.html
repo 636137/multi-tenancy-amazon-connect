@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebraska Department of Labor - Virtual Assistant</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #002855 0%, #003d7a 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        .subtitle {
+            color: #b8d4e8;
+            font-size: 1.1rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-section h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            color: #b8d4e8;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .instructions {
+            background: rgba(40, 167, 69, 0.15);
+            border: 1px solid rgba(40, 167, 69, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .instructions h3 {
+            color: #7dcea0;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #b8d4e8;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .sample-questions {
+            list-style: none;
+        }
+        
+        .sample-questions li {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid #ffd700;
+        }
+        
+        .sample-questions li:hover {
+            background: rgba(255, 215, 0, 0.15);
+            transform: translateX(5px);
+        }
+        
+        footer {
+            text-align: center;
+            color: #7ba3c4;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🌾</div>
+            <h1>Nebraska Department of Labor</h1>
+            <p class="subtitle">Virtual Assistant</p>
+            <span class="status-badge">✓ Available 24/7</span>
+        </header>
+        
+        <div class="instructions">
+            <h3>🎤 How to Get Help</h3>
+            <ol>
+                <li>Click the <strong>chat button</strong> in the bottom-right corner</li>
+                <li>Speak your question or type in the chat box</li>
+                <li>Allow microphone access if you want to use voice</li>
+                <li>The assistant will respond with voice and text</li>
+            </ol>
+        </div>
+        
+        <div class="info-section">
+            <h2>📋 Quick Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">File Claims Online</div>
+                    <div class="info-value">NEworks.nebraska.gov</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Weekly Certification</div>
+                    <div class="info-value">Every Sunday</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Maximum Weekly Benefit</div>
+                    <div class="info-value">$440/week</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Benefit Duration</div>
+                    <div class="info-value">Up to 26 weeks</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>💬 Sample Questions</h2>
+            <ul class="sample-questions">
+                <li>"How do I file for unemployment benefits?"</li>
+                <li>"What's the status of my claim?"</li>
+                <li>"When will I receive my payment?"</li>
+                <li>"How do I complete my weekly certification?"</li>
+                <li>"Where can I find job listings in Nebraska?"</li>
+                <li>"I need to speak with a representative."</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>🎯 Services Available</h2>
+            <ul class="sample-questions">
+                <li><strong>Unemployment Benefits:</strong> Filing, status, eligibility questions</li>
+                <li><strong>Job Search:</strong> NEworks job listings and career resources</li>
+                <li><strong>Employer Services:</strong> Tax registration, posting jobs</li>
+                <li><strong>Career Centers:</strong> Locations and services available</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Powered by AI | <a href="https://dol.nebraska.gov" target="_blank">dol.nebraska.gov</a></p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">For emergencies, call 402-458-2500</p>
+        </footer>
+    </div>
+    
+    <!-- ElevenLabs Widget - CORRECT CONFIGURATION -->
+    <elevenlabs-convai agent-id="agent_8801km4dp7q6fd9a2sqxbngsj0sa"></elevenlabs-convai>
+    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+</body>
+</html>

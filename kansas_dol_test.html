@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kansas Department of Labor - Virtual Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #002868 0%, #BF0A30 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #002868;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            padding: 5px;
+        }
+        
+        .header-text h1 {
+            color: #002868;
+            font-size: 24px;
+        }
+        
+        .header-text p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .info-card h2 {
+            color: #002868;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .service-item {
+            background: linear-gradient(135deg, #002868 0%, #001845 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,40,104,0.4);
+        }
+        
+        .service-item .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .service-item h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .cta-section p {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .cta-section .highlight {
+            color: #002868;
+            font-weight: bold;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+        }
+        
+        .footer a {
+            color: #FFD700;
+            text-decoration: none;
+        }
+        
+        .sunflower-accent {
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            KANSAS<br>DOL
+        </div>
+        <div class="header-text">
+            <h1>Kansas Department of Labor</h1>
+            <p>Helping Kansans find jobs, providing workers with workplace protections</p>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <div class="info-card">
+            <h2>🌻 Virtual Assistant <span class="sunflower-accent">Services</span></h2>
+            
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="icon">💼</div>
+                    <h3>Unemployment Insurance</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">📋</div>
+                    <h3>Weekly Certifications</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🏢</div>
+                    <h3>Employer Services</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🎓</div>
+                    <h3>Workforce Programs</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">⚖️</div>
+                    <h3>Appeals Process</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🔍</div>
+                    <h3>KANSASWORKS Jobs</h3>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <p>Click the <span class="highlight">chat icon</span> in the bottom right corner to speak with our AI assistant via <strong>voice or text</strong>.</p>
+                <p style="font-size: 14px; color: #666;">Available 24/7 • English & Spanish Support</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span>📞</span>
+                        <span>1-800-292-6333</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>🌐</span>
+                        <span>dol.ks.gov</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>💻</span>
+                        <span>GetKansasBenefits.gov</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>Kansas Department of Labor | 401 SW Topeka Blvd, Topeka, KS 66603</p>
+        <p>Official Website: <a href="https://www.dol.ks.gov" target="_blank">dol.ks.gov</a></p>
+    </footer>
+
+    <!-- CRITICAL: Use elevenlabs.io script, NOT unpkg - unpkg breaks audio transmission -->
+    <script src="https://elevenlabs.io/convai-widget/index.js" async></script>
+    <elevenlabs-convai agent-id="agent_7701km4gw9h4feysfrhtfxfzka60"></elevenlabs-convai>
+</body>
+</html>

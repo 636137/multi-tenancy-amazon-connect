@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texas DMV - Virtual Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #002868 0%, #BF0A30 50%, #FFFFFF 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #002868;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border-bottom: 4px solid #BF0A30;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+        
+        .logo-inner {
+            width: 100%;
+            height: 100%;
+            background: #002868;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 11px;
+            text-align: center;
+        }
+        
+        .logo-star {
+            color: #FFD700;
+            font-size: 24px;
+            line-height: 1;
+        }
+        
+        .header-text h1 {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .header-text p {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 750px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border-top: 5px solid #BF0A30;
+        }
+        
+        .info-card h2 {
+            color: #002868;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+        
+        .texas-star {
+            color: #FFD700;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .service-item {
+            background: linear-gradient(135deg, #002868 0%, #001540 100%);
+            color: white;
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #BF0A30;
+        }
+        
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,40,104,0.4);
+        }
+        
+        .service-item .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .service-item h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px solid #002868;
+        }
+        
+        .cta-section p {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .cta-section .highlight {
+            color: #BF0A30;
+            font-weight: bold;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #002868;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .footer {
+            background: #002868;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            border-top: 4px solid #BF0A30;
+        }
+        
+        .footer a {
+            color: #FFD700;
+            text-decoration: none;
+        }
+        
+        .texas-flag-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #002868 33%, #FFFFFF 33%, #FFFFFF 66%, #BF0A30 66%);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-inner">
+                <span class="logo-star">★</span>
+                <span>TxDMV</span>
+            </div>
+        </div>
+        <div class="header-text">
+            <h1>Texas Department of Motor Vehicles</h1>
+            <p>Helping Texans Go. Helping Texas Grow.</p>
+        </div>
+    </header>
+    
+    <div class="texas-flag-bar"></div>
+    
+    <main class="main-content">
+        <div class="info-card">
+            <h2><span class="texas-star">★</span> Virtual Assistant Services <span class="texas-star">★</span></h2>
+            
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="icon">🚗</div>
+                    <h3>Vehicle Registration</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">📄</div>
+                    <h3>Titles & Transfers</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🔢</div>
+                    <h3>License Plates</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🔄</div>
+                    <h3>Registration Renewal</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🏢</div>
+                    <h3>Dealer Services</h3>
+                </div>
+                <div class="service-item">
+                    <div class="icon">🚚</div>
+                    <h3>Motor Carrier Permits</h3>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <p>Click the <span class="highlight">chat icon</span> in the bottom right corner to speak with our AI assistant via <strong>voice or text</strong>.</p>
+                <p style="font-size: 14px; color: #666;">Available 24/7 • English & Spanish Support</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span>📞</span>
+                        <span>1-888-368-4689</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>🌐</span>
+                        <span>TxDMV.gov</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>🕐</span>
+                        <span>Mon-Fri 7:30am-5:30pm CT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>Texas Department of Motor Vehicles | 4000 Jackson Ave, Austin, TX 78731</p>
+        <p>Official Website: <a href="https://www.txdmv.gov" target="_blank">TxDMV.gov</a></p>
+    </footer>
+
+    <!-- CRITICAL: Use elevenlabs.io script, NOT unpkg - unpkg breaks audio transmission -->
+    <script src="https://elevenlabs.io/convai-widget/index.js" async></script>
+    <elevenlabs-convai agent-id="agent_1901km4h3fvze1eaqpebxfvtcytp"></elevenlabs-convai>
+</body>
+</html>
