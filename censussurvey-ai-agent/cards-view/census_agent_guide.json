@@ -1,0 +1,157 @@
+{
+  "Heading": "Census Survey Agent Guide",
+  "SubHeading": "Quick Reference for Census Bureau Call Handlers",
+  "CardsPerRow": "1",
+  "Cards": [
+    {
+      "Summary": {
+        "Id": "caller-verification",
+        "Icon": "shield",
+        "Heading": "🔐 Caller Verification",
+        "Status": "REQUIRED",
+        "Description": "Verify caller identity before providing information"
+      },
+      "Detail": {
+        "Heading": "Verification Procedures",
+        "Description": "Steps to verify caller identity and Census record",
+        "Sections": [
+          {
+            "TemplateString": "<h4>📋 Required Information</h4><ul><li>Census ID from mailing (12-digit code)</li><li>Full address on Census record</li><li>Head of household name</li></ul><div style='background:#d4edda; padding:10px; border-radius:5px; margin-top:10px;'><b>✓ Remember:</b> Never ask for SSN, bank info, or payment</div>"
+          },
+          {
+            "TemplateString": "<h4>⚠️ Red Flags</h4><div style='background:#f8d7da; padding:10px; border-radius:5px;'><ul style='margin:5px 0;'><li>Caller unable to verify any information</li><li>Asking about other households</li><li>Requesting information be sent to different address</li><li>Suspicious callback number requests</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>🔗 Quick Links</h4><p><a href='https://my2020census.gov' target='_blank'>Census Response Portal</a></p><p><a href='https://www.census.gov/programs-surveys/decennial-census/technical-documentation.html' target='_blank'>Technical Documentation</a></p>"
+          }
+        ],
+        "Actions": ["Verify in System", "Request Supervisor", "Log Verification Issue", "Transfer to Fraud Team"]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "survey-assistance",
+        "Icon": "document",
+        "Heading": "📝 Survey Completion Help",
+        "Status": "HIGH VOLUME",
+        "Description": "Guide callers through Census questionnaire"
+      },
+      "Detail": {
+        "Heading": "Survey Question Guidance",
+        "Description": "Reference for answering common Census questions",
+        "Sections": [
+          {
+            "TemplateString": "<h4>👥 Household Count Rules</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px; text-align:left;'>Situation</th><th style='padding:8px;'>Include?</th></tr><tr><td style='padding:8px;'>Children in shared custody (>50% time)</td><td style='padding:8px;'><b>Yes</b></td></tr><tr><td style='padding:8px;'>College student living away</td><td style='padding:8px;'>At college address</td></tr><tr><td style='padding:8px;'>Military deployed overseas</td><td style='padding:8px;'>At home address</td></tr><tr><td style='padding:8px;'>Nursing home resident</td><td style='padding:8px;'>At facility</td></tr><tr><td style='padding:8px;'>Newborn in hospital</td><td style='padding:8px;'><b>Yes, at home</b></td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>🏠 Housing Status</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Type</th><th style='padding:8px;'>Classification</th></tr><tr><td style='padding:8px;'>Mortgage</td><td style='padding:8px;'>Owned</td></tr><tr><td style='padding:8px;'>Rent-to-own</td><td style='padding:8px;'>Rented</td></tr><tr><td style='padding:8px;'>Living with family rent-free</td><td style='padding:8px;'>Occupied without payment</td></tr><tr style='background:#fff3cd;'><td style='padding:8px;'><b>Mobile home on rented lot</b></td><td style='padding:8px;'>Owned (if own mobile home)</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>✅ Completion Checklist</h4><ul><li>☐ All residents counted</li><li>☐ Relationships specified</li><li>☐ Ages and DOBs confirmed</li><li>☐ Race/ethnicity recorded</li><li>☐ Housing status confirmed</li></ul>"
+          }
+        ],
+        "Actions": ["Start New Survey", "Resume Existing", "Request Paper Form", "Schedule Callback"]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "privacy-trust",
+        "Icon": "shield",
+        "Heading": "🛡️ Privacy & Trust Concerns",
+        "Status": "HIGH VOLUME",
+        "Description": "Address caller concerns about data protection"
+      },
+      "Detail": {
+        "Heading": "Privacy Protection Talking Points",
+        "Description": "Key information to build caller trust",
+        "Sections": [
+          {
+            "TemplateString": "<h4>📜 Legal Protections (Title 13)</h4><div style='background:#d4edda; padding:10px; border-radius:5px;'><ul style='margin:5px 0;'><li><b>72-year rule:</b> Individual responses sealed for 72 years</li><li><b>Cannot be shared:</b> IRS, ICE, FBI, courts cannot access</li><li><b>Penalties:</b> $250,000 fine + 5 years prison for violations</li><li><b>Statistical use only:</b> Never used against individuals</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>🚫 What We NEVER Ask</h4><div style='background:#f8d7da; padding:10px; border-radius:5px;'><ul style='margin:5px 0;'><li>Social Security numbers</li><li>Bank account or credit card info</li><li>Money or donations</li><li>Political party affiliation</li><li>Immigration status details</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>🔗 Verification Resources</h4><p><a href='https://www.census.gov/about/policies/privacy.html' target='_blank'>Census Privacy Policy</a></p><p><a href='https://www.census.gov/programs-surveys/decennial-census/2020-census/about.html' target='_blank'>About the Census</a></p><p>Verification line: <b>1-800-923-8282</b></p>"
+          }
+        ],
+        "Actions": ["Send Privacy Info", "Transfer to Supervisor", "Log Privacy Concern", "Offer Paper Option"]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "refusal-handling",
+        "Icon": "alert",
+        "Heading": "⚠️ Refusal Handling",
+        "Status": "",
+        "Description": "Professional handling when callers decline"
+      },
+      "Detail": {
+        "Heading": "Refusal Response Protocol",
+        "Description": "Steps for when callers refuse to participate",
+        "Sections": [
+          {
+            "TemplateString": "<h4>📋 Refusal Response Steps</h4><ol><li>Acknowledge their concern respectfully</li><li>Briefly explain Census importance (funding, representation)</li><li>Offer alternative: paper form by mail</li><li>Offer callback at more convenient time</li><li>If still refusing, thank them and log reason</li></ol>"
+          },
+          {
+            "TemplateString": "<h4>💡 Why Census Matters Script</h4><div style='background:#e7f3ff; padding:10px; border-radius:5px;'><i>\"The Census determines congressional representation and over $1.5 trillion in federal funding for your community - including schools, roads, hospitals, and emergency services. Your response helps ensure your community gets its fair share.\"</i></div>"
+          },
+          {
+            "TemplateString": "<h4>📝 Common Refusal Reasons</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Reason</th><th style='padding:8px;'>Response</th></tr><tr><td style='padding:8px;'>Privacy concerns</td><td style='padding:8px;'>Title 13 protections</td></tr><tr><td style='padding:8px;'>Don't trust government</td><td style='padding:8px;'>Statistical use only</td></tr><tr><td style='padding:8px;'>Too busy</td><td style='padding:8px;'>Offer callback/paper</td></tr><tr><td style='padding:8px;'>Already completed</td><td style='padding:8px;'>Verify in system</td></tr></table>"
+          }
+        ],
+        "Actions": ["Log Refusal", "Offer Paper Form", "Schedule Callback", "Transfer to Specialist"]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "language-accessibility",
+        "Icon": "plus",
+        "Heading": "🌍 Language & Accessibility",
+        "Status": "",
+        "Description": "Support for non-English speakers and accessibility needs"
+      },
+      "Detail": {
+        "Heading": "Language & Accessibility Support",
+        "Description": "Resources for diverse caller needs",
+        "Sections": [
+          {
+            "TemplateString": "<h4>🗣️ Available Languages</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Language</th><th style='padding:8px;'>Queue Code</th></tr><tr><td style='padding:8px;'>Spanish</td><td style='padding:8px;'>LANG-ES</td></tr><tr><td style='padding:8px;'>Chinese (Mandarin)</td><td style='padding:8px;'>LANG-ZH</td></tr><tr><td style='padding:8px;'>Vietnamese</td><td style='padding:8px;'>LANG-VI</td></tr><tr><td style='padding:8px;'>Korean</td><td style='padding:8px;'>LANG-KO</td></tr><tr><td style='padding:8px;'>Tagalog</td><td style='padding:8px;'>LANG-TL</td></tr></table>"
+          },
+          {
+            "TemplateString": "<h4>♿ Accessibility Options</h4><ul><li><b>TDD/TTY:</b> 1-800-555-1234</li><li><b>Video Relay:</b> Available via VRS</li><li><b>Large Print:</b> Request form D-20LP</li><li><b>Braille:</b> Request form D-20BR</li></ul>"
+          },
+          {
+            "TemplateString": "<h4>🔗 Resources</h4><p><a href='https://www.census.gov/programs-surveys/decennial-census/2020-census/planning-management/language-resources.html' target='_blank'>Language Resources</a></p><p><a href='https://www.census.gov/about/policies/accessibility.html' target='_blank'>Accessibility Policy</a></p>"
+          }
+        ],
+        "Actions": ["Transfer to Spanish", "Transfer to Chinese", "Request Accessible Format", "Log Language Need"]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "escalation-criteria",
+        "Icon": "alert",
+        "Heading": "🚨 Escalation Criteria",
+        "Status": "URGENT",
+        "Description": "When to involve specialists or supervisors"
+      },
+      "Detail": {
+        "Heading": "Escalation Decision Guide",
+        "Description": "Criteria for transferring to specialists",
+        "Sections": [
+          {
+            "TemplateString": "<h4>🔴 Immediate Escalation</h4><div style='background:#f8d7da; padding:10px; border-radius:5px;'><ul style='margin:5px 0;'><li>Caller reports Census impersonation/fraud</li><li>Threatening or abusive behavior</li><li>Media or press inquiries</li><li>Legal or Congressional inquiries</li><li>Data breach concerns</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>🟡 Specialist Transfer</h4><div style='background:#fff3cd; padding:10px; border-radius:5px;'><ul style='margin:5px 0;'><li>Group quarters (dorms, nursing homes, prisons)</li><li>Complex household situations</li><li>Business/institutional surveys</li><li>Technical system issues</li><li>Formal complaints</li></ul></div>"
+          },
+          {
+            "TemplateString": "<h4>📞 Transfer Queues</h4><table style='width:100%; border-collapse:collapse;'><tr style='background:#f0f0f0;'><th style='padding:8px;'>Type</th><th style='padding:8px;'>Queue</th></tr><tr><td style='padding:8px;'>General Specialist</td><td style='padding:8px;'>CENSUS-SPECIALIST</td></tr><tr><td style='padding:8px;'>Group Quarters</td><td style='padding:8px;'>CENSUS-GQ</td></tr><tr><td style='padding:8px;'>Fraud/Security</td><td style='padding:8px;'>CENSUS-FRAUD</td></tr><tr><td style='padding:8px;'>Supervisor</td><td style='padding:8px;'>CENSUS-SUP</td></tr></table>"
+          }
+        ],
+        "Actions": ["Transfer to Specialist", "Transfer to Supervisor", "Report Fraud", "Log Escalation"]
+      }
+    }
+  ]
+}

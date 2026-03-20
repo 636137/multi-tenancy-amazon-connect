@@ -1,0 +1,119 @@
+TITLE: DHS-GSA Demo Recording
+FCM: NON-DROP FRAME
+
+001  AX       V     C        00:02:30:00 00:03:00:00 00:02:30:00 00:03:00:00
+* COMMENT: Appears to be a transition or 
+
+002  AX       V     C        00:04:00:00 00:05:00:00 00:04:00:00 00:05:00:00
+* COMMENT: Duplicate frame showing same c
+
+003  AX       V     C        00:06:30:00 00:07:00:00 00:06:30:00 00:07:00:00
+* COMMENT: Duplicate frame showing same s
+
+004  AX       V     C        00:07:00:00 00:07:30:00 00:07:00:00 00:07:30:00
+* COMMENT: Duplicate frame showing same s
+
+005  AX       V     C        00:07:30:00 00:08:00:00 00:07:30:00 00:08:00:00
+* COMMENT: Duplicate frame showing same s
+
+006  AX       V     C        00:12:30:00 00:13:00:00 00:12:30:00 00:13:00:00
+* COMMENT: Duplicate frame showing same c
+
+007  AX       V     C        00:13:00:00 00:13:30:00 00:13:00:00 00:13:30:00
+* COMMENT: Duplicate frame showing same c
+
+008  AX       V     C        00:13:30:00 00:14:00:00 00:13:30:00 00:14:00:00
+* COMMENT: Duplicate frame showing same c
+
+009  AX       V     C        00:14:00:00 00:14:30:00 00:14:00:00 00:14:30:00
+* COMMENT: Duplicate frame showing same c
+
+010  AX       V     C        00:14:30:00 00:15:00:00 00:14:30:00 00:15:00:00
+* COMMENT: Duplicate frame showing same c
+
+011  AX       V     C        00:16:30:00 00:17:00:00 00:16:30:00 00:17:00:00
+* COMMENT: Redundant frame showing same v
+
+012  AX       V     C        00:17:00:00 00:17:30:00 00:17:00:00 00:17:30:00
+* COMMENT: Redundant frame showing same v
+
+013  AX       V     C        00:17:30:00 00:18:00:00 00:17:30:00 00:18:00:00
+* COMMENT: Redundant frame showing same v
+
+014  AX       V     C        00:18:30:00 00:19:00:00 00:18:30:00 00:19:00:00
+* COMMENT: Duplicate frame with no new in
+
+015  AX       V     C        00:20:30:00 00:21:00:00 00:20:30:00 00:21:00:00
+* COMMENT: Returns to duplicate view with
+
+016  AX       V     C        00:22:30:00 00:23:00:00 00:22:30:00 00:23:00:00
+* COMMENT: Redundant view of earlier fram
+
+017  AX       V     C        00:23:30:00 00:24:00:00 00:23:30:00 00:24:00:00
+* COMMENT: Duplicate of previous frame wi
+
+018  AX       V     C        00:24:30:00 00:25:00:00 00:24:30:00 00:25:00:00
+* COMMENT: Duplicate frame showing same c
+
+019  AX       V     C        00:25:30:00 00:26:00:00 00:25:30:00 00:26:00:00
+* COMMENT: Similar content to previous fr
+
+020  AX       V     C        00:26:00:00 00:26:30:00 00:26:00:00 00:26:30:00
+* COMMENT: Redundant content
+
+021  AX       V     C        00:26:30:00 00:27:00:00 00:26:30:00 00:27:00:00
+* COMMENT: Similar to earlier frames
+
+022  AX       V     C        00:28:00:00 00:28:30:00 00:28:00:00 00:28:30:00
+* COMMENT: Duplicate frame showing same c
+
+023  AX       V     C        00:28:30:00 00:29:00:00 00:28:30:00 00:29:00:00
+* COMMENT: Duplicate of 27:30 frame showi
+
+024  AX       V     C        00:29:00:00 00:29:30:00 00:29:00:00 00:29:30:00
+* COMMENT: Duplicate frame showing same c
+
+025  AX       V     C        00:29:30:00 00:30:00:00 00:29:30:00 00:30:00:00
+* COMMENT: Duplicate frame showing same c
+
+026  AX       V     C        00:30:30:00 00:31:00:00 00:30:30:00 00:31:00:00
+* COMMENT: Duplicate frame showing same c
+
+027  AX       V     C        00:31:00:00 00:31:30:00 00:31:00:00 00:31:30:00
+* COMMENT: Duplicate frame showing same c
+
+028  AX       V     C        00:33:30:00 00:34:00:00 00:33:30:00 00:34:00:00
+* COMMENT: Duplicate frame with no new in
+
+029  AX       V     C        00:34:30:00 00:35:00:00 00:34:30:00 00:35:00:00
+* COMMENT: Duplicate frame with no new in
+
+030  AX       V     C        00:35:00:00 00:35:30:00 00:35:00:00 00:35:30:00
+* COMMENT: No meaningful new content
+
+031  AX       V     C        00:35:30:00 00:36:00:00 00:35:30:00 00:36:00:00
+* COMMENT: No meaningful new content
+
+032  AX       V     C        00:37:00:00 00:37:30:00 00:37:00:00 00:37:30:00
+* COMMENT: Duplicate frame showing same c
+
+033  AX       V     C        00:37:30:00 00:38:00:00 00:37:30:00 00:38:00:00
+* COMMENT: Duplicate frame showing same c
+
+034  AX       V     C        00:38:00:00 00:38:30:00 00:38:00:00 00:38:30:00
+* COMMENT: Duplicate frame showing same c
+
+035  AX       V     C        00:39:30:00 00:40:00:00 00:39:30:00 00:40:00:00
+* COMMENT: Duplicate frame showing same c
+
+036  AX       V     C        00:40:00:00 00:40:30:00 00:40:00:00 00:40:30:00
+* COMMENT: Duplicate frame showing same c
+
+037  AX       V     C        00:42:30:00 00:43:00:00 00:42:30:00 00:43:00:00
+* COMMENT: Shows meeting interface transi
+
+038  AX       V     C        00:43:00:00 00:43:30:00 00:43:00:00 00:43:30:00
+* COMMENT: Duplicate content from earlier
+
+039  AX       V     C        00:43:30:00 00:43:30:00 00:43:30:00 00:43:30:00
+* COMMENT: Duplicate content from earlier

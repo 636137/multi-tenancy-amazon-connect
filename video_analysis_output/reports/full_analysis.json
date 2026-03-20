@@ -1,0 +1,566 @@
+{
+  "generated_at": "2026-03-19T18:58:27.263574",
+  "video_title": "DHS-GSA Demo Recording",
+  "cuts": {
+    "cuts": [
+      {
+        "from": "00:02:30",
+        "to": "00:03:00",
+        "reason": "Appears to be a transition or ending screen with limited content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:04:00",
+        "to": "00:05:00",
+        "reason": "Duplicate frame showing same content as previous",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:06:30",
+        "to": "00:07:00",
+        "reason": "Duplicate frame showing same static content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:07:00",
+        "to": "00:07:30",
+        "reason": "Duplicate frame showing same static content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:07:30",
+        "to": "00:08:00",
+        "reason": "Duplicate frame showing same static content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:12:30",
+        "to": "00:13:00",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:13:00",
+        "to": "00:13:30",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:13:30",
+        "to": "00:14:00",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:14:00",
+        "to": "00:14:30",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:14:30",
+        "to": "00:15:00",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:16:30",
+        "to": "00:17:00",
+        "reason": "Redundant frame showing same view as previous",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:17:00",
+        "to": "00:17:30",
+        "reason": "Redundant frame showing same view",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:17:30",
+        "to": "00:18:00",
+        "reason": "Redundant frame showing same view",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:18:30",
+        "to": "00:19:00",
+        "reason": "Duplicate frame with no new information",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:20:30",
+        "to": "00:21:00",
+        "reason": "Returns to duplicate view with no new information",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:22:30",
+        "to": "00:23:00",
+        "reason": "Redundant view of earlier frame without new information",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:23:30",
+        "to": "00:24:00",
+        "reason": "Duplicate of previous frame with no new information",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:24:30",
+        "to": "00:25:00",
+        "reason": "Duplicate frame showing same call screen",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:25:30",
+        "to": "00:26:00",
+        "reason": "Similar content to previous frame",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:26:00",
+        "to": "00:26:30",
+        "reason": "Redundant content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:26:30",
+        "to": "00:27:00",
+        "reason": "Similar to earlier frames",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:28:00",
+        "to": "00:28:30",
+        "reason": "Duplicate frame showing same content as earlier timestamp",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:28:30",
+        "to": "00:29:00",
+        "reason": "Duplicate of 27:30 frame showing same call interface",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:29:00",
+        "to": "00:29:30",
+        "reason": "Duplicate frame showing same content as earlier timestamps",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:29:30",
+        "to": "00:30:00",
+        "reason": "Duplicate frame showing same call interface as previous timestamps",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:30:30",
+        "to": "00:31:00",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:31:00",
+        "to": "00:31:30",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:33:30",
+        "to": "00:34:00",
+        "reason": "Duplicate frame with no new information",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:34:30",
+        "to": "00:35:00",
+        "reason": "Duplicate frame with no new information",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:35:00",
+        "to": "00:35:30",
+        "reason": "No meaningful new content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:35:30",
+        "to": "00:36:00",
+        "reason": "No meaningful new content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:37:00",
+        "to": "00:37:30",
+        "reason": "Duplicate frame showing same content as previous",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:37:30",
+        "to": "00:38:00",
+        "reason": "Duplicate frame showing same content as previous",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:38:00",
+        "to": "00:38:30",
+        "reason": "Duplicate frame showing same content as previous",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:39:30",
+        "to": "00:40:00",
+        "reason": "Duplicate frame showing same content as previous",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:40:00",
+        "to": "00:40:30",
+        "reason": "Duplicate frame showing same content",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:42:30",
+        "to": "00:43:00",
+        "reason": "Shows meeting interface transition/setup screen",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:43:00",
+        "to": "00:43:30",
+        "reason": "Duplicate content from earlier frame",
+        "confidence": 0.8
+      },
+      {
+        "from": "00:43:30",
+        "to": "00:43:30",
+        "reason": "Duplicate content from earlier frames",
+        "confidence": 0.8
+      }
+    ],
+    "total_cuts": 39,
+    "generated_at": "2026-03-19T18:58:03.036260"
+  },
+  "metadata": {
+    "segments": [
+      {
+        "from": "00:00:00",
+        "to": "00:00:30",
+        "content_type": "slides",
+        "description": "Title/intro slide for the demo recording",
+        "key_elements": [
+          "Microsoft Teams title",
+          "DHS - GSA Demo Recording title",
+          "Recording timestamp: 2026-03-19 22:24 UTC"
+        ]
+      },
+      {
+        "from": "00:00:30",
+        "to": "00:01:30",
+        "content_type": "agent_desktop",
+        "description": "Showing Amazon Connect agent workspace with customer profile view",
+        "key_elements": [
+          "Amazon Connect interface",
+          "Customer Profile section",
+          "Connect assistant chat window",
+          "Quick connects menu",
+          "Number pad option",
+          "Contact handling URL in browser"
+        ]
+      },
+      {
+        "from": "00:01:30",
+        "to": "00:02:00",
+        "content_type": "browser",
+        "description": "Viewing FDA dashboard showing food safety report analytics",
+        "key_elements": [
+          "FDA Food Safety Reports Dashboard",
+          "Safety Report Heatmap",
+          "Total Reports counter: 203",
+          "Reports by Date graph",
+          "Report Breakdown pie chart",
+          "Anomaly detection section"
+        ]
+      },
+      {
+        "from": "00:02:00",
+        "to": "00:02:30",
+        "content_type": "agent_desktop",
+        "description": "Accessing recent files menu in Amazon Connect",
+        "key_elements": [
+          "Amazon Connect interface",
+          "Recent files dropdown menu",
+          "Quick connects section",
+          "File options including Excel, FAQs",
+          "Pin to taskbar option"
+        ]
+      },
+      {
+        "from": "00:02:30",
+        "to": "00:05:00",
+        "content_type": "other",
+        "description": "Showing participant avatars/profiles on dark background",
+        "key_elements": [
+          "Profile icons with initials",
+          "Names below profile icons"
+        ]
+      },
+      {
+        "from": "00:05:00",
+        "to": "00:05:30",
+        "content_type": "agent_desktop",
+        "description": "Agent desktop view showing customer profile interface and connect assistant",
+        "key_elements": [
+          "Amazon Connect interface",
+          "Customer Profile section",
+          "Search profiles field",
+          "Recently viewed profiles",
+          "Connect assistant chat",
+          "Available status indicator"
+        ]
+      },
+      {
+        "from": "00:05:30",
+        "to": "00:16:00",
+        "content_type": "browser",
+        "description": "Browsing SAM.gov help documentation",
+        "key_elements": [
+          "SAM.gov website header",
+          "Help section",
+          "Self help options",
+          "Search and Explore buttons",
+          "Federal service desk section",
+          "Help Topic Trends sidebar"
+        ]
+      },
+      {
+        "from": "00:16:00",
+        "to": "00:22:00",
+        "content_type": "agent_desktop",
+        "description": "Switch to Amazon Connect agent desktop showing customer case details and mobile mirror",
+        "key_elements": [
+          "Amazon Connect interface",
+          "UEI Merge Request case details",
+          "Customer profile section",
+          "Activity feed tab",
+          "IAE Contact Center mobile mirror window"
+        ]
+      },
+      {
+        "from": "00:22:00",
+        "to": "00:22:30",
+        "content_type": "browser",
+        "description": "Showing documentation about how to access and download contract data static reports",
+        "key_elements": [
+          "SAM.gov documentation",
+          "Instructions for accessing contract data",
+          "Step-by-step guide",
+          "DataBank section reference",
+          "Related articles"
+        ]
+      },
+      {
+        "from": "00:22:30",
+        "to": "00:23:00",
+        "content_type": "agent_desktop",
+        "description": "Return to main agent desktop view showing customer profile",
+        "key_elements": [
+          "Amazon Connect interface",
+          "Customer Profile tab",
+          "Recently viewed profiles section",
+          "Quick connects menu"
+        ]
+      },
+      {
+        "from": "00:23:00",
+        "to": "00:33:00",
+        "content_type": "mobile_mirror",
+        "description": "Showing a mirrored mobile device screen with FDA contact information",
+        "key_elements": [
+          "FDA Office of Emergency Response contact screen",
+          "Call history",
+          "Contact options",
+          "Desktop application icons"
+        ]
+      },
+      {
+        "from": "00:33:00",
+        "to": "00:36:00",
+        "content_type": "agent_desktop",
+        "description": "Showing a food scanner interface with completed scan of Trident gum alongside a chat discussion about FDA reporting procedures",
+        "key_elements": [
+          "FDA Food Scanner interface",
+          "Trident Chewing Gum scan result",
+          "Chat messaging interface",
+          "DHS-GSA Demo Recording title",
+          "Time indicators (5:24 PM start)",
+          "FDA script discussion"
+        ]
+      },
+      {
+        "from": "00:36:00",
+        "to": "00:36:30",
+        "content_type": "browser",
+        "description": "Shows a chat interface with messages about FDA food safety reporting",
+        "key_elements": [
+          "DHS - GSA Demo Recording chat window",
+          "FDA Scanner message",
+          "Chat interface",
+          "Message timestamps",
+          "Text input field"
+        ]
+      },
+      {
+        "from": "00:36:30",
+        "to": "00:39:00",
+        "content_type": "supervisor_dashboard",
+        "description": "Displaying a GSA contact center analytics dashboard with various metrics and charts",
+        "key_elements": [
+          "GSA Consolidated Contact Center Dashboard",
+          "Bot Confidence Level (0.83)",
+          "Report Breakdown by Channel pie chart",
+          "Average Queue Duration graph",
+          "Bot Intents word cloud",
+          "Contacts by Contact Center metrics"
+        ]
+      },
+      {
+        "from": "00:39:00",
+        "to": "00:41:30",
+        "content_type": "browser",
+        "description": "Viewing an FDA food safety dashboard showing reports and analytics",
+        "key_elements": [
+          "FDA Food Safety Reports Dashboard",
+          "Safety Report Heatmap",
+          "Total Reports: 203",
+          "Report Breakdown pie chart",
+          "Top Incident Descriptions list",
+          "Top Reports by Product and ZIP Code table"
+        ]
+      },
+      {
+        "from": "00:41:30",
+        "to": "00:42:00",
+        "content_type": "video_call",
+        "description": "Showing Teams meeting interface with participant tiles",
+        "key_elements": [
+          "Teams meeting interface",
+          "Meeting controls",
+          "Do Not Disturb notification",
+          "Participant thumbnails"
+        ]
+      },
+      {
+        "from": "00:42:00",
+        "to": "00:42:30",
+        "content_type": "supervisor_dashboard",
+        "description": "Displaying a comprehensive contact center analytics dashboard with various metrics and charts showing performance data",
+        "key_elements": [
+          "GSA Consolidated Contact Center Dashboard",
+          "GSA logo",
+          "Average Queue Duration (126.39 seconds)",
+          "Bot Confidence Level (0.83)",
+          "Report Breakdown by Channel pie chart",
+          "Detected Bot Intents list",
+          "Contact metrics chart",
+          "Bot Intents word cloud"
+        ]
+      },
+      {
+        "from": "00:42:30",
+        "to": "00:43:00",
+        "content_type": "video_call",
+        "description": "Showing a Teams meeting interface with participants and controls",
+        "key_elements": [
+          "Teams meeting interface",
+          "Participant icons",
+          "Meeting controls (mic, camera, share)",
+          "Do not disturb notification",
+          "Desktop icons and taskbar"
+        ]
+      },
+      {
+        "from": "00:43:00",
+        "to": "00:43:00",
+        "content_type": "supervisor_dashboard",
+        "description": "Same dashboard view as 42:00 timestamp",
+        "key_elements": [
+          "GSA Consolidated Contact Center Dashboard",
+          "Performance metrics",
+          "Channel breakdown charts",
+          "Bot analytics",
+          "Contact statistics"
+        ]
+      }
+    ],
+    "content_types_detected": [
+      "slides",
+      "other",
+      "video_call",
+      "mobile_mirror",
+      "browser",
+      "supervisor_dashboard",
+      "agent_desktop"
+    ]
+  },
+  "talk_track": {
+    "segments": [
+      {
+        "timestamp": "00:00:00",
+        "duration": 8.0,
+        "text": "Welcome to this demonstration of our integrated contact center solution for DHS and GSA, showcasing how we've unified various agency systems into a seamless operational platform.",
+        "sync_point": "Title slide"
+      },
+      {
+        "timestamp": "00:00:30",
+        "duration": 12.0,
+        "text": "At the heart of our solution is the Amazon Connect agent workspace, which provides agents with a unified interface for handling customer interactions. Let's explore how this streamlines the customer service process.",
+        "sync_point": "Amazon Connect interface"
+      },
+      {
+        "timestamp": "00:01:30",
+        "duration": 15.0,
+        "text": "Integrated directly within the agent workspace is our FDA safety reporting dashboard, enabling real-time monitoring of food safety incidents. This integration allows agents to quickly identify trends and respond to emerging situations.",
+        "sync_point": "FDA Dashboard transition"
+      },
+      {
+        "timestamp": "00:05:30",
+        "duration": 15.0,
+        "text": "The SAM.gov help documentation is seamlessly embedded, allowing agents to quickly access relevant information while maintaining context within their primary workflow.",
+        "sync_point": "SAM.gov documentation"
+      },
+      {
+        "timestamp": "00:16:00",
+        "duration": 12.0,
+        "text": "For complex cases like UEI merges, agents have access to detailed case information and a mobile mirror feature, enabling them to assist users across different platforms and devices.",
+        "sync_point": "UEI case details view"
+      },
+      {
+        "timestamp": "00:33:00",
+        "duration": 15.0,
+        "text": "Our FDA food scanner integration demonstrates how we've simplified the reporting process. Agents can now instantly access product information and guide citizens through safety reporting procedures.",
+        "sync_point": "FDA Food Scanner interface"
+      },
+      {
+        "timestamp": "00:36:30",
+        "duration": 12.0,
+        "text": "The supervisor dashboard provides comprehensive analytics, including bot performance metrics and channel distribution. This enables real-time operational oversight and data-driven decision making.",
+        "sync_point": "Supervisor dashboard"
+      },
+      {
+        "timestamp": "00:39:00",
+        "duration": 15.0,
+        "text": "The food safety analytics dashboard aggregates report data geographically, helping identify patterns and potential outbreak clusters that require immediate attention.",
+        "sync_point": "FDA safety dashboard"
+      },
+      {
+        "timestamp": "00:42:00",
+        "duration": 10.0,
+        "text": "These consolidated metrics demonstrate the efficiency gains achieved through our integrated approach, with improved response times and enhanced bot performance.",
+        "sync_point": "Final dashboard view"
+      }
+    ],
+    "total_duration": "00:43:44",
+    "word_count": 227
+  }
+}

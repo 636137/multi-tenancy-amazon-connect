@@ -1,0 +1,88 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "start-recording",
+  "Metadata": {
+    "entryPointPosition": {"x": 40, "y": 40},
+    "snapToGrid": false,
+    "ActionMetadata": {
+      "start-recording": {"position": {"x": 150, "y": 50}},
+      "set-voice": {"position": {"x": 350, "y": 50}},
+      "welcome": {"position": {"x": 550, "y": 50}},
+      "get-input": {"position": {"x": 750, "y": 50}},
+      "invoke-ai": {"position": {"x": 950, "y": 50}},
+      "speak-response": {"position": {"x": 1150, "y": 50}},
+      "no-input": {"position": {"x": 750, "y": 250}},
+      "error": {"position": {"x": 950, "y": 250}},
+      "disconnect": {"position": {"x": 1350, "y": 150}}
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "start-recording",
+      "Type": "UpdateContactRecordingBehavior",
+      "Parameters": {
+        "RecordingBehavior": {"RecordedParticipants": ["Agent", "Customer"]}
+      },
+      "Transitions": {"NextAction": "set-voice"}
+    },
+    {
+      "Identifier": "set-voice",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {"Engine": "Neural", "LanguageCode": "en-US", "VoiceId": "Joanna"},
+      "Transitions": {"NextAction": "welcome"}
+    },
+    {
+      "Identifier": "welcome",
+      "Type": "MessageParticipant",
+      "Parameters": {"Text": "Hello, thank you for calling the United States Census Bureau. My name is Sarah, and I'm here to help you with any Census-related questions. How may I assist you today?"},
+      "Transitions": {"NextAction": "get-input"}
+    },
+    {
+      "Identifier": "get-input",
+      "Type": "GetParticipantInput",
+      "Parameters": {"Text": " ", "InputTimeLimitSeconds": "30"},
+      "Transitions": {
+        "NextAction": "invoke-ai",
+        "Errors": [
+          {"NextAction": "no-input", "ErrorType": "NoMatchingCondition"},
+          {"NextAction": "error", "ErrorType": "NoMatchingError"}
+        ]
+      }
+    },
+    {
+      "Identifier": "invoke-ai",
+      "Type": "InvokeLambdaFunction",
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:us-east-1:593804350786:function:CensusSelfServiceAgent",
+        "InvocationTimeLimitSeconds": "30"
+      },
+      "Transitions": {
+        "NextAction": "speak-response",
+        "Errors": [{"NextAction": "error", "ErrorType": "NoMatchingError"}]
+      }
+    },
+    {
+      "Identifier": "speak-response",
+      "Type": "MessageParticipant",
+      "Parameters": {"Text": "$.External.response"},
+      "Transitions": {"NextAction": "get-input"}
+    },
+    {
+      "Identifier": "no-input",
+      "Type": "MessageParticipant",
+      "Parameters": {"Text": "I did not catch that. Could you please repeat what you said?"},
+      "Transitions": {"NextAction": "get-input"}
+    },
+    {
+      "Identifier": "error",
+      "Type": "MessageParticipant",
+      "Parameters": {"Text": "I apologize, I am having technical difficulties. Thank you for calling the Census Bureau. Goodbye."},
+      "Transitions": {"NextAction": "disconnect"}
+    },
+    {
+      "Identifier": "disconnect",
+      "Type": "DisconnectParticipant",
+      "Parameters": {}
+    }
+  ]
+}

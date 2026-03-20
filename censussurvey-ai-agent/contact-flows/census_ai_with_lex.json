@@ -1,0 +1,91 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "entry",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": 20,
+      "y": 20
+    },
+    "ActionMetadata": {}
+  },
+  "Actions": [
+    {
+      "Identifier": "entry",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Hello, thank you for calling the United States Census Bureau."
+      },
+      "Transitions": {
+        "NextAction": "lambda_greeting"
+      }
+    },
+    {
+      "Identifier": "lambda_greeting",
+      "Type": "InvokeLambdaFunction",
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:us-east-1:593804350786:function:CensusSelfServiceAgent",
+        "InvocationTimeLimitSeconds": "10",
+        "LambdaInvocationAttributes": {
+          "action": "greeting"
+        }
+      },
+      "Transitions": {
+        "NextAction": "speak_greeting",
+        "Errors": [
+          {
+            "NextAction": "speak_greeting",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "speak_greeting",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "$.External.response"
+      },
+      "Transitions": {
+        "NextAction": "lex_loop"
+      }
+    },
+    {
+      "Identifier": "lex_loop",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-east-1:593804350786:bot-alias/YALNR1XV51/AMCPH8PWMY"
+        }
+      },
+      "Transitions": {
+        "NextAction": "lex_loop",
+        "Errors": [
+          {
+            "NextAction": "goodbye",
+            "ErrorType": "InputTimeLimitExceeded"
+          },
+          {
+            "NextAction": "goodbye",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "goodbye",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you for calling the Census Bureau. Goodbye!"
+      },
+      "Transitions": {
+        "NextAction": "disconnect"
+      }
+    },
+    {
+      "Identifier": "disconnect",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "start",
+  "Metadata": {
+    "entryPointPosition": {"x": 40, "y": 40},
+    "ActionMetadata": {
+      "start": {"position": {"x": 40, "y": 40}},
+      "enable-logging": {"position": {"x": 200, "y": 40}},
+      "set-voice": {"position": {"x": 360, "y": 40}},
+      "greeting-lambda": {"position": {"x": 520, "y": 40}},
+      "speak-greeting": {"position": {"x": 680, "y": 40}},
+      "get-input": {"position": {"x": 840, "y": 40}},
+      "turn-lambda": {"position": {"x": 1000, "y": 40}},
+      "speak-response": {"position": {"x": 1160, "y": 40}},
+      "check-action": {"position": {"x": 1320, "y": 40}},
+      "disconnect": {"position": {"x": 1480, "y": 40}},
+      "transfer-queue": {"position": {"x": 1480, "y": 200}},
+      "error-handler": {"position": {"x": 1000, "y": 200}}
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "start",
+      "Type": "Start",
+      "Transitions": {
+        "NextAction": "enable-logging"
+      }
+    },
+    {
+      "Identifier": "enable-logging",
+      "Type": "UpdateContactRecordingBehavior",
+      "Parameters": {
+        "RecordingBehavior": {
+          "RecordedParticipants": ["Agent", "Customer"]
+        }
+      },
+      "Transitions": {
+        "NextAction": "set-voice"
+      }
+    },
+    {
+      "Identifier": "set-voice",
+      "Type": "SetVoice",
+      "Parameters": {
+        "Engine": "Neural",
+        "LanguageCode": "en-US",
+        "VoiceId": "Joanna"
+      },
+      "Transitions": {
+        "NextAction": "greeting-lambda"
+      }
+    },
+    {
+      "Identifier": "greeting-lambda",
+      "Type": "InvokeLambdaFunction",
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:us-east-1:593804350786:function:CensusSelfServiceAgent",
+        "InvocationTimeLimitSeconds": "8",
+        "LambdaInvocationAttributes": {
+          "action": "greeting"
+        }
+      },
+      "Transitions": {
+        "NextAction": "speak-greeting",
+        "Errors": [
+          {"NextAction": "error-handler", "ErrorType": "NoMatchingError"}
+        ]
+      }
+    },
+    {
+      "Identifier": "speak-greeting",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "$.External.response"
+      },
+      "Transitions": {
+        "NextAction": "get-input"
+      }
+    },
+    {
+      "Identifier": "get-input",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "Text": "",
+        "InputTimeLimitSeconds": "30",
+        "DTMFConfiguration": {
+          "DisableCancelKey": false
+        },
+        "AudioConfiguration": {
+          "EndSilenceTimeoutSeconds": 3
+        }
+      },
+      "Transitions": {
+        "NextAction": "turn-lambda",
+        "Conditions": [],
+        "Errors": [
+          {"NextAction": "turn-lambda", "ErrorType": "NoMatchingCondition"},
+          {"NextAction": "error-handler", "ErrorType": "NoMatchingError"}
+        ]
+      }
+    },
+    {
+      "Identifier": "turn-lambda",
+      "Type": "InvokeLambdaFunction",
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:us-east-1:593804350786:function:CensusSelfServiceAgent",
+        "InvocationTimeLimitSeconds": "30",
+        "LambdaInvocationAttributes": {
+          "action": "turn",
+          "userInput": "$.StoredCustomerInput"
+        }
+      },
+      "Transitions": {
+        "NextAction": "speak-response",
+        "Errors": [
+          {"NextAction": "error-handler", "ErrorType": "NoMatchingError"}
+        ]
+      }
+    },
+    {
+      "Identifier": "speak-response",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "$.External.response"
+      },
+      "Transitions": {
+        "NextAction": "check-action"
+      }
+    },
+    {
+      "Identifier": "check-action",
+      "Type": "CheckAttribute",
+      "Parameters": {
+        "Attribute": "$.External.action",
+        "ComparisonType": "Equals"
+      },
+      "Transitions": {
+        "NextAction": "get-input",
+        "Conditions": [
+          {"NextAction": "disconnect", "Condition": {"Operand": "complete"}},
+          {"NextAction": "transfer-queue", "Condition": {"Operand": "escalate"}},
+          {"NextAction": "get-input", "Condition": {"Operand": "continue"}}
+        ],
+        "Errors": [
+          {"NextAction": "get-input", "ErrorType": "NoMatchingError"}
+        ]
+      }
+    },
+    {
+      "Identifier": "disconnect",
+      "Type": "DisconnectParticipant",
+      "Parameters": {}
+    },
+    {
+      "Identifier": "transfer-queue",
+      "Type": "TransferToQueue",
+      "Parameters": {
+        "QueueId": "arn:aws:connect:us-east-1:593804350786:instance/a1f79dc3-8a46-481d-bf15-b214a7a8b05f/queue/CENSUS_GENERAL_QUEUE"
+      },
+      "Transitions": {
+        "NextAction": "disconnect",
+        "Errors": [
+          {"NextAction": "disconnect", "ErrorType": "NoMatchingError"}
+        ]
+      }
+    },
+    {
+      "Identifier": "error-handler",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "I apologize, I'm having some technical difficulties. Let me connect you with someone who can help."
+      },
+      "Transitions": {
+        "NextAction": "transfer-queue"
+      }
+    }
+  ]
+}

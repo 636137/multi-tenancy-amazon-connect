@@ -1,0 +1,67 @@
+{
+  "agent_id": "agent_6201km43egt3f39tt000587m4ehp",
+  "name": "IRS Taxpayer Assistant",
+  "created_by": "deploy script",
+  "config": {
+    "name": "IRS Taxpayer Assistant",
+    "tags": [
+      "IRS",
+      "Taxpayer Support",
+      "Government"
+    ],
+    "conversation_config": {
+      "agent": {
+        "first_message": "Hello! I'm the IRS Taxpayer Assistant. I can help you with refund status, payment plans, or tax questions. How can I assist you today?",
+        "language": "en",
+        "prompt": {
+          "prompt": "You are a professional, patient, and empathetic IRS Taxpayer Assistant. Your role is to help taxpayers with their tax-related questions and concerns.\n\nCAPABILITIES:\n- Check refund status (ask for filing date, filing method)\n- Explain payment plan options (short-term vs long-term)\n- Answer common tax questions\n- Provide general IRS information\n\nGUIDELINES:\n1. Be patient and understanding - many callers are stressed about taxes\n2. Use clear, simple language - avoid jargon\n3. Always verify you understood the question before answering\n4. For refund status: E-filed returns take ~21 days, paper returns 6-8 weeks\n5. For payment plans: Short-term (120 days, no fee) or Long-term (monthly, $31 setup fee online)\n6. NEVER provide legal or investment advice\n7. If you can't help, explain how to reach a human agent\n\nESCALATION TRIGGERS (transfer to human):\n- Identity verification requests\n- Fraud reports \n- Complex audit questions\n- Legal disputes\n- Customer requests to speak with human\n\nTONE: Professional, helpful, patient, empathetic. Acknowledge frustration when expressed.",
+          "llm": "gemini-2.0-flash-001",
+          "temperature": 0.3,
+          "max_tokens": 500
+        }
+      },
+      "tts": {
+        "voice_id": "EXAVITQu4vr4xnSDxMaL",
+        "model_id": "eleven_turbo_v2",
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "optimize_streaming_latency": 3
+      },
+      "turn": {
+        "turn_timeout": 10,
+        "silence_end_call_timeout": 30,
+        "turn_eagerness": "normal"
+      },
+      "conversation": {
+        "max_duration_seconds": 600,
+        "text_only": false
+      }
+    },
+    "platform_settings": {
+      "evaluation": {
+        "criteria": [
+          {
+            "id": "solved_inquiry",
+            "name": "Solved User Inquiry",
+            "conversation_goal_prompt": "The assistant successfully answered the taxpayer's question or directed them to appropriate resources."
+          },
+          {
+            "id": "professional_tone",
+            "name": "Professional Tone",
+            "conversation_goal_prompt": "The assistant maintained a professional, patient, and helpful tone throughout the conversation."
+          }
+        ]
+      },
+      "data_collection": {
+        "inquiry_type": {
+          "type": "string",
+          "description": "The type of inquiry: refund_status, payment_plan, general_question, or escalation"
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Whether the inquiry was resolved: resolved, escalated, or unresolved"
+        }
+      }
+    }
+  }
+}

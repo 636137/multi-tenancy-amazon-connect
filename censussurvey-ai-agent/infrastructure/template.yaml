@@ -1,0 +1,206 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Census Survey AI Agent Infrastructure
+
+Parameters:
+  ConnectInstanceId:
+    Type: String
+    Default: a1f79dc3-8a46-481d-bf15-b214a7a8b05f
+    Description: Amazon Connect Instance ID
+  
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, staging, prod]
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        CONNECT_INSTANCE_ID: !Ref ConnectInstanceId
+        AWS_REGION_NAME: !Ref AWS::Region
+        SESSIONS_TABLE: !Ref SessionsTable
+        RESPONSES_TABLE: CensusResponses
+        CASES_TABLE: !Ref CallbackCasesTable
+        ESCALATIONS_TABLE: !Ref EscalationsTable
+        AUDIT_TABLE: !Ref AuditTable
+
+Resources:
+  # DynamoDB Tables
+  SessionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub CensusSurveySessions-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: sessionId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: sessionId
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  CallbackCasesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub CensusCallbackCases-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: caseId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: caseId
+          KeyType: HASH
+
+  EscalationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub CensusEscalations-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: escalationId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: escalationId
+          KeyType: HASH
+
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub CensusAuditLog-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: contactId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: contactId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+
+  # Lambda Functions
+  SelfServiceAgentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CensusSelfServiceAgent
+      Handler: census_self_service.lambda_handler
+      CodeUri: ../lambda/
+      Timeout: 60
+      MemorySize: 512
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SessionsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AuditTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:Converse
+              Resource: '*'
+      Environment:
+        Variables:
+          MODEL_ID: anthropic.claude-3-sonnet-20240229-v1:0
+
+  CreateCallbackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CensusCreateCallback
+      Handler: create_callback.lambda_handler
+      CodeUri: ../lambda/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CallbackCasesTable
+
+  SurveyStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CensusSurveyStatus
+      Handler: survey_status.lambda_handler
+      CodeUri: ../lambda/
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: CensusResponses
+        - DynamoDBReadPolicy:
+            TableName: CensusAddresses
+
+  EscalateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CensusEscalate
+      Handler: escalate.lambda_handler
+      CodeUri: ../lambda/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref EscalationsTable
+
+  # Lambda Permissions for Connect
+  SelfServiceConnectPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SelfServiceAgentFunction
+      Action: lambda:InvokeFunction
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Sub arn:aws:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}
+
+  CreateCallbackConnectPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref CreateCallbackFunction
+      Action: lambda:InvokeFunction
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Sub arn:aws:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}
+
+  SurveyStatusConnectPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SurveyStatusFunction
+      Action: lambda:InvokeFunction
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Sub arn:aws:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}
+
+  EscalateConnectPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref EscalateFunction
+      Action: lambda:InvokeFunction
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Sub arn:aws:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}
+
+Outputs:
+  SelfServiceAgentArn:
+    Description: Main AI Agent Lambda ARN
+    Value: !GetAtt SelfServiceAgentFunction.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-SelfServiceAgentArn
+
+  CreateCallbackArn:
+    Description: Callback Tool Lambda ARN
+    Value: !GetAtt CreateCallbackFunction.Arn
+
+  SurveyStatusArn:
+    Description: Survey Status Tool Lambda ARN
+    Value: !GetAtt SurveyStatusFunction.Arn
+
+  EscalateArn:
+    Description: Escalation Tool Lambda ARN
+    Value: !GetAtt EscalateFunction.Arn
+
+  SessionsTableName:
+    Description: Sessions DynamoDB Table
+    Value: !Ref SessionsTable
+
+  ConnectInstanceId:
+    Description: Connect Instance ID
+    Value: !Ref ConnectInstanceId

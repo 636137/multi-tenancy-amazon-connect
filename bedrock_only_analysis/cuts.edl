@@ -1,0 +1,8 @@
+TITLE: Video Demo Cuts
+
+001  001      V     C        00:07:00:00 00:08:30:00 00:07:00:00 00:08:30:00
+* CUT: Login and authentication screens with waiting time
+
+002  001      V     C        00:24:00:00 00:25:30:00 00:24:00:00 00:25:30:00
+* CUT: Dead time during system transition
+

@@ -1,0 +1,262 @@
+{
+  "segments": [
+    {
+      "from": "00:00:00",
+      "to": "00:00:30",
+      "content_type": "slides",
+      "description": "Title/intro slide for the demo recording",
+      "key_elements": [
+        "Microsoft Teams title",
+        "DHS - GSA Demo Recording title",
+        "Recording timestamp: 2026-03-19 22:24 UTC"
+      ]
+    },
+    {
+      "from": "00:00:30",
+      "to": "00:01:30",
+      "content_type": "agent_desktop",
+      "description": "Showing Amazon Connect agent workspace with customer profile view",
+      "key_elements": [
+        "Amazon Connect interface",
+        "Customer Profile section",
+        "Connect assistant chat window",
+        "Quick connects menu",
+        "Number pad option",
+        "Contact handling URL in browser"
+      ]
+    },
+    {
+      "from": "00:01:30",
+      "to": "00:02:00",
+      "content_type": "browser",
+      "description": "Viewing FDA dashboard showing food safety report analytics",
+      "key_elements": [
+        "FDA Food Safety Reports Dashboard",
+        "Safety Report Heatmap",
+        "Total Reports counter: 203",
+        "Reports by Date graph",
+        "Report Breakdown pie chart",
+        "Anomaly detection section"
+      ]
+    },
+    {
+      "from": "00:02:00",
+      "to": "00:02:30",
+      "content_type": "agent_desktop",
+      "description": "Accessing recent files menu in Amazon Connect",
+      "key_elements": [
+        "Amazon Connect interface",
+        "Recent files dropdown menu",
+        "Quick connects section",
+        "File options including Excel, FAQs",
+        "Pin to taskbar option"
+      ]
+    },
+    {
+      "from": "00:02:30",
+      "to": "00:05:00",
+      "content_type": "other",
+      "description": "Showing participant avatars/profiles on dark background",
+      "key_elements": [
+        "Profile icons with initials",
+        "Names below profile icons"
+      ]
+    },
+    {
+      "from": "00:05:00",
+      "to": "00:05:30",
+      "content_type": "agent_desktop",
+      "description": "Agent desktop view showing customer profile interface and connect assistant",
+      "key_elements": [
+        "Amazon Connect interface",
+        "Customer Profile section",
+        "Search profiles field",
+        "Recently viewed profiles",
+        "Connect assistant chat",
+        "Available status indicator"
+      ]
+    },
+    {
+      "from": "00:05:30",
+      "to": "00:16:00",
+      "content_type": "browser",
+      "description": "Browsing SAM.gov help documentation",
+      "key_elements": [
+        "SAM.gov website header",
+        "Help section",
+        "Self help options",
+        "Search and Explore buttons",
+        "Federal service desk section",
+        "Help Topic Trends sidebar"
+      ]
+    },
+    {
+      "from": "00:16:00",
+      "to": "00:22:00",
+      "content_type": "agent_desktop",
+      "description": "Switch to Amazon Connect agent desktop showing customer case details and mobile mirror",
+      "key_elements": [
+        "Amazon Connect interface",
+        "UEI Merge Request case details",
+        "Customer profile section",
+        "Activity feed tab",
+        "IAE Contact Center mobile mirror window"
+      ]
+    },
+    {
+      "from": "00:22:00",
+      "to": "00:22:30",
+      "content_type": "browser",
+      "description": "Showing documentation about how to access and download contract data static reports",
+      "key_elements": [
+        "SAM.gov documentation",
+        "Instructions for accessing contract data",
+        "Step-by-step guide",
+        "DataBank section reference",
+        "Related articles"
+      ]
+    },
+    {
+      "from": "00:22:30",
+      "to": "00:23:00",
+      "content_type": "agent_desktop",
+      "description": "Return to main agent desktop view showing customer profile",
+      "key_elements": [
+        "Amazon Connect interface",
+        "Customer Profile tab",
+        "Recently viewed profiles section",
+        "Quick connects menu"
+      ]
+    },
+    {
+      "from": "00:23:00",
+      "to": "00:33:00",
+      "content_type": "mobile_mirror",
+      "description": "Showing a mirrored mobile device screen with FDA contact information",
+      "key_elements": [
+        "FDA Office of Emergency Response contact screen",
+        "Call history",
+        "Contact options",
+        "Desktop application icons"
+      ]
+    },
+    {
+      "from": "00:33:00",
+      "to": "00:36:00",
+      "content_type": "agent_desktop",
+      "description": "Showing a food scanner interface with completed scan of Trident gum alongside a chat discussion about FDA reporting procedures",
+      "key_elements": [
+        "FDA Food Scanner interface",
+        "Trident Chewing Gum scan result",
+        "Chat messaging interface",
+        "DHS-GSA Demo Recording title",
+        "Time indicators (5:24 PM start)",
+        "FDA script discussion"
+      ]
+    },
+    {
+      "from": "00:36:00",
+      "to": "00:36:30",
+      "content_type": "browser",
+      "description": "Shows a chat interface with messages about FDA food safety reporting",
+      "key_elements": [
+        "DHS - GSA Demo Recording chat window",
+        "FDA Scanner message",
+        "Chat interface",
+        "Message timestamps",
+        "Text input field"
+      ]
+    },
+    {
+      "from": "00:36:30",
+      "to": "00:39:00",
+      "content_type": "supervisor_dashboard",
+      "description": "Displaying a GSA contact center analytics dashboard with various metrics and charts",
+      "key_elements": [
+        "GSA Consolidated Contact Center Dashboard",
+        "Bot Confidence Level (0.83)",
+        "Report Breakdown by Channel pie chart",
+        "Average Queue Duration graph",
+        "Bot Intents word cloud",
+        "Contacts by Contact Center metrics"
+      ]
+    },
+    {
+      "from": "00:39:00",
+      "to": "00:41:30",
+      "content_type": "browser",
+      "description": "Viewing an FDA food safety dashboard showing reports and analytics",
+      "key_elements": [
+        "FDA Food Safety Reports Dashboard",
+        "Safety Report Heatmap",
+        "Total Reports: 203",
+        "Report Breakdown pie chart",
+        "Top Incident Descriptions list",
+        "Top Reports by Product and ZIP Code table"
+      ]
+    },
+    {
+      "from": "00:41:30",
+      "to": "00:42:00",
+      "content_type": "video_call",
+      "description": "Showing Teams meeting interface with participant tiles",
+      "key_elements": [
+        "Teams meeting interface",
+        "Meeting controls",
+        "Do Not Disturb notification",
+        "Participant thumbnails"
+      ]
+    },
+    {
+      "from": "00:42:00",
+      "to": "00:42:30",
+      "content_type": "supervisor_dashboard",
+      "description": "Displaying a comprehensive contact center analytics dashboard with various metrics and charts showing performance data",
+      "key_elements": [
+        "GSA Consolidated Contact Center Dashboard",
+        "GSA logo",
+        "Average Queue Duration (126.39 seconds)",
+        "Bot Confidence Level (0.83)",
+        "Report Breakdown by Channel pie chart",
+        "Detected Bot Intents list",
+        "Contact metrics chart",
+        "Bot Intents word cloud"
+      ]
+    },
+    {
+      "from": "00:42:30",
+      "to": "00:43:00",
+      "content_type": "video_call",
+      "description": "Showing a Teams meeting interface with participants and controls",
+      "key_elements": [
+        "Teams meeting interface",
+        "Participant icons",
+        "Meeting controls (mic, camera, share)",
+        "Do not disturb notification",
+        "Desktop icons and taskbar"
+      ]
+    },
+    {
+      "from": "00:43:00",
+      "to": "00:43:00",
+      "content_type": "supervisor_dashboard",
+      "description": "Same dashboard view as 42:00 timestamp",
+      "key_elements": [
+        "GSA Consolidated Contact Center Dashboard",
+        "Performance metrics",
+        "Channel breakdown charts",
+        "Bot analytics",
+        "Contact statistics"
+      ]
+    }
+  ],
+  "content_types_detected": [
+    "slides",
+    "other",
+    "video_call",
+    "mobile_mirror",
+    "browser",
+    "supervisor_dashboard",
+    "agent_desktop"
+  ]
+}

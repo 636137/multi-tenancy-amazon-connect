@@ -1,0 +1,66 @@
+{
+  "analysis": {
+    "video_summary": "This demo showcases the integration between GSA (General Services Administration) and DHS systems, focusing on federal procurement data systems and FDA safety reporting capabilities. The demonstration moves through several key platforms including SAM.gov, Amazon Connect contact center interface, and specialized FDA dashboards. The presenter navigates through authentication processes, demonstrates data access procedures, and explores various reporting and analytics dashboards.",
+    "audio_summary": "No audio transcript was provided, making it impossible to analyze speech patterns or verbal content directly. The visual progression suggests this was likely a technical demonstration of federal systems integration and reporting capabilities.",
+    "cuts": [],
+    "content_segments": [
+      {
+        "start_time": "00:00:00",
+        "end_time": "00:01:59",
+        "content_type": "browser",
+        "description": "Microsoft Teams meeting initialization screen for DHS-GSA Demo Recording",
+        "spoken_context": "Not available"
+      },
+      {
+        "start_time": "00:01:59",
+        "end_time": "00:06:29",
+        "content_type": "agent_desktop",
+        "description": "Amazon Connect agent workspace showing customer profile interface",
+        "spoken_context": "Not available"
+      },
+      {
+        "start_time": "00:06:29",
+        "end_time": "00:10:58",
+        "content_type": "browser",
+        "description": "SAM.gov help documentation and authentication process",
+        "spoken_context": "Not available"
+      },
+      {
+        "start_time": "00:23:57",
+        "end_time": "00:36:55",
+        "content_type": "mobile_mirror",
+        "description": "FDA Office of Emergency Response mobile application demonstration",
+        "spoken_context": "Not available"
+      },
+      {
+        "start_time": "00:36:55",
+        "end_time": "00:41:24",
+        "content_type": "supervisor_dashboard",
+        "description": "GSA Consolidated Contact Center Dashboard and FDA Food Safety Dashboard",
+        "spoken_context": "Not available"
+      }
+    ],
+    "talk_track": [],
+    "audio_quality_issues": [],
+    "key_moments": [
+      {
+        "timestamp": "00:08:28",
+        "description": "Successful authentication into federal systems via Login.gov",
+        "quote": "Not available"
+      },
+      {
+        "timestamp": "00:36:55",
+        "description": "Transition to GSA dashboard showing consolidated contact center metrics",
+        "quote": "Not available"
+      },
+      {
+        "timestamp": "00:39:25",
+        "description": "FDA Food Safety Dashboard revealing nationwide incident tracking",
+        "quote": "Not available"
+      }
+    ],
+    "recommended_duration": "00:35:00",
+    "total_cut_time": "00:08:44"
+  },
+  "transcript": null
+}

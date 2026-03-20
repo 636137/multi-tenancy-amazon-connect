@@ -1,0 +1,94 @@
+{
+  "analysis": {
+    "video_summary": "This demo showcases the integration between GSA (General Services Administration) and FDA systems, focusing on contact center capabilities and food safety reporting dashboards. The demonstration moves through multiple systems including SAM.gov, Amazon Connect contact center interface, and various administrative dashboards showing metrics and reporting capabilities. The presenter appears to be walking through a typical workflow for handling food safety reports and demonstrating how different government systems interact.",
+    "inferred_narration": "The presenter appears to be demonstrating the integration of multiple government systems, starting with authentication processes, moving through contact center operations, and showing how food safety reports are tracked and managed across different platforms. There's particular emphasis on dashboard functionality and real-time reporting capabilities.",
+    "cuts": [
+      {
+        "start_time": "00:07:00",
+        "end_time": "00:08:30",
+        "reason": "Login and authentication screens with waiting time",
+        "visual_indicator": "Login.gov authentication screens and loading states"
+      },
+      {
+        "start_time": "00:24:00",
+        "end_time": "00:25:30",
+        "reason": "Dead time during system transition",
+        "visual_indicator": "Static screens and navigation delays"
+      }
+    ],
+    "content_segments": [
+      {
+        "start_time": "00:00:00",
+        "end_time": "00:06:59",
+        "content_type": "browser",
+        "description": "FDA Food Safety Reports Dashboard showing geographical distribution and metrics",
+        "likely_topic": "Overview of food safety reporting system and metrics"
+      },
+      {
+        "start_time": "00:07:00",
+        "end_time": "00:15:00",
+        "content_type": "login_screen",
+        "description": "SAM.gov authentication and system access",
+        "likely_topic": "System security and authentication processes"
+      },
+      {
+        "start_time": "00:15:01",
+        "end_time": "00:24:00",
+        "content_type": "agent_desktop",
+        "description": "Amazon Connect contact center interface and case management",
+        "likely_topic": "Contact center operations and case handling"
+      },
+      {
+        "start_time": "00:24:01",
+        "end_time": "00:43:44",
+        "content_type": "supervisor_dashboard",
+        "description": "GSA Consolidated Contact Center Dashboard and FDA reporting metrics",
+        "likely_topic": "Analytics and reporting capabilities"
+      }
+    ],
+    "talk_track": [
+      {
+        "start_time": "00:01:29",
+        "duration_seconds": 15,
+        "narration": "The FDA Food Safety Reports Dashboard provides real-time visibility into food safety incidents across the country, with interactive maps and detailed metrics tracking.",
+        "visual_context": "Dashboard showing map with incident markers and statistical graphs"
+      }
+    ],
+    "key_moments": [
+      {
+        "timestamp": "00:01:29",
+        "description": "Introduction of main FDA dashboard interface",
+        "frame_description": "FDA Food Safety Reports Dashboard with map and metrics"
+      },
+      {
+        "timestamp": "00:32:55",
+        "description": "Demonstration of mobile food scanner integration",
+        "frame_description": "FDA Food Scanner app interface showing product scan completion"
+      }
+    ],
+    "visual_quality_issues": [
+      {
+        "timestamp": "00:24:26",
+        "issue": "Mobile screen mirroring appears slightly blurry"
+      }
+    ],
+    "recommended_duration": "00:40:14",
+    "total_cut_time": "00:03:30",
+    "demo_flow_analysis": {
+      "introduction": "Overview of FDA food safety reporting system and dashboards",
+      "main_demonstration": "Integration between contact center systems, mobile apps, and reporting dashboards",
+      "conclusion": "Comprehensive view of consolidated reporting capabilities",
+      "pacing_assessment": "Generally well-paced but could be tightened by removing authentication sequences"
+    }
+  },
+  "audio_info": {
+    "duration_seconds": 2624.06,
+    "sample_rate": 16000,
+    "channels": 1,
+    "has_audio": true
+  },
+  "models_used": {
+    "vision_analysis": "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+    "audio_analysis": "Visual inference (Nova Sonic streaming not implemented)"
+  }
+}

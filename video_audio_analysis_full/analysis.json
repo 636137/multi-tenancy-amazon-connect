@@ -1,0 +1,66 @@
+{
+  "analysis": {
+    "video_summary": "This demo showcases various federal government systems and tools, including SAM.gov, Amazon Connect contact center, and FDA dashboards. The demonstration walks through authentication processes, system navigation, and data visualization capabilities. The focus appears to be on demonstrating integrated solutions for government service delivery and food safety reporting systems.",
+    "audio_summary": "No audio transcript was provided, making it impossible to analyze speech patterns or verbal content. The demonstration appears to be primarily visual, showing navigation through multiple government platforms and systems.",
+    "cuts": [
+      {
+        "start_time": "00:02:00",
+        "end_time": "00:03:30",
+        "reason": "Repetitive login screens and authentication steps",
+        "audio_indicator": "No audio indicators available"
+      }
+    ],
+    "content_segments": [
+      {
+        "start_time": "00:00:00",
+        "end_time": "00:01:59",
+        "content_type": "browser",
+        "description": "Microsoft Teams meeting setup and initial screen",
+        "spoken_context": "No audio available"
+      },
+      {
+        "start_time": "00:01:59",
+        "end_time": "00:06:29",
+        "content_type": "agent_desktop",
+        "description": "Amazon Connect agent workspace demonstration with customer profile view",
+        "spoken_context": "No audio available"
+      },
+      {
+        "start_time": "00:36:55",
+        "end_time": "00:41:24",
+        "content_type": "supervisor_dashboard",
+        "description": "GSA Contact Center Dashboard and FDA Food Safety Dashboard demonstrations",
+        "spoken_context": "No audio available"
+      }
+    ],
+    "talk_track": [
+      {
+        "start_time": "00:00:00",
+        "duration_seconds": 15,
+        "narration": "Welcome to this demonstration of integrated federal government systems, including SAM.gov, Amazon Connect, and FDA monitoring tools.",
+        "original_speech": "No original speech available"
+      }
+    ],
+    "audio_quality_issues": [
+      {
+        "timestamp": "00:00:00",
+        "issue": "No audio track available for analysis"
+      }
+    ],
+    "key_moments": [
+      {
+        "timestamp": "00:36:55",
+        "description": "Introduction of GSA Consolidated Contact Center Dashboard showing key metrics",
+        "quote": "No quotes available"
+      },
+      {
+        "timestamp": "00:39:25",
+        "description": "Transition to FDA Food Safety Dashboard showing nationwide reporting data",
+        "quote": "No quotes available"
+      }
+    ],
+    "recommended_duration": "00:35:00",
+    "total_cut_time": "00:08:44"
+  },
+  "transcript": null
+}

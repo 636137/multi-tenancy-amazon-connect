@@ -1,0 +1,53 @@
+{
+  "Heading": "Census Survey Agent Guide",
+  "SubHeading": "Quick Reference for Census Bureau Call Handlers",
+  "CardsPerRow": "1",
+  "Cards": [
+    {
+      "Summary": {
+        "Id": "caller-verification",
+        "Icon": "shield",
+        "Heading": "\ud83d\udd10 Caller Verification",
+        "Status": "REQUIRED",
+        "Description": "Verify caller identity before providing information"
+      },
+      "Detail": {
+        "Heading": "Verification Procedures",
+        "Description": "Steps to verify caller identity and Census record",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udccb Required Information</h4><ul><li>Census ID from mailing</li><li>Full address on Census record</li><li>Head of household name</li></ul><div style='background:#d4edda; padding:10px; border-radius:5px;'><b>Never ask for SSN or payment</b></div>"
+          }
+        ],
+        "Actions": [
+          "Verify",
+          "Supervisor",
+          "Log Issue"
+        ]
+      }
+    },
+    {
+      "Summary": {
+        "Id": "privacy-trust",
+        "Icon": "shield",
+        "Heading": "\ud83d\udee1\ufe0f Privacy & Trust",
+        "Status": "HIGH VOLUME",
+        "Description": "Address data protection concerns"
+      },
+      "Detail": {
+        "Heading": "Privacy Talking Points",
+        "Description": "Build caller trust",
+        "Sections": [
+          {
+            "TemplateString": "<h4>\ud83d\udcdc Title 13 Protections</h4><div style='background:#d4edda; padding:10px;'><ul><li>72-year seal on responses</li><li>IRS, ICE, FBI cannot access</li><li>$250K fine for violations</li></ul></div>"
+          }
+        ],
+        "Actions": [
+          "Privacy Info",
+          "Supervisor",
+          "Paper Option"
+        ]
+      }
+    }
+  ]
+}

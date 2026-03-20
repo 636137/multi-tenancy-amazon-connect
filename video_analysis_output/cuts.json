@@ -1,0 +1,240 @@
+{
+  "cuts": [
+    {
+      "from": "00:02:30",
+      "to": "00:03:00",
+      "reason": "Appears to be a transition or ending screen with limited content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:04:00",
+      "to": "00:05:00",
+      "reason": "Duplicate frame showing same content as previous",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:06:30",
+      "to": "00:07:00",
+      "reason": "Duplicate frame showing same static content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:07:00",
+      "to": "00:07:30",
+      "reason": "Duplicate frame showing same static content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:07:30",
+      "to": "00:08:00",
+      "reason": "Duplicate frame showing same static content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:12:30",
+      "to": "00:13:00",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:13:00",
+      "to": "00:13:30",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:13:30",
+      "to": "00:14:00",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:14:00",
+      "to": "00:14:30",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:14:30",
+      "to": "00:15:00",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:16:30",
+      "to": "00:17:00",
+      "reason": "Redundant frame showing same view as previous",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:17:00",
+      "to": "00:17:30",
+      "reason": "Redundant frame showing same view",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:17:30",
+      "to": "00:18:00",
+      "reason": "Redundant frame showing same view",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:18:30",
+      "to": "00:19:00",
+      "reason": "Duplicate frame with no new information",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:20:30",
+      "to": "00:21:00",
+      "reason": "Returns to duplicate view with no new information",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:22:30",
+      "to": "00:23:00",
+      "reason": "Redundant view of earlier frame without new information",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:23:30",
+      "to": "00:24:00",
+      "reason": "Duplicate of previous frame with no new information",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:24:30",
+      "to": "00:25:00",
+      "reason": "Duplicate frame showing same call screen",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:25:30",
+      "to": "00:26:00",
+      "reason": "Similar content to previous frame",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:26:00",
+      "to": "00:26:30",
+      "reason": "Redundant content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:26:30",
+      "to": "00:27:00",
+      "reason": "Similar to earlier frames",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:28:00",
+      "to": "00:28:30",
+      "reason": "Duplicate frame showing same content as earlier timestamp",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:28:30",
+      "to": "00:29:00",
+      "reason": "Duplicate of 27:30 frame showing same call interface",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:29:00",
+      "to": "00:29:30",
+      "reason": "Duplicate frame showing same content as earlier timestamps",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:29:30",
+      "to": "00:30:00",
+      "reason": "Duplicate frame showing same call interface as previous timestamps",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:30:30",
+      "to": "00:31:00",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:31:00",
+      "to": "00:31:30",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:33:30",
+      "to": "00:34:00",
+      "reason": "Duplicate frame with no new information",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:34:30",
+      "to": "00:35:00",
+      "reason": "Duplicate frame with no new information",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:35:00",
+      "to": "00:35:30",
+      "reason": "No meaningful new content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:35:30",
+      "to": "00:36:00",
+      "reason": "No meaningful new content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:37:00",
+      "to": "00:37:30",
+      "reason": "Duplicate frame showing same content as previous",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:37:30",
+      "to": "00:38:00",
+      "reason": "Duplicate frame showing same content as previous",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:38:00",
+      "to": "00:38:30",
+      "reason": "Duplicate frame showing same content as previous",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:39:30",
+      "to": "00:40:00",
+      "reason": "Duplicate frame showing same content as previous",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:40:00",
+      "to": "00:40:30",
+      "reason": "Duplicate frame showing same content",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:42:30",
+      "to": "00:43:00",
+      "reason": "Shows meeting interface transition/setup screen",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:43:00",
+      "to": "00:43:30",
+      "reason": "Duplicate content from earlier frame",
+      "confidence": 0.8
+    },
+    {
+      "from": "00:43:30",
+      "to": "00:43:30",
+      "reason": "Duplicate content from earlier frames",
+      "confidence": 0.8
+    }
+  ],
+  "total_cuts": 39,
+  "generated_at": "2026-03-19T18:58:03.036260"
+}
